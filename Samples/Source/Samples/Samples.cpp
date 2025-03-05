@@ -1,6 +1,8 @@
 ﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "Samples.h"
+
+#include"SampleLogChannels.h"
 #include "Modules/ModuleManager.h"
 
 class SamplesModule : public FDefaultGameModuleImpl
@@ -17,7 +19,7 @@ void SamplesModule::StartupModule()
 {
 	FDefaultGameModuleImpl::StartupModule();
 
-	UE_LOG(LogTemp, Warning, TEXT("StartUpModule!"));
+	UE_LOG(LogSample, Warning, TEXT("StartUpModule!"));
 }
 
 void SamplesModule::ShutdownModule()
