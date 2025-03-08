@@ -1,8 +1,14 @@
-#pragma once
+ï»¿#pragma once
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
 #include "SampleUserFacingExperience.generated.h"
+
+/*
+	Mapê³¼ Experienceì˜ ì •ë³´ë¥¼ ê°€ì§€ê³  ìžˆëŠ” í´ëž˜ìŠ¤
+	Map - UserFacingExperienceì˜ ë§µ ì •ë³´
+	Experience - ìœ ì €ê°€ ê²½í—˜í•  ruleê³¼ ê²Œìž„ ì •ë³´ ê°ì²´
+*/
 
 UCLASS()
 class SAMPLES_API USampleUserFacingExperience : public UPrimaryDataAsset
@@ -10,12 +16,12 @@ class SAMPLES_API USampleUserFacingExperience : public UPrimaryDataAsset
 	GENERATED_BODY()
 
 public:
-	// map¿¡ ´ëÇÑ Á¤º¸
-	// meta ¸¦ ÀÌ¿ëÇÏ¿© °ü·Ã Á¤º¸¸¸ ÀúÀåÇÏ±â À§ÇÔ
+	// mapì— ëŒ€í•œ ì •ë³´
+	// meta ë¥¼ ì´ìš©í•˜ì—¬ ê´€ë ¨ ì •ë³´ë§Œ ì €ìž¥í•˜ê¸° ìœ„í•¨
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Experience, meta = (AllowedTypes = "Map"))
 	FPrimaryAssetId MapID;
 
-	// Æù µ¥ÀÌÅÍ
+	// í° ë°ì´í„°
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Experience, meta = (AllowedTypes = "SampleExperienceDefinition"))
 	FPrimaryAssetId ExperienceID;
 
@@ -29,7 +35,7 @@ public:
 //      - Input
 //		- Ability
 // 
-// -> °ÔÀÓ ¸ðµå¿¡¼­ ÀÌµé¿¡ °üÇÑ µ¥ÀÌÅÍ¸¦ ÇÑ¹ø¿¡ ÀÐÀ» ¼ö ÀÖÀ½
-// Experience ´Â ±âÁ¸ÀÇ unreal gamemode°¡ ³Ê¹« ¹«°Ì±â¿¡ ³ª¿Â ±â´É (°¡º±°Ô ¸¸µç °ÔÀÓ ¸ðµå?)
+// -> ê²Œìž„ ëª¨ë“œì—ì„œ ì´ë“¤ì— ê´€í•œ ë°ì´í„°ë¥¼ í•œë²ˆì— ì½ì„ ìˆ˜ ìžˆìŒ
+// Experience ëŠ” ê¸°ì¡´ì˜ unreal gamemodeê°€ ë„ˆë¬´ ë¬´ê²ê¸°ì— ë‚˜ì˜¨ ê¸°ëŠ¥ (ê°€ë³ê²Œ ë§Œë“  ê²Œìž„ ëª¨ë“œ?)
 // 
 //
