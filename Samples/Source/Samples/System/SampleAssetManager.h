@@ -10,6 +10,9 @@ class SAMPLES_API USampleAssetManager : public UAssetManager
 	GENERATED_BODY()
 public:
 	USampleAssetManager();
+	// Scan?
+	// - FSoftObjectPath 처럼 무언가가 '존재'하는 위치를 저장하듯
+	// 에셋 매니저도 '특정한 에셋이 존재'한다는 것을 알기 위한 개념
 
 	static USampleAssetManager& Get();
 
