@@ -8,7 +8,14 @@ UCLASS()
 class SAMPLES_API ASampleGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
+
+public:
+	ASampleGameMode();
+
+	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
 	
+	void HandleMatchAssignmentIfNotExpectingOne();
+
 };
 
 /*
