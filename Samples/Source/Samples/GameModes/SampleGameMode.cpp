@@ -3,6 +3,7 @@
 #include"../Player/SamplePlayerController.h"
 #include"../Player/SamplePlayerState.h"
 #include"../Character/SampleCharacter.h"
+#include"../GameModes/SampleExperienceManagerComponent.h"
 
 ASampleGameMode::ASampleGameMode()
 {
@@ -22,6 +23,21 @@ void ASampleGameMode::InitGame(const FString& MapName, const FString& Options, F
 	GetWorld()->GetTimerManager().SetTimerForNextTick(this, &ThisClass::HandleMatchAssignmentIfNotExpectingOne);
 }
 
+void ASampleGameMode::InitGameState()
+{
+	Super::InitGameState();
+	
+	// GameState 내부에 해당 클래스 존재시 반환
+	// Experience 비동기 로딩을 위한 Delegate를 준비
+	USampleExperienceManagerComponent* ExperienceManagerComponent = GameState->FindComponentByClass<USampleExperienceManagerComponent>();
+	// InitGameState 가 호출된 시점에는 ExperienceManagerComponent 가 생성되어있음
+	// 그러나 일단 check를 걸어는 준다
+	check(ExperienceManagerComponent);
+
+	// OnExperienceLoaded를 등록
+	ExperienceManagerComponent->CallOrRegister_OnExperienceLoaded(FOnSampleExperienceLoaded::FDelegate::CreateUObject(this,&ThisClass::OnExperienceLoaded ));
+}
+
 void ASampleGameMode::HandleMatchAssignmentIfNotExpectingOne()
 {
 	// 실제 lyra 프로젝트에서는 다양한 환경 설정을 확인하며,
@@ -31,4 +47,10 @@ void ASampleGameMode::HandleMatchAssignmentIfNotExpectingOne()
 	// -> 위에서 첫 프레임에 바로 호출할땐 해당 Manager가 생성되지 않으므로 한 프레임 늦추는 이유
 	//
 
+
+
+}
+
+void ASampleGameMode::OnExperienceLoaded(const USampleExperienceDefinition* currentExperience)
+{
 }

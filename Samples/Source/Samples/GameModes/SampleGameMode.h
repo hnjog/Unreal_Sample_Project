@@ -4,6 +4,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "SampleGameMode.generated.h"
 
+class USampleExperienceDefinition;
+
 UCLASS()
 class SAMPLES_API ASampleGameMode : public AGameModeBase
 {
@@ -13,9 +15,10 @@ public:
 	ASampleGameMode();
 
 	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
-	
-	void HandleMatchAssignmentIfNotExpectingOne();
+	virtual void InitGameState() final;
 
+	void HandleMatchAssignmentIfNotExpectingOne();
+	void OnExperienceLoaded(const USampleExperienceDefinition* currentExperience);
 };
 
 /*
