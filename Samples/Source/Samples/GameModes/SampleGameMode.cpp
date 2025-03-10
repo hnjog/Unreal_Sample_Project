@@ -10,7 +10,7 @@ ASampleGameMode::ASampleGameMode()
 	// GameState를 설정해주었기에 World가 생성되는 시점에 생성자로 ExperienceManager를 생성
 	GameStateClass = ASampleGameState::StaticClass();
 	PlayerControllerClass = ASamplePlayerController::StaticClass();
-	PlayerStateClass = ASampleGameState::StaticClass();
+	PlayerStateClass = ASamplePlayerState::StaticClass();
 	DefaultPawnClass = ASampleCharacter::StaticClass();
 }
 
