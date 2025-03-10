@@ -17,7 +17,24 @@ public:
 	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
 	virtual void InitGameState() final;
 
+	// 블루프린트 네이티브 이벤트
+	// - C++에서 정의된 함수를 블루프린트에서 사용할 수 있도록 하는 유형의 함수
+	// - _Implementation 앞쪽 부분의 함수로 선언되며, (ex : HandleStartingNewPlayer)
+	//  해당 함수 호출 시 _Implementation 로 구현된 부분이 실행된다
+	// -> C++과 블루프린트간의 유연한 통합으로 '성능'과 쉬운 호출을 위한 기능
+	// 
+	// (_Implementation 가 구현이 되어 있지 않은 경우는 BP의 원본 방식을 사용하고,
+	//  구현된 경우는 C++을 우선적으로 사용함)
+	// 
+	// HandleStartingNewPlayer
+	virtual void HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer) final;
+
+	// SpawnDefaultPawnAtTransform
+	virtual APawn* SpawnDefaultPawnAtTransform_Implementation(AController* NewPlayer, const FTransform& SpawnTransform) final;
+
+	// member method
 	void HandleMatchAssignmentIfNotExpectingOne();
+	bool isExperienceLoaded() const;
 	void OnExperienceLoaded(const USampleExperienceDefinition* currentExperience);
 };
 

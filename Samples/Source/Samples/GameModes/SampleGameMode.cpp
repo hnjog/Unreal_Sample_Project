@@ -4,6 +4,7 @@
 #include"../Player/SamplePlayerState.h"
 #include"../Character/SampleCharacter.h"
 #include"../GameModes/SampleExperienceManagerComponent.h"
+#include"Samples/SampleLogChannels.h"
 
 ASampleGameMode::ASampleGameMode()
 {
@@ -41,6 +42,22 @@ void ASampleGameMode::InitGameState()
 	ExperienceManagerComponent->CallOrRegister_OnExperienceLoaded(FOnSampleExperienceLoaded::FDelegate::CreateUObject(this,&ThisClass::OnExperienceLoaded ));
 }
 
+void ASampleGameMode::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
+{
+	if (isExperienceLoaded())
+	{
+		// experience가 load 된 이후에 pawn을 생성할 목적
+		// 그리고 load 완료후 다시 이 함수를 호출
+		Super::HandleStartingNewPlayer_Implementation(NewPlayer);
+	}
+}
+
+APawn* ASampleGameMode::SpawnDefaultPawnAtTransform_Implementation(AController* NewPlayer, const FTransform& SpawnTransform)
+{
+	UE_LOG(LogSample, Log, TEXT("SpawnDefaultPawnAtTransform_Implementation is called!"));
+	return Super::SpawnDefaultPawnAtTransform_Implementation(NewPlayer,SpawnTransform);
+}
+
 void ASampleGameMode::HandleMatchAssignmentIfNotExpectingOne()
 {
 	// 실제 lyra 프로젝트에서는 다양한 환경 설정을 확인하며,
@@ -52,6 +69,15 @@ void ASampleGameMode::HandleMatchAssignmentIfNotExpectingOne()
 
 
 
+}
+
+bool ASampleGameMode::isExperienceLoaded() const
+{
+	check(GameState);
+	USampleExperienceManagerComponent* ExperienceManagerComponent = GameState->FindComponentByClass<USampleExperienceManagerComponent>();
+	check(ExperienceManagerComponent);
+
+	return ExperienceManagerComponent->IsExperienceLoaded();
 }
 
 void ASampleGameMode::OnExperienceLoaded(const USampleExperienceDefinition* currentExperience)
