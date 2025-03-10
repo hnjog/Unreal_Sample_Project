@@ -7,6 +7,7 @@
 
 ASampleGameMode::ASampleGameMode()
 {
+	// GameState를 설정해주었기에 World가 생성되는 시점에 생성자로 ExperienceManager를 생성
 	GameStateClass = ASampleGameState::StaticClass();
 	PlayerControllerClass = ASamplePlayerController::StaticClass();
 	PlayerStateClass = ASampleGameState::StaticClass();
@@ -31,10 +32,12 @@ void ASampleGameMode::InitGameState()
 	// Experience 비동기 로딩을 위한 Delegate를 준비
 	USampleExperienceManagerComponent* ExperienceManagerComponent = GameState->FindComponentByClass<USampleExperienceManagerComponent>();
 	// InitGameState 가 호출된 시점에는 ExperienceManagerComponent 가 생성되어있음
-	// 그러나 일단 check를 걸어는 준다
+	// (GameState 에서 생성하면서 해당 클래스를 생성해놓았으므로)
 	check(ExperienceManagerComponent);
 
 	// OnExperienceLoaded를 등록
+	// 로딩이 되어있다면 바로 호출하고, 아니면 기다렸다 호출된다
+	// 현재 시점에선 로드가 안되어있으므로 기다렸다 호출하기 위함
 	ExperienceManagerComponent->CallOrRegister_OnExperienceLoaded(FOnSampleExperienceLoaded::FDelegate::CreateUObject(this,&ThisClass::OnExperienceLoaded ));
 }
 
@@ -53,4 +56,5 @@ void ASampleGameMode::HandleMatchAssignmentIfNotExpectingOne()
 
 void ASampleGameMode::OnExperienceLoaded(const USampleExperienceDefinition* currentExperience)
 {
+
 }
