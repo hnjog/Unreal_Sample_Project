@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "CoreMinimal.h"
 #include "Components/GameStateComponent.h"
@@ -46,6 +46,8 @@ public:
 	// OnExperienceLoaded 에 바인딩 하거나, Experience 로딩이 완료되었다면 호출
 	void CallOrRegister_OnExperienceLoaded(FOnSampleExperienceLoaded::FDelegate&& Delegate);
 
+	void ServerSetCurrentExperience(FPrimaryAssetId ExperienceId);
+	void StartExperienceLoad();
 public:
 	// 가리키는 객체를 수정할 수 없도록 const 를 걸어준다
 	// 그래도 ptr은 새로운 Experience를 가르킬 수 있음

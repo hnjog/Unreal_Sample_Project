@@ -67,8 +67,50 @@ void ASampleGameMode::HandleMatchAssignmentIfNotExpectingOne()
 	// -> 위에서 첫 프레임에 바로 호출할땐 해당 Manager가 생성되지 않으므로 한 프레임 늦추는 이유
 	//
 
+	// 해당 함수에서 우리가 로딩할 Experience에 대해 PrimaryAssetId를 생성하여
+	// OnMatchAssignmentGiven으로 넘겨준다
 
+	// PrimaryAsset : '중요한 자산'이란 뜻으로
+	// Unreal의 자산 시스템의 일부
+	// PrimaryAsset은 로드 및 관리하는 시스템이 통합되어 있기에
+	// 핵심 에셋들을 효율적으로 로드 & 언로드 할 수 있음
+	// (일반 Asset 은 UObject)
+	// 
+	// FPrimaryAssetId : PrimaryAsset을 구별하기 위한 식별자이며
+	// 내부에 AssetType과 AssetName을 가진다
+	// (일종의 FName 변수이며, 각각 구별을 위한 태그로 사용자가 임의로 지정 가능)
+	//
+	FPrimaryAssetId ExperienceId;
 
+	// precedence order(highest wins) -> 우선순위
+	// - matchmaking assignment(if present)
+	// - default experience
+
+	UWorld* World = GetWorld();
+
+	// fall back to the default experience
+	// 기본 옵션으로 default하게 B_SampleDefaultExperience로 설정해놓기
+	if (!ExperienceId.IsValid())
+	{
+		ExperienceId = FPrimaryAssetId(FPrimaryAssetType("SampleExperienceDefinition"), FName("B_SampleDefaultExperience"));
+	}
+
+	OnMatchAssignmentGiven(ExperienceId);
+}
+
+// 선택한 ExperienceId를 서버로 넘겨준다
+void ASampleGameMode::OnMatchAssignmentGiven(FPrimaryAssetId ExperienceId)
+{
+	// ExperienceManagerComponent를 활용하여 Experience를 로딩하기 위해
+	// ExperienceManagerComponent의 ServerSetCurrentExperience 를 호출
+	check(ExperienceId.IsValid());
+
+	check(GameState);
+	USampleExperienceManagerComponent* ExperienceManagerComponent = GameState->FindComponentByClass<USampleExperienceManagerComponent>();
+	check(ExperienceManagerComponent);
+
+	// 네트워크 상에선 게임 모드가 Client가 아니라 Server에 존재
+	ExperienceManagerComponent->ServerSetCurrentExperience(ExperienceId);
 }
 
 bool ASampleGameMode::isExperienceLoaded() const

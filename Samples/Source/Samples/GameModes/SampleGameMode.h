@@ -34,6 +34,7 @@ public:
 
 	// member method
 	void HandleMatchAssignmentIfNotExpectingOne();
+	void OnMatchAssignmentGiven(FPrimaryAssetId ExperienceId);
 	bool isExperienceLoaded() const;
 	void OnExperienceLoaded(const USampleExperienceDefinition* currentExperience);
 };

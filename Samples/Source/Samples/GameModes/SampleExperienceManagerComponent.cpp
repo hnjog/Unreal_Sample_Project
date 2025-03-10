@@ -1,4 +1,6 @@
-﻿#include "SampleExperienceManagerComponent.h"
+#include "SampleExperienceManagerComponent.h"
+#include "../System/SampleAssetManager.h"
+#include "../GameModes/SampleExperienceDefinition.h"
 
 void USampleExperienceManagerComponent::CallOrRegister_OnExperienceLoaded(FOnSampleExperienceLoaded::FDelegate&& Delegate)
 {
@@ -23,4 +25,36 @@ void USampleExperienceManagerComponent::CallOrRegister_OnExperienceLoaded(FOnSam
 		//  -> 복사 비용을 낮추기 위하여 Move를 통하여 전달
 		OnExperienceLoaded.Add(MoveTemp(Delegate));
 	}
+}
+
+void USampleExperienceManagerComponent::ServerSetCurrentExperience(FPrimaryAssetId ExperienceId)
+{
+	USampleAssetManager& AssetManager = USampleAssetManager::Get();
+
+	TSubclassOf<USampleExperienceDefinition> AssetClass;
+	{
+		FSoftObjectPath AssetPath = AssetManager.GetPrimaryAssetPath(ExperienceId);
+		AssetClass = Cast<UClass>(AssetPath.TryLoad()); // 동기식 load
+	}
+
+	// CDO : Class Default Object
+	// 특정한 클래스의 기본 인스턴스
+	// -> 해당 클래스의 기본 속성값을 가진 객체
+	// (CDO의 값을 변경하는 경우, 차후 생성되는 인스턴스의 기본값이 변경됨)
+	// 
+	// CDO 를 가져오는 이유?
+	const USampleExperienceDefinition* Experience = GetDefault<USampleExperienceDefinition>(AssetClass);
+	check(Experience != nullptr);
+	check(CurrentExperience == nullptr);
+	{
+		// CDO로 CurrentExperience를 설정
+		// Experience의 CDO를 변경했다면 CurrentExperience에 변경점도 같이 적용된다?
+		CurrentExperience = Experience;
+	}
+
+	StartExperienceLoad();
+}
+
+void USampleExperienceManagerComponent::StartExperienceLoad()
+{
 }
