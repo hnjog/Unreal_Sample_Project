@@ -27,11 +27,11 @@
 			"Enabled": true
 		},
 		{
-			"Name": "GameFeatures",
+			"Name": "GameplayAbilities",
 			"Enabled": true
 		},
 		{
-			"Name": "GameplayAbilities",
+			"Name": "GameFeatures",
 			"Enabled": true
 		}
 	]

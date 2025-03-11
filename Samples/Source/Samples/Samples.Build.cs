@@ -8,16 +8,17 @@ public class Samples : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { 
-			"Core",
-			"CoreUObject",
-			"Engine",
-			"InputCore",
-			// GAS
-			"GameplayTags",
-			// Game Features
-			"ModularGameplay",
-		});
+		PublicDependencyModuleNames.AddRange(new string[] {
+            "Core",
+            "CoreUObject",
+            "Engine",
+            "InputCore",
+            // GAS
+            "GameplayTags",
+            // Game Features
+            "ModularGameplay",
+            "GameFeatures",
+        });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
