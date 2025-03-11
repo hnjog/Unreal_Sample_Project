@@ -5,6 +5,7 @@
 #include "SampleGameMode.generated.h"
 
 class USampleExperienceDefinition;
+class USamplePawnData;
 
 UCLASS()
 class SAMPLES_API ASampleGameMode : public AGameModeBase
@@ -37,6 +38,7 @@ public:
 	void OnMatchAssignmentGiven(FPrimaryAssetId ExperienceId);
 	bool isExperienceLoaded() const;
 	void OnExperienceLoaded(const USampleExperienceDefinition* currentExperience);
+	const USamplePawnData* GetPawnDataForController(const AController* InController) const;
 };
 
 /*

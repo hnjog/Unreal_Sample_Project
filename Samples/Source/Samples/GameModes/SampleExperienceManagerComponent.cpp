@@ -35,6 +35,7 @@ void USampleExperienceManagerComponent::ServerSetCurrentExperience(FPrimaryAsset
 	TSubclassOf<USampleExperienceDefinition> AssetClass;
 	{
 		FSoftObjectPath AssetPath = AssetManager.GetPrimaryAssetPath(ExperienceId);
+		// B_ 블루프린트가 load 될 것
 		AssetClass = Cast<UClass>(AssetPath.TryLoad()); // 동기식 load
 	}
 
@@ -167,4 +168,11 @@ void USampleExperienceManagerComponent::OnExperienceFullLoadCompleted()
 	LoadState = ESampleExperienceLoadState::Loaded;
 	OnExperienceLoaded.Broadcast(CurrentExperience);
 	OnExperienceLoaded.Clear();
+}
+
+const USampleExperienceDefinition* USampleExperienceManagerComponent::GetCurrentExperienceChecked() const
+{
+	check(LoadState == ESampleExperienceLoadState::Loaded);
+	check(CurrentExperience != nullptr);
+	return CurrentExperience;
 }

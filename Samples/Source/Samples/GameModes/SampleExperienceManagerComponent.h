@@ -51,6 +51,7 @@ public:
 	void StartExperienceLoad();
 	void OnExperienceLoadComplete();
 	void OnExperienceFullLoadCompleted();
+	const USampleExperienceDefinition* GetCurrentExperienceChecked() const;
 
 public:
 	// 가리키는 객체를 수정할 수 없도록 const 를 걸어준다

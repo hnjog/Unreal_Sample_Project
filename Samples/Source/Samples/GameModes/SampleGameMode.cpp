@@ -3,7 +3,9 @@
 #include"../Player/SamplePlayerController.h"
 #include"../Player/SamplePlayerState.h"
 #include"../Character/SampleCharacter.h"
+#include"../Character/SamplePawnData.h"
 #include"../GameModes/SampleExperienceManagerComponent.h"
+#include"../GameModes/SampleExperienceDefinition.h"
 #include"Samples/SampleLogChannels.h"
 
 ASampleGameMode::ASampleGameMode()
@@ -28,7 +30,7 @@ void ASampleGameMode::InitGame(const FString& MapName, const FString& Options, F
 void ASampleGameMode::InitGameState()
 {
 	Super::InitGameState();
-	
+
 	// GameState 내부에 해당 클래스 존재시 반환
 	// Experience 비동기 로딩을 위한 Delegate를 준비
 	USampleExperienceManagerComponent* ExperienceManagerComponent = GameState->FindComponentByClass<USampleExperienceManagerComponent>();
@@ -39,7 +41,7 @@ void ASampleGameMode::InitGameState()
 	// OnExperienceLoaded를 등록
 	// 로딩이 되어있다면 바로 호출하고, 아니면 기다렸다 호출된다
 	// 현재 시점에선 로드가 안되어있으므로 기다렸다 호출하기 위함
-	ExperienceManagerComponent->CallOrRegister_OnExperienceLoaded(FOnSampleExperienceLoaded::FDelegate::CreateUObject(this,&ThisClass::OnExperienceLoaded ));
+	ExperienceManagerComponent->CallOrRegister_OnExperienceLoaded(FOnSampleExperienceLoaded::FDelegate::CreateUObject(this, &ThisClass::OnExperienceLoaded));
 }
 
 void ASampleGameMode::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
@@ -55,7 +57,7 @@ void ASampleGameMode::HandleStartingNewPlayer_Implementation(APlayerController* 
 APawn* ASampleGameMode::SpawnDefaultPawnAtTransform_Implementation(AController* NewPlayer, const FTransform& SpawnTransform)
 {
 	UE_LOG(LogSample, Log, TEXT("SpawnDefaultPawnAtTransform_Implementation is called!"));
-	return Super::SpawnDefaultPawnAtTransform_Implementation(NewPlayer,SpawnTransform);
+	return Super::SpawnDefaultPawnAtTransform_Implementation(NewPlayer, SpawnTransform);
 }
 
 void ASampleGameMode::HandleMatchAssignmentIfNotExpectingOne()
@@ -125,4 +127,42 @@ bool ASampleGameMode::isExperienceLoaded() const
 void ASampleGameMode::OnExperienceLoaded(const USampleExperienceDefinition* currentExperience)
 {
 
+}
+
+const USamplePawnData* ASampleGameMode::GetPawnDataForController(const AController* InController) const
+{
+	// 게임 도중에 PawnData가 오버라이드 되었을 경우,
+	// PawnData는 PlayerState에서 가져오게 됨
+	if (InController)
+	{
+		if (const ASamplePlayerState* SamplePS = InController->GetPlayerState<ASamplePlayerState>())
+		{
+			// 현재 캐싱이 되어있는 PawnData가 이미 있다면
+			// 그대로 반환한다 (이 경우는 playerState에서 바로 사용하는 것과 똑같긴 하다)
+			if (const USamplePawnData* PawnData = SamplePS->GetPawnData<USamplePawnData>())
+			{
+				return PawnData;
+			}
+		}
+	}
+
+	// fall back to the default for the current experience
+	// 아직 PlayerState에 PawnData가 설정되어 있지 않은 경우,
+	// ExperienceManagerComponent의 CurrentExperience로부터 가져와서 설정한다
+	check(GameState);
+	USampleExperienceManagerComponent* ExperienceManagerComponent = GameState->FindComponentByClass<USampleExperienceManagerComponent>();
+	check(ExperienceManagerComponent);
+
+	// load가 완료 되었다면 현재 Experience 쪽으로 가서 가져옴
+	if (ExperienceManagerComponent->IsExperienceLoaded())
+	{
+		const USampleExperienceDefinition* Experience = ExperienceManagerComponent->GetCurrentExperienceChecked();
+		if (Experience->DefaultPawnData)
+		{
+			return Experience->DefaultPawnData;
+		}
+	}
+
+	// load가 된것도 아닌데 여기 들어왔네?
+	return nullptr;
 }
