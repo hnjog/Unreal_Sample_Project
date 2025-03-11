@@ -24,6 +24,15 @@ void ASampleGameMode::InitGame(const FString& MapName, const FString& Options, F
 	// 호출 시점엔 아직 GameInstance를 통해 초기화 작업이 진행중이므로
 	// 해당 프레임에선 Lyra의 Comcept인 Experience 처리를 진행할 수 없음
 	// - 이를 위해 한 프레임 뒤에 이벤트를 받아 처리를 이어서 진행
+	// InitGameState가 호출된 후, HandleMatchAssignmentIfNotExpectingOne 가 호출된다
+	// InitGame(이 떄 한 프레임 뒤에 HandleMatchAssignmentIfNotExpectingOne 호출) 
+	// -> GameState 생성자 호출(ExperienceManager 생성) -> InitGameState 호출로 인하여
+	// OnExperienceLoaded 등록(이 때, Pawn들을 Restart 시킴)
+	// 
+	// HandleMatchAssignmentIfNotExpectingOne 를 통해 한 프레임 뒤,
+	// Manager에게 Experience를 Load하도록 시키며,
+	// 완료 될시 OnExperienceLoaded 가 호출
+	//
 	GetWorld()->GetTimerManager().SetTimerForNextTick(this, &ThisClass::HandleMatchAssignmentIfNotExpectingOne);
 }
 
