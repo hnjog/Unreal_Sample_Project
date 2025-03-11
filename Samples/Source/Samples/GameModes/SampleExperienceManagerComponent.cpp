@@ -44,13 +44,24 @@ void USampleExperienceManagerComponent::ServerSetCurrentExperience(FPrimaryAsset
 	// -> 해당 클래스의 기본 속성값을 가진 객체
 	// (CDO의 값을 변경하는 경우, 차후 생성되는 인스턴스의 기본값이 변경됨)
 	// 
+	// '기본값의 모음'이자 객체화된 인스턴스
+	// 
 	// CDO 를 가져오는 이유?
+	// 직렬화 하는 과정에서 Delta Serialization 을 지원하기 위함
+	// -> 직렬화는 데이터를 저장하는 방식
+	// -> Delta 직렬화는 데이터의 '변경 사항'만을 기록하여 데이터를 저장
+	// 
+	// CDO를 통해 기본값과 비교하여 바뀐 값만 저장하는 방식을 통해
+	// 메모리 절약 및 네트워크 서버 성능 개선 가능
+	// (바뀐 부분만 저장 및 전송)
+	// 
+	// CDO를 마음대로 수정하는것은 위험하지 않나?
+	//
 	const USampleExperienceDefinition* Experience = GetDefault<USampleExperienceDefinition>(AssetClass);
 	check(Experience != nullptr);
 	check(CurrentExperience == nullptr);
 	{
 		// CDO로 CurrentExperience를 설정
-		// Experience의 CDO를 변경했다면 CurrentExperience에 변경점도 같이 적용된다?
 		CurrentExperience = Experience;
 	}
 
@@ -71,8 +82,6 @@ void USampleExperienceManagerComponent::StartExperienceLoad()
 
 	// ServerSetCurrentExperience에선 ExperienceId를 넘겨주었는데, 여기선 CDO를 활용하여
 	// GetPrimaryAssetId를 로딩할 대상으로 넣는다
-	//
-	// CDO를 수정하는 경우 차후 인스턴스 생성에도 반영되기에 사용하는 걸까
 
 	TSet<FPrimaryAssetId> BundleAssetList;
 	BundleAssetList.Add(CurrentExperience->GetPrimaryAssetId());
