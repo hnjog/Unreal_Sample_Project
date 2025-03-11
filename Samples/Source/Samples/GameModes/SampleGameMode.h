@@ -27,6 +27,8 @@ public:
 	// (_Implementation 가 구현이 되어 있지 않은 경우는 BP의 원본 방식을 사용하고,
 	//  구현된 경우는 C++을 우선적으로 사용함)
 	// 
+	virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) final;
+
 	// HandleStartingNewPlayer
 	virtual void HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer) final;
 

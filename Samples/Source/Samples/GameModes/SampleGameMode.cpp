@@ -44,6 +44,24 @@ void ASampleGameMode::InitGameState()
 	ExperienceManagerComponent->CallOrRegister_OnExperienceLoaded(FOnSampleExperienceLoaded::FDelegate::CreateUObject(this, &ThisClass::OnExperienceLoaded));
 }
 
+UClass* ASampleGameMode::GetDefaultPawnClassForController_Implementation(AController* InController)
+{
+	// GetDefaultPawnClassForController 를 활용해
+	// PawnData로부터 PawnClass를 가져옴
+	if (const USamplePawnData* PawnData = GetPawnDataForController(InController))
+	{
+		if (PawnData->PawnClass)
+		{
+			return PawnData->PawnClass;
+		}
+	}
+
+	// 원래는 여기서 생성자에서 등록된 ASampleCharacter를 통해 SampleCharacter를 세팅하지만
+	// Experience가 load 되었다면 그걸 가져온다
+	return Super::GetDefaultPawnClassForController_Implementation(InController);
+}
+
+PRAGMA_DISABLE_OPTIMIZATION
 void ASampleGameMode::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
 {
 	if (isExperienceLoaded())
@@ -53,6 +71,7 @@ void ASampleGameMode::HandleStartingNewPlayer_Implementation(APlayerController* 
 		Super::HandleStartingNewPlayer_Implementation(NewPlayer);
 	}
 }
+PRAGMA_ENABLE_OPTIMIZATION
 
 APawn* ASampleGameMode::SpawnDefaultPawnAtTransform_Implementation(AController* NewPlayer, const FTransform& SpawnTransform)
 {
