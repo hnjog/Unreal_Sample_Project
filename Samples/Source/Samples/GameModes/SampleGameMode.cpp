@@ -126,7 +126,33 @@ bool ASampleGameMode::isExperienceLoaded() const
 
 void ASampleGameMode::OnExperienceLoaded(const USampleExperienceDefinition* currentExperience)
 {
+	// PlayerController 순회
+	for (FConstPlayerControllerIterator Iterator = GetWorld()->GetPlayerControllerIterator(); Iterator; Iterator++)
+	{
+		APlayerController* PC = Cast<APlayerController>(*Iterator);
+		// Load가 지금 완료되었지만,
+		// 먼저 Spawn되어 아무것도 하지 못한 Case가 있을 수 있음
+		// 그렇기에 전부 순회하면서 한번씩 체크
 
+		// PC가 Pawn을 Possess하지 않았다면, RestartPlayer을 통해 Pawn을 다시 Spawn
+		// - Onpossess를 참고
+		if (PC && PC->GetPawn() == nullptr)
+		{
+			if (PlayerCanRestart(PC))
+			{
+				// 재시작?
+				// 스타트 지점을 찾고,
+				// 내부적으로 Pawn을 가져오고 Spawn 해준다
+				// 이후 SetPawn, 그리고 Possess를 진행
+				// 사실상 초기에 Player 생성되는 로직을 다시 진행하는 것과 같다
+				// 
+				// 우리는 Experience가 로드될때까지 Pawn 생성을 막아뒀기에
+				// 초반에 해당 로직이 실행되지 못하는데
+				// 그것을 Restart를 통해 다시 진행시켜줌
+				RestartPlayer(PC);
+			}
+		}
+	}
 }
 
 const USamplePawnData* ASampleGameMode::GetPawnDataForController(const AController* InController) const
