@@ -9,4 +9,10 @@ class SAMPLES_API USampleGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 	
+public:
+
+	// UGameInstance interface
+	virtual void Init() override;
+	virtual void Shutdown() override;
+
 };
