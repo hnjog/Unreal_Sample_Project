@@ -1,6 +1,7 @@
 ﻿// 민감한 폴더 이름을 사용하는 경우는 경로를 확실히 하자
 #include "SampleAssetManager.h"
 #include "Samples/SampleLogChannels.h"
+#include"../SampleGameplayTags.h"
 
 USampleAssetManager::USampleAssetManager()
 {
@@ -29,6 +30,10 @@ void USampleAssetManager::StartInitialLoading()
 {
 	// 생성 시점 : 에디터가 켜지기 전 시점 -> Thread-safe 하지 않음
 	Super::StartInitialLoading();
+
+	// 태그 싱글톤 호출
+	// 해당 시점엔 Editor가 켜지기 전 시점
+	FSampleGameplayTags::InitializeNativeTags();
 }
 PRAGMA_ENABLE_OPTIMIZATION
 
