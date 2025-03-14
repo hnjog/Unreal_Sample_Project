@@ -1,9 +1,10 @@
-#include "SampleCharacter.h"
+﻿#include "SampleCharacter.h"
 
 ASampleCharacter::ASampleCharacter()
 {
-	PrimaryActorTick.bCanEverTick = true;
-
+	// Tick 꺼준다
+	PrimaryActorTick.bStartWithTickEnabled = false;
+	PrimaryActorTick.bCanEverTick = false;
 }
 
 void ASampleCharacter::BeginPlay()
