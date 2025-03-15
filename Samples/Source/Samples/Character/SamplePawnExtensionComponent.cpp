@@ -1,5 +1,6 @@
 ﻿#include "SamplePawnExtensionComponent.h"
 #include "../SampleLogChannels.h"
+#include "Components/GameFrameworkComponentManager.h"
 
 USamplePawnExtensionComponent::USamplePawnExtensionComponent(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -25,6 +26,23 @@ void USamplePawnExtensionComponent::OnRegister()
 			return;
 		}
 	}
+
+	// GameFrameworkComponentManager의 InitState 사용을 위한 등록 진행
+	// - IGameFrameworkInitStateInterface를 상속받았기에 RegisterInitStateFeature 을 통해 등록
+	// InitState를 사용하려면 '등록'을 해야 한다
+	// 
+	// UGameFrameworkComponentManager의 GetForActor 를 보면
+	// 특정한 World마다 하나만 존재 (싱글톤과 비슷)
+	// 
+	// RegisterInitStateFeature
+	// - IGameFrameworkInitStateInterface 인터페이스 구현시,
+	//   자신의 상태를 매니저에 등록시키는 함수
+	//   (컴포넌트 자신과 '소유 액터'를 매니저에 등록함으로서,
+	//    Actor가 GameFeature로 정의된 현재 기능의 이름으로 현재 객체(컴포넌트)를 등록)
+	RegisterInitStateFeature();
+	
+	// 디버깅을 위한 함수
+	UGameFrameworkComponentManager* Manager = UGameFrameworkComponentManager::GetForActor(GetOwningActor());
 }
 
 void USamplePawnExtensionComponent::BeginPlay()
