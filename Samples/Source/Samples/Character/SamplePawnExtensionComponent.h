@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/PawnComponent.h"
+#include "Components/GameFrameworkInitStateInterface.h"
 #include "SamplePawnExtensionComponent.generated.h"
 
 /*
@@ -26,10 +27,12 @@
 	Delegate 처럼 이벤트 기반의
 	필요에 따라 그때그때 효율적으로 처리하는 방식으로 구현
 
+	IGameFrameworkInitStateInterface 는 
+	초기화를 편리하게 만들 수 있는 인터페이스
 */
 
 UCLASS()
-class SAMPLES_API USamplePawnExtensionComponent : public UPawnComponent
+class SAMPLES_API USamplePawnExtensionComponent : public UPawnComponent, public IGameFrameworkInitStateInterface
 {
 	GENERATED_BODY()
 

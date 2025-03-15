@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/PawnComponent.h"
+#include "Components/GameFrameworkInitStateInterface.h"
 #include "SampleHeroComponent.generated.h"
 
 /*
@@ -23,7 +24,7 @@
 */
 
 UCLASS(Blueprintable, Meta = (BlueprintSpawnableComponent))
-class SAMPLES_API USampleHeroComponent : public UPawnComponent
+class SAMPLES_API USampleHeroComponent : public UPawnComponent, public IGameFrameworkInitStateInterface
 {
 	GENERATED_BODY()
 public:
