@@ -36,6 +36,12 @@ class SAMPLES_API USamplePawnExtensionComponent : public UPawnComponent
 public:
 	USamplePawnExtensionComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+	// UPawnComponent Interfaces
+	// OnRegister 
+	// : 생성되는 초반에 호출됨
+	virtual void OnRegister() final;
+	virtual void BeginPlay() final;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) final;
 };
 
 /*
