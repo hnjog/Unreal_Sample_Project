@@ -1,10 +1,14 @@
 ﻿#include "SampleCharacter.h"
+#include"SamplePawnExtensionComponent.h"
 
 ASampleCharacter::ASampleCharacter()
 {
 	// Tick 꺼준다
 	PrimaryActorTick.bStartWithTickEnabled = false;
 	PrimaryActorTick.bCanEverTick = false;
+
+	// PawnExtensionComponent 생성
+	PawnExtComponent = CreateDefaultSubobject<USamplePawnExtensionComponent>(TEXT("PawnExtensionComponent"));
 }
 
 void ASampleCharacter::BeginPlay()

@@ -1,8 +1,10 @@
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "SampleCharacter.generated.h"
+
+class USamplePawnExtensionComponent;
 
 UCLASS()
 class SAMPLES_API ASampleCharacter : public ACharacter
@@ -20,4 +22,25 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+public:
+	// TObjectPtr<> : 언리얼 내부의 스마트 포인터 같은 것
+	// - UObject 기반 클래스에 대한 포인터
+	// - 가비지 컬렉션 시스템과 함께 사용되어 성능 최적화
+	// - 안전한 포인터 관리(dangling pointer 같은 상황을 방지)
+	// -> Unreal 내부에서 UObject 기반한 메모리에 대하여 추적하고 관리하여
+	//    가비지 컬렉터가 참조되지 않는 메모리(or 특정 조건 삭제)를 수거
+	// => 개발자의 실수를 방지하며 개발 편의를 위한 기능
+	// 
+	// 에디터가 아닌 환경이라면
+	// Raw Pointer로 변환되어 최적화 된다
+	// 
+	// 전반적으로 '게임 오브젝트'인 UObject 를 위한 '스마트 포인터' 이다
+	// 언리얼 엔진에 이미 다른 스마트 포인터인
+	// TSharedPtr - 여러 객체가 동일한 리소스를 공유(참조 카운트로 생명 주기 관리)
+	// TWeakPtr - TSharedPtr 와 함께 사용되어 '약한 참조' 유지
+	// TUniquePtr - 고유한 소유권 제공 (다른 포인터로 복사 x)
+	// 등이 존재
+	//
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sample|Character")
+	TObjectPtr<USamplePawnExtensionComponent> PawnExtComponent;
 };
