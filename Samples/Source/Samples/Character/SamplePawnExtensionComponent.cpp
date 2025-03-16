@@ -1,6 +1,7 @@
-﻿#include "SamplePawnExtensionComponent.h"
+#include "SamplePawnExtensionComponent.h"
 #include "../SampleLogChannels.h"
 #include "Components/GameFrameworkComponentManager.h"
+#include"../SampleGameplayTags.h"
 
 // FeatureName을 Component 단위니, Component는 빼고 PawnExtension으로만 네이밍 한다
 const FName USamplePawnExtensionComponent::NAME_ActorFeatureName("PawnExtension");
@@ -65,6 +66,37 @@ void USamplePawnExtensionComponent::OnRegister()
 void USamplePawnExtensionComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// FeatureName에 NAME_None을 넣으면, Actor에 등록된 Feature Component의 InitState 상태를 관찰하겠다는 의미
+	// Actor의 InitState가 변경되는 상황을 구독받겠다
+	// NAME_None와 FGameplayTag (빈 태그) 인 상황
+	// 
+	// NAME_None 을 넣으면 현재 자신 이후로 생길 다른 컴포넌트 들에 대하여 상태 변화를 감지한다는 의미
+	// (정확히는 PawnExtensionComponent가 먼저 생성이 되고,
+	//  다른 컴포넌트들은 같은 객체의 다른 컴포넌트로 Manager가 던져줄테니)
+	// (결국 ComponentManager가 알려준다)
+	// (특정한 FeatureName을 정확히 넣으면, 해당하는 FeatureName의 상태 변경만 받을 수 있음)
+	//
+	// 현재는 '빈 값'을 넣었기에 모든 상태 변화를 감지한다
+	// FGameplayTag 에 특정한 상태를 넣는 경우,
+	// 해당 상태로 변경되는 것만 받게 된다
+	//
+	BindOnActorInitStateChanged(NAME_None, FGameplayTag(), false);
+
+	// InitState_Spawned 로 상태 변환 시도
+	// - TryToChangeInitState 의 진행 양상
+	//  1. CanChangeInitState로 상태 변환의 가능성 유무를 판단
+	//  2. HandleChangeInitState로 내부 상태를 변경(Feature Component)
+	//  3. BindOnActorInitStateChanged로 Bind된 Delegate를 조건에 맞게 호출
+	//		(현재 객체가 변경된 상태에 구독한 Delegate 들에게 알려준다)
+	//		- SamplePawnComponent의 경우, 모든 Actor의 Feature 상태 변화에 따라
+	//		  OnActorInitStateChanged 가 호출됨 (위에서 Bind 했으므로)
+	ensure(TryToChangeInitState(FSampleGameplayTags::Get().InitState_Spawned));
+
+	// 오버라이드 하여 사용하는 함수
+	// - ForceUpdateInitState 와 같이 강제 업데이트 진행
+	//   (CanChangeInitState와 HandleChangeInitState 를 통하여)
+	CheckDefaultInitialization();
 }
 
 void USamplePawnExtensionComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
