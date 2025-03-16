@@ -39,9 +39,23 @@ void USamplePawnExtensionComponent::OnRegister()
 	//   자신의 상태를 매니저에 등록시키는 함수
 	//   (컴포넌트 자신과 '소유 액터'를 매니저에 등록함으로서,
 	//    Actor가 GameFeature로 정의된 현재 기능의 이름으로 현재 객체(컴포넌트)를 등록)
+	// 
+	// FObjectKey? - 특정 클래스가 CDO인지, 일반 객체 인지 등을 파악할 수 있도록
+	// 메모리와 ID값이 존재하는 구조체
+	// 
+	// A 라는 CDO 가 존재하고
+	// A1, A2 가 생성되었을때, 각각에 컴포넌트들이 붙을것임
+	// 컴포넌트 매니저는 하나밖에 없고 내부에서 Map을 통해 관리한다
+	// (같은 클래스들이지만, Instance별로 따로 구분 - FObjectKey 로 구분)
+	// (이후 내부에서 FeatureName을 통해 Component를 구분한다)
+	//
+	// 결론적으로 Manager에게 현재 객체와 자신을 Key로서 등록시키며 관리하도록 요청하는 단계이며,
+	// GameInstance 쪽에 정의한 RegisterInitState를 사용하기 위하여 필요한 단계
 	RegisterInitStateFeature();
 	
-	// 디버깅을 위한 함수
+	// GetOwningActor
+	// - 자신이 Actor라면 자신을,
+	//   아니라면 현재 자신이 부착되어있는 액터를 반환
 	UGameFrameworkComponentManager* Manager = UGameFrameworkComponentManager::GetForActor(GetOwningActor());
 }
 
