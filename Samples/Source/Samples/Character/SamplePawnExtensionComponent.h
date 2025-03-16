@@ -52,6 +52,9 @@ public:
 	// GetFeatureName -> 기본적으로는 Override해서 사용해야 한다
 	// NAME_None을 반환하고 있기에
 	virtual FName GetFeatureName() const final { return NAME_ActorFeatureName; }
+	virtual void OnActorInitStateChanged(const FActorInitStateChangedParams& Params) final;
+	virtual bool CanChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState, FGameplayTag DesiredState) const final;
+	virtual void CheckDefaultInitialization() final;
 };
 
 /*

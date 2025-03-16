@@ -1,4 +1,4 @@
-#include "SamplePawnExtensionComponent.h"
+﻿#include "SamplePawnExtensionComponent.h"
 #include "../SampleLogChannels.h"
 #include "Components/GameFrameworkComponentManager.h"
 #include"../SampleGameplayTags.h"
@@ -106,4 +106,19 @@ void USamplePawnExtensionComponent::EndPlay(const EEndPlayReason::Type EndPlayRe
 	UnregisterInitStateFeature();
 
 	Super::EndPlay(EndPlayReason);
+}
+
+void USamplePawnExtensionComponent::OnActorInitStateChanged(const FActorInitStateChangedParams& Params)
+{
+	IGameFrameworkInitStateInterface::OnActorInitStateChanged(Params);
+}
+
+bool USamplePawnExtensionComponent::CanChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState, FGameplayTag DesiredState) const
+{
+	return IGameFrameworkInitStateInterface::CanChangeInitState(Manager, CurrentState, DesiredState);
+}
+
+void USamplePawnExtensionComponent::CheckDefaultInitialization()
+{
+	IGameFrameworkInitStateInterface::CheckDefaultInitialization();
 }
