@@ -101,5 +101,9 @@ void USamplePawnExtensionComponent::BeginPlay()
 
 void USamplePawnExtensionComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
+	// 소멸 시점에 호출, RegisterInitStateFeature() 와 쌍을 이루는 함수
+	// 이걸 빠트리면, 컴포넌트가 제거되지 않고 map에 계속 남아 유지될 가능성도 존재함
+	UnregisterInitStateFeature();
+
 	Super::EndPlay(EndPlayReason);
 }
