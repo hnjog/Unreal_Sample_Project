@@ -59,7 +59,7 @@ void USamplePawnExtensionComponent::OnRegister()
 	// GetOwningActor
 	// - 자신이 Actor라면 자신을,
 	//   아니라면 현재 자신이 부착되어있는 액터를 반환
-	UGameFrameworkComponentManager* Manager = UGameFrameworkComponentManager::GetForActor(GetOwningActor());
+	// UGameFrameworkComponentManager* Manager = UGameFrameworkComponentManager::GetForActor(GetOwningActor());
 }
 
 void USamplePawnExtensionComponent::BeginPlay()
