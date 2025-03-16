@@ -2,6 +2,9 @@
 #include "../SampleLogChannels.h"
 #include "Components/GameFrameworkComponentManager.h"
 
+// FeatureName을 Component 단위니, Component는 빼고 PawnExtension으로만 네이밍 한다
+const FName USamplePawnExtensionComponent::NAME_ActorFeatureName("PawnExtension");
+
 USamplePawnExtensionComponent::USamplePawnExtensionComponent(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {

@@ -39,12 +39,19 @@ class SAMPLES_API USamplePawnExtensionComponent : public UPawnComponent, public 
 public:
 	USamplePawnExtensionComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+	// 선언은 헤더, 구현은 cpp
+	static const FName NAME_ActorFeatureName;
+
 	// UPawnComponent Interfaces
 	// OnRegister 
 	// : 생성되는 초반에 호출됨
 	virtual void OnRegister() final;
 	virtual void BeginPlay() final;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) final;
+
+	// GetFeatureName -> 기본적으로는 Override해서 사용해야 한다
+	// NAME_None을 반환하고 있기에
+	virtual FName GetFeatureName() const final { return NAME_ActorFeatureName; }
 };
 
 /*
