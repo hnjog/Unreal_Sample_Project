@@ -118,7 +118,30 @@ bool USamplePawnExtensionComponent::CanChangeInitState(UGameFrameworkComponentMa
 	return IGameFrameworkInitStateInterface::CanChangeInitState(Manager, CurrentState, DesiredState);
 }
 
+// PawnExtension에서
+// 나를 제외하고 전부 CheckDefaultInitialization 를 호출 시킨 후,
+// ContinueInitStateChain 를 통해 현재 가능한 상태까지 업데이트를 하게 된다
 void USamplePawnExtensionComponent::CheckDefaultInitialization()
 {
-	IGameFrameworkInitStateInterface::CheckDefaultInitialization();
+	// PawnExtensionComponent는 Feature Component들의 초기화를 관장하는 Component이다:
+	// - 따라서, Actor에 바인딩된 Feature Component들에 대해 CheckDefaultInitialization을 
+	//   호출해주도록 한다 (ForceUpdate 느낌?)
+	//   (현재 자신은 제외하고)
+	// - 이 메서드를 IGameFrameworkInitStateInterface가 제공하는데, 
+	//    CheckDefaultInitializationForImplementers
+	// 
+	CheckDefaultInitializationForImplementers();
+
+	const FSampleGameplayTags& InitTags = FSampleGameplayTags::Get();
+
+	// 사용자 정의 InitState를 직접 넘겨준다
+	static const TArray<FGameplayTag> StateChain = { InitTags.InitState_Spawned, InitTags.InitState_DataAvailable, InitTags.InitState_DataInitialized, InitTags.InitState_GameplayReady };
+
+	// CanChangeInitState()와 HandleChangeInitState() 
+	// 그리고 ChangeFeatureInitState 호출을 통한 OnActorInitStateChanged Delegate 호출까지 진행
+	// 
+	// chain들을 받고
+	// 현재 상태에서 다음 상태로 넘어갈 수 있는지를 판단하고
+	// 가능하면 계속 넘겨준다
+	ContinueInitStateChain(StateChain);
 }
