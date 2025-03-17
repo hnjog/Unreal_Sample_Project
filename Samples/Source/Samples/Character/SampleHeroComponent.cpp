@@ -1,6 +1,8 @@
 ﻿#include "SampleHeroComponent.h"
 #include "Components/GameFrameworkComponentManager.h"
 #include "../SampleLogChannels.h"
+#include"../SampleGameplayTags.h"
+#include"SamplePawnExtensionComponent.h"
 
 const FName USampleHeroComponent::NAME_ActorFeatureName("PawnExtension");
 
@@ -33,6 +35,15 @@ void USampleHeroComponent::OnRegister()
 void USampleHeroComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// PawnExtension의 모든 상태변화를 받겠다고 구독
+	BindOnActorInitStateChanged(USamplePawnExtensionComponent::NAME_ActorFeatureName, FGameplayTag(), false);
+
+	// 상태 변화 감지
+	ensure(TryToChangeInitState(FSampleGameplayTags::Get().InitState_Spawned));
+
+	// 자신의 초기화 호출
+	CheckDefaultInitialization();
 }
 
 void USampleHeroComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
