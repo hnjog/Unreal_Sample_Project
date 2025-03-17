@@ -29,4 +29,20 @@ class SAMPLES_API USampleHeroComponent : public UPawnComponent, public IGameFram
 	GENERATED_BODY()
 public:
 	USampleHeroComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+	static const FName NAME_ActorFeatureName;
+
+	// PawnComponent interface
+	virtual void OnRegister() final;
+	virtual void BeginPlay() final;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) final;
+
+	// IGameFrameworkInitStateInterface
+	virtual FName GetFeatureName() const final { return NAME_ActorFeatureName; }
+	virtual void OnActorInitStateChanged(const FActorInitStateChangedParams& Params) final;
+	virtual bool CanChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState, FGameplayTag DesiredState) const final;
+	// 상태 변경에 따른 데이터 핸들링용 함수 -> PawnExtension은 초기화를 담당하며
+	// 각 컴포넌트들의 데이터는 각자가 관리한다
+	virtual void HandleChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState, FGameplayTag DesiredState) final;
+	virtual void CheckDefaultInitialization() final;
 };
