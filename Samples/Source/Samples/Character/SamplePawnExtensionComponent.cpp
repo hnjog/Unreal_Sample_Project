@@ -2,6 +2,7 @@
 #include "../SampleLogChannels.h"
 #include "Components/GameFrameworkComponentManager.h"
 #include"../SampleGameplayTags.h"
+#include"../Character/SamplePawnData.h"
 
 // FeatureName을 Component 단위니, Component는 빼고 PawnExtension으로만 네이밍 한다
 const FName USamplePawnExtensionComponent::NAME_ActorFeatureName("PawnExtension");
@@ -113,9 +114,65 @@ void USamplePawnExtensionComponent::OnActorInitStateChanged(const FActorInitStat
 	IGameFrameworkInitStateInterface::OnActorInitStateChanged(Params);
 }
 
+// CurrentState -> DesiredState로 바꾸기 위하여 '요청'하는 함수
 bool USamplePawnExtensionComponent::CanChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState, FGameplayTag DesiredState) const
 {
-	return IGameFrameworkInitStateInterface::CanChangeInitState(Manager, CurrentState, DesiredState);
+	check(Manager);
+
+	// 일단 OnRegister에서 체크하고 있으니 Pawn 체크는 안한듯?
+	APawn* Pawn = GetPawn<APawn>();
+	
+	const FSampleGameplayTags& InitTags = FSampleGameplayTags::Get();
+
+	// InitState_Spawned 초기화 상태 요청
+	if (!CurrentState.IsValid() && DesiredState == InitTags.InitState_Spawned)
+	{
+		// Pawn이 잘 세팅만 되어있으면 바로 Spawned로 넘어감!
+		if (Pawn)
+		{
+			return true;
+		}
+	}
+
+	// Spawned -> DataAvailable
+	if (CurrentState == InitTags.InitState_Spawned && DesiredState == InitTags.InitState_DataAvailable)
+	{
+		// 아마 PawnData를 누군가 설정하는 모양이다
+		if (!PawnData)
+		{
+			return false;
+		}
+
+		// LocallyControlled인 Pawn이 Controller가 없으면 에러!
+		const bool bIsLocallyControlled = Pawn->IsLocallyControlled();
+		if (bIsLocallyControlled)
+		{
+			if (!GetController<AController>())
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	// DataAvailable -> DataInitialized
+	if (CurrentState == InitTags.InitState_DataAvailable && DesiredState == InitTags.InitState_DataInitialized)
+	{
+		// Actor에 바인드된 모든 Feature들이 DataAvailable 상태일 때, DataInitialized로 넘어감:
+		// - HaveAllFeaturesReachedInitState 확인
+		// 다른 컴포넌트들과 비슷하게 연동되도록
+		return Manager->HaveAllFeaturesReachedInitState(Pawn, InitTags.InitState_DataAvailable);
+	}
+
+	// DataInitialized -> GameplayReady
+	if (CurrentState == InitTags.InitState_DataInitialized && DesiredState == InitTags.InitState_GameplayReady)
+	{
+		return true;
+	}
+
+	// 위의 선형적인(linear) transition이 아니면 false!
+	return false;
 }
 
 // PawnExtension에서
