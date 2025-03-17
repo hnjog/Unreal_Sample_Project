@@ -4,6 +4,7 @@
 #include"../SampleGameplayTags.h"
 #include"SamplePawnExtensionComponent.h"
 #include"../Player/SamplePlayerState.h"
+#include"SamplePawnData.h"
 
 const FName USampleHeroComponent::NAME_ActorFeatureName("Hero");
 
