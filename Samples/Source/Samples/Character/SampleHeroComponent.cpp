@@ -118,7 +118,25 @@ bool USampleHeroComponent::CanChangeInitState(UGameFrameworkComponentManager* Ma
 
 void USampleHeroComponent::HandleChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState, FGameplayTag DesiredState)
 {
-	IGameFrameworkInitStateInterface::HandleChangeInitState(Manager, CurrentState, DesiredState);
+	const FSampleGameplayTags& InitTags = FSampleGameplayTags::Get();
+
+	// DataAvailable -> DataInitialized
+	if (CurrentState == InitTags.InitState_DataAvailable && DesiredState == InitTags.InitState_DataInitialized)
+	{
+		APawn* Pawn = GetPawn<APawn>();
+		ASamplePlayerState* SamplePS = GetPlayerState<ASamplePlayerState>();
+		if (!ensure(Pawn && SamplePS))
+			return;
+
+		// Input & Camera Handling (TODO)
+
+		const bool bIsLocallyControlled = Pawn->IsLocallyControlled();
+		const USamplePawnData* PawnData = nullptr;
+		if (USamplePawnExtensionComponent* PawnExtComp = USamplePawnExtensionComponent::FindPawnExtensionComponent(Pawn))
+		{
+			PawnData = PawnExtComp->GetPawnData<USamplePawnData>();
+		}
+	}
 }
 
 void USampleHeroComponent::CheckDefaultInitialization()
