@@ -7,6 +7,7 @@
 #include"../GameModes/SampleExperienceManagerComponent.h"
 #include"../GameModes/SampleExperienceDefinition.h"
 #include"Samples/SampleLogChannels.h"
+#include"../Character/SamplePawnExtensionComponent.h"
 
 ASampleGameMode::ASampleGameMode()
 {
@@ -84,8 +85,31 @@ PRAGMA_ENABLE_OPTIMIZATION
 
 APawn* ASampleGameMode::SpawnDefaultPawnAtTransform_Implementation(AController* NewPlayer, const FTransform& SpawnTransform)
 {
-	UE_LOG(LogSample, Log, TEXT("SpawnDefaultPawnAtTransform_Implementation is called!"));
-	return Super::SpawnDefaultPawnAtTransform_Implementation(NewPlayer, SpawnTransform);
+	// 원래 있었던 것들
+	FActorSpawnParameters SpawnInfo;
+	SpawnInfo.Instigator = GetInstigator();
+	SpawnInfo.ObjectFlags |= RF_Transient;
+	SpawnInfo.bDeferConstruction = true;
+
+	// PawnData를 가져가 캐싱하기 위한 일종의 Wrapping
+	if (UClass* PawnClass = GetDefaultPawnClassForController(NewPlayer))
+	{
+		if (APawn* SpawnedPawn = GetWorld()->SpawnActor<APawn>(PawnClass,SpawnTransform,SpawnInfo))
+		{
+			if (USamplePawnExtensionComponent* PawnExtComp = USamplePawnExtensionComponent::FindPawnExtensionComponent(SpawnedPawn))
+			{
+				if (const USamplePawnData* PawnData = GetPawnDataForController(NewPlayer))
+				{
+					PawnExtComp->SetPawnData(PawnData);
+				}
+			}
+
+			SpawnedPawn->FinishSpawning(SpawnTransform);
+			return SpawnedPawn;
+		}
+	}
+
+	return nullptr;
 }
 
 void ASampleGameMode::HandleMatchAssignmentIfNotExpectingOne()
