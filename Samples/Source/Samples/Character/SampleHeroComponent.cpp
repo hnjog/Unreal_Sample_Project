@@ -70,5 +70,11 @@ void USampleHeroComponent::HandleChangeInitState(UGameFrameworkComponentManager*
 
 void USampleHeroComponent::CheckDefaultInitialization()
 {
-	IGameFrameworkInitStateInterface::CheckDefaultInitialization();
+	// PawnExtension의 경우는 다른 Component들에게 전부 이 함수를 호출하라 하지만
+	// Hero는 딱히 다른 컴포넌트에 영향을 줄 필욘 없음
+	// -> 이 컴포넌트가 다른 컴포넌트의 존재를 몰라도 되기에 종속성이 없어진다
+	// Pawn도 manager에게 요청하는 것이지, 딱히 다른 컴포넌트를 직접 호출하진 않는다
+	const FSampleGameplayTags& InitTags = FSampleGameplayTags::Get();
+	static const TArray<FGameplayTag> StateChain = { InitTags.InitState_Spawned, InitTags.InitState_DataAvailable, InitTags.InitState_DataInitialized, InitTags.InitState_GameplayReady };
+	ContinueInitStateChain(StateChain);
 }
