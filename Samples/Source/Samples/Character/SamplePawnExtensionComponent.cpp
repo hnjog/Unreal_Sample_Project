@@ -111,7 +111,27 @@ void USamplePawnExtensionComponent::EndPlay(const EEndPlayReason::Type EndPlayRe
 
 void USamplePawnExtensionComponent::OnActorInitStateChanged(const FActorInitStateChangedParams& Params)
 {
-	IGameFrameworkInitStateInterface::OnActorInitStateChanged(Params);
+	if (Params.FeatureName != NAME_ActorFeatureName)
+	{
+		// PawnExtensionComponent에선 다른 Feature Component들의 상태가
+		// InitState_DataAvailable 임을 관찰하고 싱크를 맞춰줌 (CanChangeInitState)
+		// - 이를 위해 OnActorInitStateChanged 에서 
+		// InitState_DataAvailable 로 바뀐 컴포넌트 들이 있으면
+		// 지속적으로 CheckDefaultInitialization 를 호출시켜
+		// 전체적인 상태를 확인하고 갱신한다
+		// 
+		// PEC::CheckDefaultInitialization -> 
+		// 다른 컴포넌트들의 CheckDefaultInitialization 호출 및
+		// ContinueInitStateChain 를 통해
+		// CanChangeInitState 를 내부에서 호출시킨다
+		// CanChangeInitState 와 HandleChangeInitState 를 통해
+		// 상태가 변경되면 OnActorInitStateChanged 가 호출된다
+		const FSampleGameplayTags& InitTags = FSampleGameplayTags::Get();
+		if (Params.FeatureState == InitTags.InitState_DataAvailable)
+		{
+			CheckDefaultInitialization();
+		}
+	}
 }
 
 // CurrentState -> DesiredState로 바꾸기 위하여 '요청'하는 함수
