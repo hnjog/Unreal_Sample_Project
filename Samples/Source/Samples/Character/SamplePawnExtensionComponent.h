@@ -31,6 +31,8 @@
 	초기화를 편리하게 만들 수 있는 인터페이스
 */
 
+class USamplePawnData;
+
 UCLASS()
 class SAMPLES_API USamplePawnExtensionComponent : public UPawnComponent, public IGameFrameworkInitStateInterface
 {
@@ -55,6 +57,10 @@ public:
 	virtual void OnActorInitStateChanged(const FActorInitStateChangedParams& Params) final;
 	virtual bool CanChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState, FGameplayTag DesiredState) const final;
 	virtual void CheckDefaultInitialization() final;
+
+	// Pawn을 생성한 Data를 캐싱 (다른 컴포넌트에서 사용 가능)
+	UPROPERTY(EditInstanceOnly, Category = "Sample|Pawn")
+	TObjectPtr<const USamplePawnData> PawnData;
 };
 
 /*
