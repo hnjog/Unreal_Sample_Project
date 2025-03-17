@@ -15,6 +15,30 @@ USamplePawnExtensionComponent::USamplePawnExtensionComponent(const FObjectInitia
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
+void USamplePawnExtensionComponent::SetPawnData(const USamplePawnData* InPawnData)
+{
+	// Pawn에 대한 Authority가 없으면 이 함수는 진행하지 않음
+	// GetLocalRole -> 객체의 네트워크 역할을 확인하는 데 사용하는 객체
+	// 서버 / 클라 로 나뉘는 네트워크의 역할에서 역할을 구분한다
+	// ROLE_Authority : 서버가 해당 객체를 제어함 (서버가 게임 객체를 관리 및 변경)
+	// 
+	// ROLE_AutonomousProxy : 클라이언트가 객체를 제어할 수 있음 
+	// (클라가 자신의 캐릭터 등을 조작하는 상황 -> 차후, 서버에서 확인하고 수정 이나 동기화)
+	// 
+	// ROLE_SimulatedProxy : 서버에서 제어되나, 클라이언트가 이를 시뮬레이션 하는 경우
+	// (NPC, 다른 플레이어, 몬스터와 같이 서버에서 상태를 제어하고,
+	// 클라에선 해당 위치를 통해 렌더링 및 구현 되는 경우)
+	// 
+	APawn* Pawn = GetPawnChecked<APawn>();
+	if (Pawn->GetLocalRole() != ROLE_Authority)
+		return;
+
+	if (PawnData)
+		return;
+
+	PawnData = InPawnData;
+}
+
 void USamplePawnExtensionComponent::OnRegister()
 {
 	Super::OnRegister();

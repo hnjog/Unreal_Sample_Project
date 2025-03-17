@@ -41,9 +41,14 @@ class SAMPLES_API USamplePawnExtensionComponent : public UPawnComponent, public 
 public:
 	USamplePawnExtensionComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	// 선언은 헤더, 구현은 cpp
-	static const FName NAME_ActorFeatureName;
+	static USamplePawnExtensionComponent* FindPawnExtensionComponent(const AActor* Actor) { return (Actor ? Actor->FindComponentByClass<USamplePawnExtensionComponent>() : nullptr); }
 
+	template<class T>
+	const T* GetPawnData() const { return Cast<T>(PawnData); }
+
+	void SetPawnData(const USamplePawnData* InPawnData);
+
+public:
 	// UPawnComponent Interfaces
 	// OnRegister 
 	// : 생성되는 초반에 호출됨
@@ -58,9 +63,13 @@ public:
 	virtual bool CanChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState, FGameplayTag DesiredState) const final;
 	virtual void CheckDefaultInitialization() final;
 
+public:
 	// Pawn을 생성한 Data를 캐싱 (다른 컴포넌트에서 사용 가능)
 	UPROPERTY(EditInstanceOnly, Category = "Sample|Pawn")
 	TObjectPtr<const USamplePawnData> PawnData;
+
+	// 선언은 헤더, 구현은 cpp
+	static const FName NAME_ActorFeatureName;
 };
 
 /*
