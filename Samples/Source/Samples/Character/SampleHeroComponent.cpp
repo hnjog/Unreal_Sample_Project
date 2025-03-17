@@ -5,7 +5,7 @@
 #include"SamplePawnExtensionComponent.h"
 #include"../Player/SamplePlayerState.h"
 
-const FName USampleHeroComponent::NAME_ActorFeatureName("PawnExtension");
+const FName USampleHeroComponent::NAME_ActorFeatureName("Hero");
 
 USampleHeroComponent::USampleHeroComponent(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
