@@ -158,6 +158,7 @@ bool USamplePawnExtensionComponent::CanChangeInitState(UGameFrameworkComponentMa
 	if (CurrentState == InitTags.InitState_Spawned && DesiredState == InitTags.InitState_DataAvailable)
 	{
 		// 아마 PawnData를 누군가 설정하는 모양이다
+		// -> GameMode에서 해준다
 		if (!PawnData)
 		{
 			return false;
