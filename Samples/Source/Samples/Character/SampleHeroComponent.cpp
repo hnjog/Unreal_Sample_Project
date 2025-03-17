@@ -56,7 +56,19 @@ void USampleHeroComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 void USampleHeroComponent::OnActorInitStateChanged(const FActorInitStateChangedParams& Params)
 {
-	IGameFrameworkInitStateInterface::OnActorInitStateChanged(Params);
+	const FSampleGameplayTags& InitTags = FSampleGameplayTags::Get();
+	if (Params.FeatureName == USamplePawnExtensionComponent::NAME_ActorFeatureName)
+	{
+		// PawnExtension에서 들어온 것인지 체크하고
+		// 해당 컴포넌트의 상태를 체크하고
+		// 그 때, 자신의 CheckDefaultInitialization를 호출
+		// 일종의 보험(PawnExtension에서 호출을 하고 있는 상황이지만, 순서가 꼬이는 경우 등을 대비한 것으로 보인다)
+		if (Params.FeatureState == InitTags.InitState_DataInitialized)
+		{
+			CheckDefaultInitialization();
+		}
+	}
+	
 }
 
 bool USampleHeroComponent::CanChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState, FGameplayTag DesiredState) const
