@@ -34,5 +34,9 @@ void ASampleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	// Pawn이 Possess로서, Controller와 PlayerState 정보 접근이 가능한 상태가 되었기에
+	// PawnExtensionComponent에게 현재 상황을 전달
+	// 이러면 다시 PEC 와 HC에서 InitState가 업데이트 될것임
+	PawnExtComponent->SetupPlayerInputComponent();
 }
 

@@ -37,6 +37,20 @@ void USamplePawnExtensionComponent::SetPawnData(const USamplePawnData* InPawnDat
 		return;
 
 	PawnData = InPawnData;
+	// lyra 원본은 내부에선
+	// CheckDefaultInitialization를 호출하나, 
+	// 해당 시점에선 State가 None이기에 StateChain이 호출되어도 상태가 변하지 않는다 
+	// -> 캐릭터가 생성되고 바로 컴포넌트에 넣어주었으며,
+	// BeginPlay()는 객체가 월드에 스폰되고 '다음 프레임'에 호출이 된다
+	// (여기서 넣어봤자 BeginPlay 호출이 안된다 -> 상태 정의가 None 상태)
+	// (없는 상태를 따로 StateChain에 넣어놓지 않았기에 진행되지 않음)
+	// 
+}
+
+void USamplePawnExtensionComponent::SetupPlayerInputComponent()
+{
+	// Update를 통한 InitState의 상태 변환을 시작
+	CheckDefaultInitialization();
 }
 
 void USamplePawnExtensionComponent::OnRegister()

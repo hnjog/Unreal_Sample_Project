@@ -20,6 +20,19 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
+	// Pawn에 Possess가 호출된 이후 호출되는 함수
+	// Possess : playerController가 Pawn이나 Character를 제어하도록 설정할 때 호출하며,
+	//		플레이어가 해당 캐릭터를 자신의 '컨트롤러'에 소유하게 된다
+	// 
+	// SetupPlayerInputComponent : 플레이어가 입력을 설정하는 데 사용
+	//								(인풋 바인딩 : 이동 등)
+	// 
+	// 플레이어의 입력은 플레이어 컨트롤러로 가게 된다
+	// 따라서 그러한 입력을 설정하기 위하여 Pawn에서 이 함수를 호출
+	// 
+	// 반대로 SetupPlayerInputComponent 가 호출이 되었다는 것은
+	// Possess가 호출되었다는 증거
+	// 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:

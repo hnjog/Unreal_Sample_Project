@@ -91,6 +91,7 @@ bool USampleHeroComponent::CanChangeInitState(UGameFrameworkComponentManager* Ma
 	// Spawned -> DataAvailable
 	if (CurrentState == InitTags.InitState_Spawned && DesiredState == InitTags.InitState_DataAvailable)
 	{
+		// PlayerState는 Pawn에 possess가 호출된 이후에 정상적으로 호출이 가능하기에 여기서 멈춤
 		if (!SamplePS)
 		{
 			return false;
