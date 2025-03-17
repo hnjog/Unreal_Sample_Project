@@ -3,6 +3,7 @@
 #include "../SampleLogChannels.h"
 #include"../SampleGameplayTags.h"
 #include"SamplePawnExtensionComponent.h"
+#include"../Player/SamplePlayerState.h"
 
 const FName USampleHeroComponent::NAME_ActorFeatureName("PawnExtension");
 
@@ -60,7 +61,46 @@ void USampleHeroComponent::OnActorInitStateChanged(const FActorInitStateChangedP
 
 bool USampleHeroComponent::CanChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState, FGameplayTag DesiredState) const
 {
-	return IGameFrameworkInitStateInterface::CanChangeInitState(Manager,CurrentState,DesiredState);
+	check(Manager);
+
+	const FSampleGameplayTags& InitTags = FSampleGameplayTags::Get();
+	APawn* Pawn = GetPawn<APawn>();
+	ASamplePlayerState* SamplePS = GetPlayerState<ASamplePlayerState>();
+
+	// Spawned 초기화
+	if (!CurrentState.IsValid() && DesiredState == InitTags.InitState_Spawned)
+	{
+		if (Pawn)
+		{
+			return true;
+		}
+	}
+
+	// Spawned -> DataAvailable
+	if (CurrentState == InitTags.InitState_Spawned && DesiredState == InitTags.InitState_DataAvailable)
+	{
+		if (!SamplePS)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	// DataAvailable -> DataInitialized
+	if (CurrentState == InitTags.InitState_DataAvailable && DesiredState == InitTags.InitState_DataInitialized)
+	{
+		// PawnExtensionComponent가 DataInitialized될 때까지 기다림 (== 모든 Feature Component가 DataAvailable인 상태)
+		return SamplePS && Manager->HasFeatureReachedInitState(Pawn, USamplePawnExtensionComponent::NAME_ActorFeatureName, InitTags.InitState_DataInitialized);
+	}
+
+	// DataInitialized -> GameplayReady
+	if (CurrentState == InitTags.InitState_DataInitialized && DesiredState == InitTags.InitState_GameplayReady)
+	{
+		return true;
+	}
+
+	return false;
 }
 
 void USampleHeroComponent::HandleChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState, FGameplayTag DesiredState)
