@@ -1,10 +1,12 @@
-﻿#include "SampleHeroComponent.h"
+#include "SampleHeroComponent.h"
 #include "Components/GameFrameworkComponentManager.h"
 #include "../SampleLogChannels.h"
 #include"../SampleGameplayTags.h"
 #include"SamplePawnExtensionComponent.h"
 #include"../Player/SamplePlayerState.h"
 #include"SamplePawnData.h"
+#include"../Camera/SampleCameraMode.h"
+#include"../Camera/SampleCameraComponent.h"
 
 const FName USampleHeroComponent::NAME_ActorFeatureName("Hero");
 
@@ -150,3 +152,22 @@ void USampleHeroComponent::CheckDefaultInitialization()
 	static const TArray<FGameplayTag> StateChain = { InitTags.InitState_Spawned, InitTags.InitState_DataAvailable, InitTags.InitState_DataInitialized, InitTags.InitState_GameplayReady };
 	ContinueInitStateChain(StateChain);
 }
+
+PRAGMA_DISABLE_OPTIMIZATION
+TSubclassOf<USampleCameraMode> USampleHeroComponent::DetermineCameraMode() const
+{
+	const APawn* Pawn = GetPawn<APawn>();
+	if (Pawn == nullptr)
+		return nullptr;
+
+	if (USamplePawnExtensionComponent* PawnExtComp = USamplePawnExtensionComponent::FindPawnExtensionComponent(Pawn))
+	{
+		if (const USamplePawnData* PawnData = PawnExtComp->GetPawnData<USamplePawnData>())
+		{
+			return PawnData->DefaultCameraMode;
+		}
+	}
+
+	return nullptr;
+}
+PRAGMA_ENABLE_OPTIMIZATION

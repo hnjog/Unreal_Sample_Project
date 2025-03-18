@@ -1,9 +1,11 @@
-﻿#pragma once
+#pragma once
 
 #include "CoreMinimal.h"
 #include "Components/PawnComponent.h"
 #include "Components/GameFrameworkInitStateInterface.h"
 #include "SampleHeroComponent.generated.h"
+
+class USampleCameraMode;
 
 /*
 	카메라, 입력 등 플레이어가 제어하는 시스템의 초기화를 처리하는 컴포넌트
@@ -45,4 +47,6 @@ public:
 	// 각 컴포넌트들의 데이터는 각자가 관리한다
 	virtual void HandleChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState, FGameplayTag DesiredState) final;
 	virtual void CheckDefaultInitialization() final;
+
+	TSubclassOf<USampleCameraMode> DetermineCameraMode() const;
 };
