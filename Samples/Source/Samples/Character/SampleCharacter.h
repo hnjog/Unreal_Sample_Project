@@ -5,6 +5,7 @@
 #include "SampleCharacter.generated.h"
 
 class USamplePawnExtensionComponent;
+class USampleCameraComponent;
 
 UCLASS()
 class SAMPLES_API ASampleCharacter : public ACharacter
@@ -56,4 +57,7 @@ public:
 	//
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sample|Character")
 	TObjectPtr<USamplePawnExtensionComponent> PawnExtComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sample|Character")
+	TObjectPtr<USampleCameraComponent> CameraComponent;
 };

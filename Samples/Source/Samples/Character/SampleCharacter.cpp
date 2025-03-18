@@ -1,5 +1,6 @@
 ﻿#include "SampleCharacter.h"
 #include"SamplePawnExtensionComponent.h"
+#include"../Camera/SampleCameraComponent.h"
 
 ASampleCharacter::ASampleCharacter()
 {
@@ -16,6 +17,12 @@ ASampleCharacter::ASampleCharacter()
 	// (다만 이후 생성되는 컴포넌트들은 BP에서만 생성해야 하는 점을 상기)
 	// (더 파고드려면 Post Initialize 등을 참고하자)
 	PawnExtComponent = CreateDefaultSubobject<USamplePawnExtensionComponent>(TEXT("PawnExtensionComponent"));
+
+	// CameraComponent 생성
+	{
+		CameraComponent = CreateDefaultSubobject<USampleCameraComponent>(TEXT("CameraComponent"));
+		CameraComponent->SetRelativeLocation(FVector(-300.0f, 0.0f, 75.0f));
+	}
 }
 
 void ASampleCharacter::BeginPlay()
