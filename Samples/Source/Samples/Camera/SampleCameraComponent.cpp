@@ -1,5 +1,4 @@
 ﻿#include "SampleCameraComponent.h"
-#include"SampleCameraMode.h"
 
 USampleCameraComponent::USampleCameraComponent(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
