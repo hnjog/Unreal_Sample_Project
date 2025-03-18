@@ -1,4 +1,4 @@
-#include "SampleCameraComponent.h"
+﻿#include "SampleCameraComponent.h"
 #include"SampleCameraMode.h"
 
 USampleCameraComponent::USampleCameraComponent(const FObjectInitializer& ObjectInitializer)
@@ -43,4 +43,9 @@ void USampleCameraComponent::OnRegister()
 		CameraModeStack = NewObject<USampleCameraModeStack>(this);
 	}
 
+}
+
+void USampleCameraComponent::GetCameraView(float DeltaTime, FMinimalViewInfo& DesiredView)
+{
+	Super::GetCameraView(DeltaTime, DesiredView);
 }
