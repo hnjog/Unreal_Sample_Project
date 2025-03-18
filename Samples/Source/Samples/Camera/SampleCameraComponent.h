@@ -4,10 +4,17 @@
 #include "Camera/CameraComponent.h"
 #include "SampleCameraComponent.generated.h"
 
+class USampleCameraModeStack;
+
 UCLASS()
 class SAMPLES_API USampleCameraComponent : public UCameraComponent
 {
 	GENERATED_BODY()
 public:
 	USampleCameraComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+	virtual void OnRegister() final;
+
+	UPROPERTY()
+	TObjectPtr<USampleCameraModeStack> CameraModeStack;
 };
