@@ -44,7 +44,27 @@ void USampleCameraComponent::OnRegister()
 
 }
 
+// 매 프레임 호출됨
 void USampleCameraComponent::GetCameraView(float DeltaTime, FMinimalViewInfo& DesiredView)
 {
-	Super::GetCameraView(DeltaTime, DesiredView);
+	check(CameraModeStack);
+
+	UpdateCameraModes();
+}
+
+void USampleCameraComponent::UpdateCameraModes()
+{
+	check(CameraModeStack);
+
+	// DetermineCameraModeDelegate는 CameraMode class를 반환한다
+	// - 해당 Delegate는 HeroComponent의 멤버 함수로 바인딩
+	if (DetermineCameraModeDelegate.IsBound())
+	{
+		if (const TSubclassOf<USampleCameraMode> CameraMode = DetermineCameraModeDelegate.Execute())
+		{
+			// 이 함수를 통해 매 프레임마다 카메라 모드를 저장
+			// 이후, Blending에 이용
+			// CameraModeStack->PushCameraMode(CameraMode);
+		}
+	}
 }

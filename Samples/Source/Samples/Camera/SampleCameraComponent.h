@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include"SampleCameraMode.h"
@@ -46,6 +46,8 @@ public:
 
 	virtual void OnRegister() final;
 	virtual void GetCameraView(float DeltaTime, FMinimalViewInfo& DesiredView) final;
+
+	void UpdateCameraModes();
 
 public:
 	// Camera의 Blending 기능을 지원하는 Stack
