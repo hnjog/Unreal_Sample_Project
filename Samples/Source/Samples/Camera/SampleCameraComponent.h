@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "CoreMinimal.h"
 #include"SampleCameraMode.h"
@@ -41,6 +41,8 @@ class SAMPLES_API USampleCameraComponent : public UCameraComponent
 	GENERATED_BODY()
 public:
 	USampleCameraComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+	static USampleCameraComponent* FindCameraComponent(const AActor* Actor) { return (Actor ? Actor->FindComponentByClass<USampleCameraComponent>() : nullptr); }
 
 	virtual void OnRegister() final;
 	virtual void GetCameraView(float DeltaTime, FMinimalViewInfo& DesiredView) final;
