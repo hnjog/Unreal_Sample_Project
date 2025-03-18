@@ -19,6 +19,10 @@ ASampleCharacter::ASampleCharacter()
 	PawnExtComponent = CreateDefaultSubobject<USamplePawnExtensionComponent>(TEXT("PawnExtensionComponent"));
 
 	// CameraComponent 생성
+	// 이건 카메라에 다는 것이라 괜찮은 건가?
+	// 어쩌면 UCameraComponent를 상속받은것이라 조금 다른 방식일듯?
+	// (PawnExt,Hero : UGameFrameworkComponent 를 상속 - 플러그인 기능)
+	// (UCameraComponent : SceneComponent를 상속)
 	{
 		CameraComponent = CreateDefaultSubobject<USampleCameraComponent>(TEXT("CameraComponent"));
 		CameraComponent->SetRelativeLocation(FVector(-300.0f, 0.0f, 75.0f));
