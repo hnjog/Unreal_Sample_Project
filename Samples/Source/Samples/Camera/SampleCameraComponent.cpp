@@ -1,2 +1,6 @@
-#include "SampleCameraComponent.h"
+﻿#include "SampleCameraComponent.h"
 
+USampleCameraComponent::USampleCameraComponent(const FObjectInitializer& ObjectInitializer)
+	:Super(ObjectInitializer)
+{
+}
