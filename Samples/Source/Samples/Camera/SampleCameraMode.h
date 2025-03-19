@@ -31,6 +31,21 @@ class USampleCameraMode : public UObject
 	GENERATED_BODY()
 public:
 	USampleCameraMode(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+public:
+	// Member Method
+
+	// Camera Blending 진행 시간
+	UPROPERTY(EditDefaultsOnly, Category = "Blending")
+	float BlendTime;
+
+	// Blend 값 (0,1)
+	float BlendAlpha;
+
+	// CameraMode의 최종 Blend값
+	// BLendAlpha의 선형 값을 매칭하며 BlendWeight를 계산
+	float BlendWeight;
+
 };
 
 // Camera Blending 을 담당하는 객체
@@ -40,6 +55,9 @@ class USampleCameraModeStack : public UObject
 	GENERATED_BODY()
 public:
 	USampleCameraModeStack(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+	USampleCameraMode* GetCameraModeInstance(TSubclassOf<USampleCameraMode>& CameraModeClass);
+	void PushCameraMode(TSubclassOf<USampleCameraMode>& CameraModeClass);
 
 	// Member Variables
 public:
