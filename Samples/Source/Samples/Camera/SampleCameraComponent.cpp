@@ -50,6 +50,13 @@ void USampleCameraComponent::GetCameraView(float DeltaTime, FMinimalViewInfo& De
 	check(CameraModeStack);
 
 	UpdateCameraModes();
+
+	// EvaluateStack
+	// - CameraModeStack에 있는 CameraMode를 업데이트(+블렌딩) 하고,
+	//   CameraModeStack을 Bottom-Top 까지 업데이트된 CameraMode들을 lerp 진행
+	// 이 결과가 CameraModeView에 캐싱
+	FSampleCameraModeView CameraModeView;
+	CameraModeStack->EvaluateStack(DeltaTime, CameraModeView);
 }
 
 void USampleCameraComponent::UpdateCameraModes()

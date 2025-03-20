@@ -174,3 +174,20 @@ void USampleCameraModeStack::PushCameraMode(TSubclassOf<USampleCameraMode>& Came
 
 
 }
+
+void USampleCameraModeStack::EvaluateStack(float DeltaTime, FSampleCameraModeView& OutCameraModeView)
+{
+	// Top -> Bottom [0 -> Num]까지 순차적으로 Stack에 있는 CameraMode 업데이트
+	UpdateStack(DeltaTime);
+
+	// Bottom->Top 까지 CameraModeStack에 대해 Blending 진행
+	BlendStack(OutCameraModeView);
+}
+
+void USampleCameraModeStack::UpdateStack(float DeltaTime)
+{
+}
+
+void USampleCameraModeStack::BlendStack(FSampleCameraModeView& OutCameraModeView) const
+{
+}

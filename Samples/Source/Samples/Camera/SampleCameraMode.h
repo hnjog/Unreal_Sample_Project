@@ -67,6 +67,9 @@ public:
 
 	USampleCameraMode* GetCameraModeInstance(TSubclassOf<USampleCameraMode>& CameraModeClass);
 	void PushCameraMode(TSubclassOf<USampleCameraMode>& CameraModeClass);
+	void EvaluateStack(float DeltaTime, FSampleCameraModeView& OutCameraModeView);
+	void UpdateStack(float DeltaTime);
+	void BlendStack(FSampleCameraModeView& OutCameraModeView) const;
 
 	// Member Variables
 public:
