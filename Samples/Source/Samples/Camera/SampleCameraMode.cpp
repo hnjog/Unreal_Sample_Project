@@ -13,6 +13,10 @@ USampleCameraMode::USampleCameraMode(const FObjectInitializer& ObjectInitializer
 {
 }
 
+void USampleCameraMode::UpdateCameraMode(float DeltaTime)
+{
+}
+
 
 USampleCameraModeStack::USampleCameraModeStack(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -186,6 +190,39 @@ void USampleCameraModeStack::EvaluateStack(float DeltaTime, FSampleCameraModeVie
 
 void USampleCameraModeStack::UpdateStack(float DeltaTime)
 {
+	const int32 StackSize = CameraModeStack.Num();
+	if (StackSize <= 0)
+		return;
+
+	// CameraModeStack 순회하며 업데이트
+	int32 RemoveCount = 0;
+	int32 RemoveIndex = INDEX_NONE;
+	// 최신 데이터부터 가장 마지막 데이터까지
+	for (int32 StackIndex = 0; StackIndex < StackSize; StackIndex++)
+	{
+		USampleCameraMode* CameraMode = CameraModeStack[StackIndex];
+		check(CameraMode);
+
+		CameraMode->UpdateCameraMode(DeltaTime);
+
+		// CameraMode의 BlendWeight가 1.0에 도달하면 해당 CameraMode을 제거
+		// 1.0을 넘어가면 사용하지 않을 데이터
+		// - 그렇기에 이 이후의 데이터들은 더 볼 필요도 없이 제거
+		// -> 이러한 이유로 stack이라 이름 붙였지만 array에서 0부터 집어넣는 이유
+		// 반대로 최신 데이터를 뒤쪽에 두는 진짜 stack 방식으로 하는 경우,
+		// 앞쪽부터 데이터를 지워나가며, 당겨야 하기에 0부터 집어넣는 듯하다
+		if (CameraMode->BlendWeight >= 1.0f)
+		{
+			RemoveIndex = StackIndex + 1;
+			RemoveCount = StackSize - RemoveIndex;
+			break;
+		}
+	}
+
+	if (RemoveCount > 0)
+	{
+		CameraModeStack.RemoveAt(RemoveIndex, RemoveCount);
+	}
 }
 
 void USampleCameraModeStack::BlendStack(FSampleCameraModeView& OutCameraModeView) const
