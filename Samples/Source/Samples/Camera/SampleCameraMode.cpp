@@ -1,4 +1,12 @@
-﻿#include "SampleCameraMode.h"
+#include "SampleCameraMode.h"
+FSampleCameraModeView::FSampleCameraModeView()
+	:Location(ForceInit),
+	Rotation(ForceInit),
+	ControlRotation(ForceInit),
+	FieldOfView(SAMPLE_CAMERA_DEFAULT_FOV)
+{
+
+}
 
 USampleCameraMode::USampleCameraMode(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)

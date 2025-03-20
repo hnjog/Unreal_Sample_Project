@@ -3,7 +3,16 @@
 #include "CoreMinimal.h"
 #include "SampleCameraMode.generated.h"
 
-// 
+struct FSampleCameraModeView
+{
+	FSampleCameraModeView();
+
+	FVector Location;
+	FRotator Rotation;
+	FRotator ControlRotation;
+	float FieldOfView;
+};
+
 /*
 	Camera Blending 대상 유닛
 
