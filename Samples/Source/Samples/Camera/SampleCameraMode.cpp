@@ -15,6 +15,20 @@ USampleCameraMode::USampleCameraMode(const FObjectInitializer& ObjectInitializer
 
 void USampleCameraMode::UpdateCameraMode(float DeltaTime)
 {
+	// Acotr를 활용하고, Pivot[Location | Rotation]을 계산해, View를 업데이트
+	UpdateView(DeltaTime);
+
+	// BlendWeight를 DeltaTime을 활용하여, BlendAlpha 계산 후,
+	// BLendFunction에 맞게 재 매핑하여 최종 계산
+	UpdateBlending(DeltaTime);
+}
+
+void USampleCameraMode::UpdateView(float DeltaTime)
+{
+}
+
+void USampleCameraMode::UpdateBlending(float DeltaTime)
+{
 }
 
 

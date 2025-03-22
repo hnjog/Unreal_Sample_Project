@@ -42,6 +42,8 @@ public:
 	USampleCameraMode(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	void UpdateCameraMode(float DeltaTime);
+	void UpdateView(float DeltaTime);
+	void UpdateBlending(float DeltaTime);
 
 public:
 	// Member Method
