@@ -213,6 +213,8 @@ void USampleCameraModeStack::UpdateStack(float DeltaTime)
 		// 앞쪽부터 데이터를 지워나가며, 당겨야 하기에 0부터 집어넣는 듯하다
 		if (CameraMode->BlendWeight >= 1.0f)
 		{
+			// 최소한 하나의 카메라 모드는 남겨두기 위하여 (인덱스 0은 남겨두기 위해)
+			// 비록 지금 1이 넘었더라도 그 다음것부터 삭제
 			RemoveIndex = StackIndex + 1;
 			RemoveCount = StackSize - RemoveIndex;
 			break;
