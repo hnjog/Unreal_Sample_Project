@@ -9,6 +9,9 @@ struct FSampleCameraModeView
 {
 	FSampleCameraModeView();
 
+	void Blend(const FSampleCameraModeView& Other, float OtherWeight);
+
+public:
 	FVector Location;
 	FRotator Rotation;
 	FRotator ControlRotation;

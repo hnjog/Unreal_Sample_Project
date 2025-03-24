@@ -17,6 +17,11 @@ FSampleCameraModeView::FSampleCameraModeView()
 
 }
 
+void FSampleCameraModeView::Blend(const FSampleCameraModeView& Other, float OtherWeight)
+{
+
+}
+
 USampleCameraMode::USampleCameraMode(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
@@ -309,6 +314,7 @@ void USampleCameraModeStack::PushCameraMode(TSubclassOf<USampleCameraMode>& Came
 void USampleCameraModeStack::EvaluateStack(float DeltaTime, FSampleCameraModeView& OutCameraModeView)
 {
 	// Top -> Bottom [0 -> Num]까지 순차적으로 Stack에 있는 CameraMode 업데이트
+	// UpdateStack 진행 후, Stack 내부에는 BlendWeight가 1.0이하인 CameraMode만 남게 됨
 	UpdateStack(DeltaTime);
 
 	// Bottom->Top 까지 CameraModeStack에 대해 Blending 진행
@@ -356,4 +362,27 @@ void USampleCameraModeStack::UpdateStack(float DeltaTime)
 
 void USampleCameraModeStack::BlendStack(FSampleCameraModeView& OutCameraModeView) const
 {
+	const int32 StackSize = CameraModeStack.Num();
+	if (StackSize <= 0)
+	{
+		return;
+	}
+
+	// Bottom -> Top 순서로 Blend 진행
+	const USampleCameraMode* CameraMode = CameraModeStack[StackSize - 1];
+	check(CameraMode);
+
+	// 참고로 가장 아래쪽의 BlendWeight은 1.0
+	OutCameraModeView = CameraMode->View;
+
+	// StackSize - 1은 위쪽에서 이미 View를 건네줬으므로,
+	// 나머지 녀석들에 대한 Blending을 진행
+	for (int32 StackIndex = (StackSize - 2); StackIndex >= 0; StackIndex--)
+	{
+		CameraMode = CameraModeStack[StackIndex];
+		check(CameraMode);
+
+		// 현재의 데이터에 이미 쌓여진 데이터들을 Blending 해준다
+		OutCameraModeView.Blend(CameraMode->View, CameraMode->BlendWeight);
+	}
 }
