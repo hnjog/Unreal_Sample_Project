@@ -1,4 +1,4 @@
-#include "SampleCameraMode.h"
+﻿#include "SampleCameraMode.h"
 #include"SamplePlayerCameraManager.h"
 #include"SampleCameraComponent.h"
 
@@ -19,6 +19,33 @@ FSampleCameraModeView::FSampleCameraModeView()
 
 void FSampleCameraModeView::Blend(const FSampleCameraModeView& Other, float OtherWeight)
 {
+	// 사실상 최신 데이터이기에, 이거랑 블렌딩할 필요 없음
+	if (OtherWeight <= 0.0f)
+	{
+		return;
+	}
+
+	if (OtherWeight >= 1.0f)
+	{
+		// Weight가 1.0 이면 현재 개체에 Other을 덮어쓰면 된다
+		// 1.0 이상인 경우는 이미 과거의 데이터이고,
+		// 순회 순서상 Other이 더 과거의 것이기에,
+		// 현재 Other는 보관할 필요가 없음
+		// 그러므로 덮어씌워준다
+		*this = Other;
+		return;
+	}
+
+	//Location + OtherWeight * (Other.Location - Location)
+	Location = FMath::Lerp(Location, Other.Location, OtherWeight);
+
+	const FRotator DeltaRotation = (Other.Rotation - Rotation).GetNormalized();
+	Rotation += (OtherWeight * DeltaRotation);
+
+	const FRotator DeltaControlRotation = (Other.ControlRotation - ControlRotation).GetNormalized();
+	ControlRotation += (OtherWeight * DeltaControlRotation);
+
+	FieldOfView = FMath::Lerp(FieldOfView, Other.FieldOfView, OtherWeight);
 
 }
 
