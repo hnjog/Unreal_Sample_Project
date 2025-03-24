@@ -38,12 +38,38 @@ void USampleCameraMode::UpdateCameraMode(float DeltaTime)
 	UpdateBlending(DeltaTime);
 }
 
+// Character의 Location과 ControlRotation을 활용하여, View를 업데이트
 void USampleCameraMode::UpdateView(float DeltaTime)
 {
+	// CameraMode를 가지고 있는 CameraComponent의 Owner인 Character(Pawn)을 활용해, PivotLoaction/Rotation을 반환
+	FVector PivotLocation = GetPivotLocation();
+	FRotator PivotRotation = GetPivotRotation();
+
+	// Pitch 값에 대해 Min, Max값을 Clamp시킨다
+	PivotRotation.Pitch = FMath::ClampAngle(PivotRotation.Pitch, ViewPitchMin, ViewPitchMax);
+
+	// FSampleCameraModeView에 PivotLocation/Rotation을 설정
+	View.Location = PivotLocation;
+	View.Rotation = PivotRotation;
+
+	// PivotRotation을 ControlRotation으로 활용
+	View.ControlRotation = View.Rotation;
+	View.FieldOfView = FieldOfView;
+
 }
 
 void USampleCameraMode::UpdateBlending(float DeltaTime)
 {
+}
+
+FVector USampleCameraMode::GetPivotLocation() const
+{
+	return FVector();
+}
+
+FRotator USampleCameraMode::GetPivotRotation() const
+{
+	return FRotator();
 }
 
 

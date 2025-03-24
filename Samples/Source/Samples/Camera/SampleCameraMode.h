@@ -46,6 +46,9 @@ public:
 	void UpdateView(float DeltaTime);
 	void UpdateBlending(float DeltaTime);
 
+	FVector GetPivotLocation() const;
+	FRotator GetPivotRotation() const;
+
 public:
 	FSampleCameraModeView View;
 
