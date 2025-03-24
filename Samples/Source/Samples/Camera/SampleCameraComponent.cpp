@@ -57,6 +57,46 @@ void USampleCameraComponent::GetCameraView(float DeltaTime, FMinimalViewInfo& De
 	// 이 결과가 CameraModeView에 캐싱
 	FSampleCameraModeView CameraModeView;
 	CameraModeStack->EvaluateStack(DeltaTime, CameraModeView);
+
+	if (APawn* TargetPawn = Cast<APawn>(GetTargetActor()))
+	{
+		if (APlayerController* PC = TargetPawn->GetController<APlayerController>())
+		{
+			// PlayerController의 ControlRotation을 CameraModeView의 ControlRotation으로 업데이트
+			// - PC가 Possess하고 있는 Pawn의 RootComponent에 ControlRoatation을 반영(조정하고 있는 캐릭터에 회전)
+			PC->SetControlRotation(CameraModeView.ControlRotation);
+		}
+	}
+
+	// Camera의 Location/Rotation을 반영
+	SetWorldLocationAndRotation(CameraModeView.Location, CameraModeView.Rotation);
+
+	// FOV Update
+	FieldOfView = CameraModeView.FieldOfView;
+
+	/*
+		ControlRotation : PlayerController가 조정하는 Pawn의 Rotation을 적용할 값
+		Rotation : 카메라에 반영하는 Rotation
+	*/
+
+	// FMinimalViewInfo 를 업데이트하여, 변화 사항을 최종 렌더링까지 반영
+	DesiredView.Location = CameraModeView.Location;
+	DesiredView.Rotation = CameraModeView.Rotation;
+	DesiredView.FOV = CameraModeView.FieldOfView;
+	DesiredView.OrthoWidth = OrthoWidth;
+	DesiredView.OrthoNearClipPlane = OrthoNearClipPlane;
+	DesiredView.OrthoFarClipPlane = OrthoFarClipPlane;
+	DesiredView.AspectRatio = AspectRatio;
+	DesiredView.bConstrainAspectRatio = bConstrainAspectRatio;
+	DesiredView.bUseFieldOfViewForLOD = bUseFieldOfViewForLOD;
+	DesiredView.ProjectionMode = ProjectionMode;
+	DesiredView.PostProcessBlendWeight = PostProcessBlendWeight;
+	if (PostProcessBlendWeight > 0.0f)
+	{
+		DesiredView.PostProcessSettings = PostProcessSettings;
+	}
+	
+
 }
 
 void USampleCameraComponent::UpdateCameraModes()
