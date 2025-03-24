@@ -64,6 +64,7 @@ void USampleCameraMode::UpdateView(float DeltaTime)
 
 void USampleCameraMode::UpdateBlending(float DeltaTime)
 {
+
 }
 
 USampleCameraComponent* USampleCameraMode::GetSampleCameraComponent() const
@@ -96,7 +97,16 @@ FVector USampleCameraMode::GetPivotLocation() const
 
 FRotator USampleCameraMode::GetPivotRotation() const
 {
-	return FRotator();
+	const AActor* TargetActor = GetTargetActor();
+	check(TargetActor);
+
+	if (const APawn* TargetPawn = Cast<APawn>(TargetActor))
+	{
+		// GetViewRotation : 보통의 경우, Pawn의 ControlRotation을 반환
+		return TargetPawn->GetViewRotation();
+	}
+
+	return TargetActor->GetActorRotation();
 }
 
 
