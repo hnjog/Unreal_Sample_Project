@@ -41,12 +41,24 @@ class USampleCameraMode : public UObject
 public:
 	USampleCameraMode(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+	// Member Method
 	void UpdateCameraMode(float DeltaTime);
 	void UpdateView(float DeltaTime);
 	void UpdateBlending(float DeltaTime);
 
 public:
-	// Member Method
+	FSampleCameraModeView View;
+
+	// Camera Mode의 FOV
+	UPROPERTY(EditDefaultsOnly, Category = "View", meta = (UIMin = "5.0", UIMax = "170", ClampMin = "5.0", ClampMax = "170"))
+	float FieldOfView;
+
+	// View에 대한 Pitch [Min, Max]
+	UPROPERTY(EditDefaultsOnly, Category = "View", meta = (UIMin = "-89.9", UIMax = "89.9", ClampMin = "-89.9", ClampMax = "89.9"))
+	float ViewPitchMin;
+
+	UPROPERTY(EditDefaultsOnly, Category = "View", meta = (UIMin = "-89.9", UIMax = "89.9", ClampMin = "-89.9", ClampMax = "89.9"))
+	float ViewPitchMax;
 
 	// Camera Blending 진행 시간
 	UPROPERTY(EditDefaultsOnly, Category = "Blending")

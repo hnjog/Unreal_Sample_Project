@@ -11,6 +11,13 @@ FSampleCameraModeView::FSampleCameraModeView()
 USampleCameraMode::USampleCameraMode(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
+	FieldOfView = SAMPLE_CAMERA_DEFAULT_FOV;
+	ViewPitchMin = SAMPLE_CAMERA_DEFAULT_PIRCH_MIN;
+	ViewPitchMax = SAMPLE_CAMERA_DEFAULT_PIRCH_MAX;
+
+	BlendTime = 0.0f;
+	BlendAlpha = 1.0f;
+	BlendWeight = 1.0f;
 }
 
 void USampleCameraMode::UpdateCameraMode(float DeltaTime)
