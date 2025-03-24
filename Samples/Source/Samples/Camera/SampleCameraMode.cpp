@@ -1,4 +1,4 @@
-﻿#include "SampleCameraMode.h"
+#include "SampleCameraMode.h"
 #include"SamplePlayerCameraManager.h"
 #include"SampleCameraComponent.h"
 
@@ -67,7 +67,39 @@ void USampleCameraMode::UpdateView(float DeltaTime)
 
 void USampleCameraMode::UpdateBlending(float DeltaTime)
 {
+	// BlendAlpha를 DeltaTime을 통해 계산
+	if (BlendTime > 0.f)
+	{
+		// BlendTime은 Blending 과정 총 시간 (초)
+		// - BlendAlpha 는 0 -> 1로 (BlendAlpha : 누적합)
+		// - DeltaTime을 활용해, BlendTime을 1로 볼 경우, 진행 시간을 누적
+		BlendAlpha += (DeltaTime / BlendTime);
+	}
+	else
+	{
+		BlendAlpha = 1.0f;
+	}
 
+	// BlendWeight를 [0,1]를 BlendFunction에 맞게 재매핑
+	const float Exponent = (BlendExpontent > 0.0f) ? BlendExpontent : 1.0f;
+	switch (BlendFunction)
+	{
+	case ESampleCameraBlendFunction::Linear:
+		BlendWeight = BlendAlpha;
+		break;
+	case ESampleCameraBlendFunction::EaseIn:
+		BlendWeight = FMath::InterpEaseIn(0.0f, 1.0f, BlendAlpha, Exponent);
+		break;
+	case ESampleCameraBlendFunction::EaseOut:
+		BlendWeight = FMath::InterpEaseOut(0.0f, 1.0f, BlendAlpha, Exponent);
+		break;
+	case ESampleCameraBlendFunction::EaseInOut:
+		BlendWeight = FMath::InterpEaseInOut(0.0f, 1.0f, BlendAlpha, Exponent);
+		break;
+	default:
+		checkf(false, TEXT("UpdateBlending : Invalid BlendFunction [%d]\n"),(uint8)BlendFunction);
+		break;
+	}
 }
 
 USampleCameraComponent* USampleCameraMode::GetSampleCameraComponent() const
