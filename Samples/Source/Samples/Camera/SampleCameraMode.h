@@ -15,6 +15,18 @@ struct FSampleCameraModeView
 	float FieldOfView;
 };
 
+// [0,1]을 BlendFunction에 맞게 재 매핑
+UENUM()
+enum class ESampleCameraBlendFunction : uint8
+{
+	Linear, // 정비례
+	// EaseIn/Out은 exponent 값에 의해 조절
+	EaseIn,
+	EaseOut, // 보통 사용할 예정(뒤쪽에서 보간되는것이 멀미가 덜함
+	EaseInOut,
+	COUNT
+};
+
 /*
 	Camera Blending 대상 유닛
 
@@ -78,6 +90,11 @@ public:
 	// BLendAlpha의 선형 값을 매칭하며 BlendWeight를 계산
 	float BlendWeight;
 
+	// EaseIn/Out에 사용할 exponent 값
+	float BlendExpontent;
+
+	// BlendFunction
+	ESampleCameraBlendFunction BlendFunction;
 };
 
 // Camera Blending 을 담당하는 객체

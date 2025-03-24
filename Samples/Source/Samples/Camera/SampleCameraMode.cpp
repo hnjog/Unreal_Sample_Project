@@ -27,6 +27,9 @@ USampleCameraMode::USampleCameraMode(const FObjectInitializer& ObjectInitializer
 	BlendTime = 0.0f;
 	BlendAlpha = 1.0f;
 	BlendWeight = 1.0f;
+
+	BlendFunction = ESampleCameraBlendFunction::EaseOut;
+	BlendExpontent = 4.0f;
 }
 
 void USampleCameraMode::UpdateCameraMode(float DeltaTime)
