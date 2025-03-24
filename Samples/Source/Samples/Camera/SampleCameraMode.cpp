@@ -68,7 +68,10 @@ void USampleCameraMode::UpdateBlending(float DeltaTime)
 
 USampleCameraComponent* USampleCameraMode::GetSampleCameraComponent() const
 {
-	return nullptr;
+	// USampleCameraMode를 생성하는 곳은 USampleCameraModeStack
+	// - 해당 코드 내부에서 GetOuter()를 SampleCameraMode로 SampleCameraComponent로 설정
+	// - USampleCameraModeStack::GetCameraModeInstance() (NewObject 할때,Outer를 Stack의 Outer, 즉 CameraComponent를 넣어줌)
+	return CastChecked<USampleCameraComponent>(GetOuter());
 }
 
 AActor* USampleCameraMode::GetTargetActor() const
