@@ -60,7 +60,7 @@ public:
 
 	// Member Method
 	void UpdateCameraMode(float DeltaTime);
-	void UpdateView(float DeltaTime);
+	virtual void UpdateView(float DeltaTime);
 	void UpdateBlending(float DeltaTime);
 
 	USampleCameraComponent* GetSampleCameraComponent() const;

@@ -4,6 +4,8 @@
 #include "SampleCameraMode.h"
 #include "SampleCameraMode_ThirdPerson.generated.h"
 
+class UCurveVector;
+
 // 추상 클래스이기에 다른 클래스에서 상속받아야 객체 생성이 가능
 UCLASS(Abstract,Blueprintable)
 class SAMPLES_API USampleCameraMode_ThirdPerson : public USampleCameraMode
@@ -12,4 +14,9 @@ class SAMPLES_API USampleCameraMode_ThirdPerson : public USampleCameraMode
 public:
 	USampleCameraMode_ThirdPerson(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+public:
+	virtual void UpdateView(float DeltaTime) override;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Third Person")
+	TObjectPtr<const UCurveVector> TargetOffsetCurve;
 };
