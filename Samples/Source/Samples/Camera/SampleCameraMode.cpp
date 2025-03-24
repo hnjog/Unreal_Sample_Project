@@ -41,6 +41,9 @@ void USampleCameraMode::UpdateCameraMode(float DeltaTime)
 // Character의 Location과 ControlRotation을 활용하여, View를 업데이트
 void USampleCameraMode::UpdateView(float DeltaTime)
 {
+	// 기존에는 SprintArm 컴포넌트를 이용한 회전 방식이나
+	// Pivot의 개념은 spring arm 처럼 캐릭터의 위치에 따라 이동하게 하고, 회전값을 조정하는 역할
+	
 	// CameraMode를 가지고 있는 CameraComponent의 Owner인 Character(Pawn)을 활용해, PivotLoaction/Rotation을 반환
 	FVector PivotLocation = GetPivotLocation();
 	FRotator PivotRotation = GetPivotRotation();
@@ -62,9 +65,23 @@ void USampleCameraMode::UpdateBlending(float DeltaTime)
 {
 }
 
+AActor* USampleCameraMode::GetTargetActor() const
+{
+	return nullptr;
+}
+
 FVector USampleCameraMode::GetPivotLocation() const
 {
-	return FVector();
+	const AActor* TargetActor = GetTargetActor();
+	check(TargetActor);
+
+	if (const APawn* TargetPawn = Cast<APawn>(TargetActor))
+	{
+		// BaseEyeHeight(약 88)를 고려하여, ViewLocation을 반환
+		return TargetPawn->GetPawnViewLocation();
+	}
+
+	return TargetActor->GetActorLocation();
 }
 
 FRotator USampleCameraMode::GetPivotRotation() const

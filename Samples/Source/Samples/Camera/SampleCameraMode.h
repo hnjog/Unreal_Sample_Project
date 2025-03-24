@@ -46,6 +46,7 @@ public:
 	void UpdateView(float DeltaTime);
 	void UpdateBlending(float DeltaTime);
 
+	AActor* GetTargetActor() const;
 	FVector GetPivotLocation() const;
 	FRotator GetPivotRotation() const;
 
