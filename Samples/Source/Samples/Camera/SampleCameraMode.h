@@ -3,6 +3,8 @@
 #include "CoreMinimal.h"
 #include "SampleCameraMode.generated.h"
 
+class USampleCameraComponent;
+
 struct FSampleCameraModeView
 {
 	FSampleCameraModeView();
@@ -46,6 +48,7 @@ public:
 	void UpdateView(float DeltaTime);
 	void UpdateBlending(float DeltaTime);
 
+	USampleCameraComponent* GetSampleCameraComponent() const;
 	AActor* GetTargetActor() const;
 	FVector GetPivotLocation() const;
 	FRotator GetPivotRotation() const;

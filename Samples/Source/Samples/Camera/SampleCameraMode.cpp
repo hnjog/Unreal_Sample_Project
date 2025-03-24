@@ -1,5 +1,6 @@
 ﻿#include "SampleCameraMode.h"
 #include"SamplePlayerCameraManager.h"
+#include"SampleCameraComponent.h"
 
 // 특정 클래스나 구조체에 대한 자동 생성된 C++ 파일을 포함하는 역할
 // 지정된 클래스의 메타데이터를 통하여 리플렉션을 이용하기 위함
@@ -65,9 +66,15 @@ void USampleCameraMode::UpdateBlending(float DeltaTime)
 {
 }
 
-AActor* USampleCameraMode::GetTargetActor() const
+USampleCameraComponent* USampleCameraMode::GetSampleCameraComponent() const
 {
 	return nullptr;
+}
+
+AActor* USampleCameraMode::GetTargetActor() const
+{
+	const USampleCameraComponent* SampleCameraComponent = GetSampleCameraComponent();
+	return SampleCameraComponent->GetTargetActor();
 }
 
 FVector USampleCameraMode::GetPivotLocation() const
