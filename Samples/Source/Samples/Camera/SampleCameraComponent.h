@@ -48,7 +48,7 @@ public:
 	virtual void GetCameraView(float DeltaTime, FMinimalViewInfo& DesiredView) final;
 
 	void UpdateCameraModes();
-	AActor* GetTargetActor() const;
+	AActor* GetTargetActor() const { return GetOwner(); };
 
 public:
 	// Camera의 Blending 기능을 지원하는 Stack

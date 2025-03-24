@@ -75,8 +75,3 @@ void USampleCameraComponent::UpdateCameraModes()
 		}
 	}
 }
-
-AActor* USampleCameraComponent::GetTargetActor() const
-{
-	return nullptr;
-}
