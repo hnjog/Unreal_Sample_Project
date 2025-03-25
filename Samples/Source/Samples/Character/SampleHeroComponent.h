@@ -6,6 +6,7 @@
 #include "SampleHeroComponent.generated.h"
 
 class USampleCameraMode;
+struct FSampleMappableConfigPair;
 
 /*
 	카메라, 입력 등 플레이어가 제어하는 시스템의 초기화를 처리하는 컴포넌트
@@ -49,4 +50,8 @@ public:
 	virtual void CheckDefaultInitialization() final;
 
 	TSubclassOf<USampleCameraMode> DetermineCameraMode() const;
+
+public:
+	UPROPERTY(EditAnywhere)
+	TArray<FSampleMappableConfigPair> DefalutInputConfigs;
 };

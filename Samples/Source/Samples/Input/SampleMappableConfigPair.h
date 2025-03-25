@@ -1,10 +1,19 @@
 #pragma once
 
-#include "CoreMinimal.h"
+#include "SampleMappableConfigPair.generated.h"
 
-class SAMPLES_API SampleMappableConfigPair
+class UPlayerMappableInputConfig;
+
+USTRUCT()
+struct FSampleMappableConfigPair
 {
+	GENERATED_BODY()
 public:
-	SampleMappableConfigPair();
-	~SampleMappableConfigPair();
+	FSampleMappableConfigPair() = default;
+
+	UPROPERTY(EditAnywhere)
+	TSoftObjectPtr<UPlayerMappableInputConfig> Config;
+
+	UPROPERTY(EditAnywhere)
+	bool bShouldActivateAutomatically = true;
 };

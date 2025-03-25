@@ -7,6 +7,7 @@
 #include"SamplePawnData.h"
 #include"../Camera/SampleCameraMode.h"
 #include"../Camera/SampleCameraComponent.h"
+#include"../Input/SampleMappableConfigPair.h"
 
 const FName USampleHeroComponent::NAME_ActorFeatureName("Hero");
 
