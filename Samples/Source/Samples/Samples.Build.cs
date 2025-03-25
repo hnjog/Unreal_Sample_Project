@@ -12,12 +12,14 @@ public class Samples : ModuleRules
             "Core",
             "CoreUObject",
             "Engine",
-            "InputCore",
             // GAS
             "GameplayTags",
             // Game Features
             "ModularGameplay",
             "GameFeatures",
+			//Input
+            "InputCore",
+            "EnhancedInput",
         });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
