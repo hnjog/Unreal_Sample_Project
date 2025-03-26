@@ -5,6 +5,7 @@
 #include "SamplePawnData.generated.h"
 
 class USampleCameraMode;
+class USampleInputConfig;
 
 UCLASS()
 class SAMPLES_API USamplePawnData : public UPrimaryDataAsset
@@ -20,4 +21,8 @@ public:
 	// Camera Mode
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sample|Camera")
 	TSubclassOf<USampleCameraMode> DefaultCameraMode;
+
+	// Input Config
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sample|InputConfig")
+	TObjectPtr<USampleInputConfig> InputConfig;
 };
