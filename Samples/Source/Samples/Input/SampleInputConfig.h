@@ -28,8 +28,8 @@ class SAMPLES_API USampleInputConfig : public UDataAsset
 public:
 	USampleInputConfig(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 	
-	const UInputAction* FindNativeInputActionForTag(const FGameplayTag& Tag, bool bLogNotFound = true) const;
-	const UInputAction* FindAbilityInputActionForTag(const FGameplayTag& Tag, bool bLogNotFound = true) const;
+	const UInputAction* FindNativeInputActionForTag(const FGameplayTag& InputTag, bool bLogNotFound = true) const;
+	const UInputAction* FindAbilityInputActionForTag(const FGameplayTag& InputTag, bool bLogNotFound = true) const;
 
 public:
 	// 잘 안바뀌는 액션들 (ex : 이동, 마우스 움직임 등)
