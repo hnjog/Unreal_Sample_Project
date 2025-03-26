@@ -7,6 +7,7 @@
 
 class USampleCameraMode;
 struct FSampleMappableConfigPair;
+struct FInputActionValue;
 
 /*
 	카메라, 입력 등 플레이어가 제어하는 시스템의 초기화를 처리하는 컴포넌트
@@ -51,6 +52,9 @@ public:
 
 	TSubclassOf<USampleCameraMode> DetermineCameraMode() const;
 	void InitializePlayerInput(UInputComponent* PlayerInputComponent);
+
+	void Input_Move(const FInputActionValue& InputActionValue);
+	void Input_LookMouse(const FInputActionValue& InputActionValue);
 
 public:
 	UPROPERTY(EditAnywhere)

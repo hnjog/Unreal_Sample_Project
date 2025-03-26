@@ -14,6 +14,7 @@
 #include"Samples/Input/SampleMappableConfigPair.h"
 #include"EnhancedInputSubsystems.h"
 #include"InputMappingContext.h"
+#include"InputActionValue.h"
 
 const FName USampleHeroComponent::NAME_ActorFeatureName("Hero");
 
@@ -242,10 +243,20 @@ void USampleHeroComponent::InitializePlayerInput(UInputComponent* PlayerInputCom
 
 				USampleInputComponent* SampleIC = CastChecked<USampleInputComponent>(PlayerInputComponent);
 				{
-					//SampleIC->BindNativeAction(InputConfig, GameplayTags.InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move, false);
-					//SampleIC->BindNativeAction(InputConfig, GameplayTags.InputTag_Look_Mouse, ETriggerEvent::Triggered, this, &ThisClass::Input_LookMouse, false);
+					SampleIC->BindNativeAction(InputConfig, GameplayTags.InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move, false);
+					SampleIC->BindNativeAction(InputConfig, GameplayTags.InputTag_Look_Mouse, ETriggerEvent::Triggered, this, &ThisClass::Input_LookMouse, false);
 				}
 			}
 		}
 	}
+}
+
+void USampleHeroComponent::Input_Move(const FInputActionValue& InputActionValue)
+{
+
+}
+
+void USampleHeroComponent::Input_LookMouse(const FInputActionValue& InputActionValue)
+{
+
 }
