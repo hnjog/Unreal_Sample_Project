@@ -8,6 +8,8 @@
 #include"../Camera/SampleCameraMode.h"
 #include"../Camera/SampleCameraComponent.h"
 #include"../Input/SampleMappableConfigPair.h"
+#include"Samples/Player/SamplePlayerController.h"
+#include"Samples/Input/SampleInputComponent.h"
 
 const FName USampleHeroComponent::NAME_ActorFeatureName("Hero");
 
@@ -147,6 +149,14 @@ void USampleHeroComponent::HandleChangeInitState(UGameFrameworkComponentManager*
 				CameraComponent->DetermineCameraModeDelegate.BindUObject(this, &ThisClass::DetermineCameraMode);
 			}
 		}
+
+		if (ASamplePlayerController* SamplePC = GetController<ASamplePlayerController>())
+		{
+			if (Pawn->InputComponent != nullptr)
+			{
+				InitializePlayerInput(Pawn->InputComponent);
+			}
+		}
 	}
 }
 
@@ -179,3 +189,8 @@ TSubclassOf<USampleCameraMode> USampleHeroComponent::DetermineCameraMode() const
 	return nullptr;
 }
 PRAGMA_ENABLE_OPTIMIZATION
+
+void USampleHeroComponent::InitializePlayerInput(UInputComponent* InputComponent)
+{
+
+}

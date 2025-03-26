@@ -50,6 +50,7 @@ public:
 	virtual void CheckDefaultInitialization() final;
 
 	TSubclassOf<USampleCameraMode> DetermineCameraMode() const;
+	void InitializePlayerInput(UInputComponent* InputComponent);
 
 public:
 	UPROPERTY(EditAnywhere)
