@@ -253,10 +253,55 @@ void USampleHeroComponent::InitializePlayerInput(UInputComponent* PlayerInputCom
 
 void USampleHeroComponent::Input_Move(const FInputActionValue& InputActionValue)
 {
+	APawn* Pawn = GetPawn<APawn>();
+	AController* Controller = Pawn ? Pawn->GetController() : nullptr;
 
+	if (Controller)
+	{
+		// 이미 설정한 값(Vector2D)를 가져옴
+		const FVector2D Value = InputActionValue.Get<FVector2D>(); 
+		const FRotator MovementRotation(0.0f, Controller->GetControlRotation().Yaw, 0.0f);
+		
+		if (Value.X != 0.f)
+		{
+			// Left/Right -> X 값에 들어있음
+			// MovementDirection은 현재 카메라의 RightVector를 의미(World-Space)
+			const FVector MovementDirection = MovementRotation.RotateVector(FVector::RightVector);
+
+			// 내부적으로 MovementDirection * Value.X 를 MovementComponent에 적용(더함)
+			Pawn->AddMovementInput(MovementDirection, Value.X);
+		}
+
+		if (Value.Y != 0.f)
+		{
+			// Forward/Backward -> Y 값에 들어있음
+			// MovementDirection은 현재 카메라의 ForwardVector를 의미(World-Space)
+			const FVector MovementDirection = MovementRotation.RotateVector(FVector::ForwardVector);
+
+			// 내부적으로 MovementDirection * Value.Y 를 MovementComponent에 적용(더함)
+			Pawn->AddMovementInput(MovementDirection, Value.Y);
+		}
+	}
 }
 
 void USampleHeroComponent::Input_LookMouse(const FInputActionValue& InputActionValue)
 {
+	APawn* Pawn = GetPawn<APawn>();
+	if (Pawn == nullptr)
+		return;
 
+	const FVector2D Value = InputActionValue.Get<FVector2D>();
+	if (Value.X != 0.0f)
+	{
+		// X에 Yaw 값
+		// -Camera에 대해 Yaw 값 적용
+		Pawn->AddControllerYawInput(Value.X);
+	}
+
+	if (Value.Y != 0.0f)
+	{
+		// Y에 Pitch 값
+		double AimInversionValue = -Value.Y;
+		Pawn->AddControllerPitchInput(AimInversionValue);
+	}
 }
