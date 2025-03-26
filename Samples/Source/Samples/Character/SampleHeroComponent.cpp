@@ -10,6 +10,10 @@
 #include"../Input/SampleMappableConfigPair.h"
 #include"Samples/Player/SamplePlayerController.h"
 #include"Samples/Input/SampleInputComponent.h"
+#include"PlayerMappableInputConfig.h"
+#include"Samples/Input/SampleMappableConfigPair.h"
+#include"EnhancedInputSubsystems.h"
+#include"InputMappingContext.h"
 
 const FName USampleHeroComponent::NAME_ActorFeatureName("Hero");
 
@@ -190,7 +194,58 @@ TSubclassOf<USampleCameraMode> USampleHeroComponent::DetermineCameraMode() const
 }
 PRAGMA_ENABLE_OPTIMIZATION
 
-void USampleHeroComponent::InitializePlayerInput(UInputComponent* InputComponent)
+void USampleHeroComponent::InitializePlayerInput(UInputComponent* PlayerInputComponent)
 {
+	check(PlayerInputComponent);
 
+	const APawn* Pawn = GetPawn<APawn>();
+	if (Pawn == nullptr)
+		return;
+
+	// LocalPlayer 가져옴
+	const APlayerController* PC = GetController<APlayerController>();
+	check(PC);
+
+	// EnhancedInputLocalPlayerSubsystem 가져옴
+	const ULocalPlayer* LP = PC->GetLocalPlayer();
+	check(LP);
+
+	UEnhancedInputLocalPlayerSubsystem* Subsystem = LP->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>();
+	check(Subsystem);
+
+	// MappingContext 비워주기
+	Subsystem->ClearAllMappings();
+
+	// PawnExtensionComponent -> PawnData -> InputConfig 존재 유무 판단
+	if (const USamplePawnExtensionComponent* PawnExtComp = USamplePawnExtensionComponent::FindPawnExtensionComponent(Pawn))
+	{
+		if (const USamplePawnData* PawnData = PawnExtComp->GetPawnData<USamplePawnData>())
+		{
+			if (const USampleInputConfig* InputConfig = PawnData->InputConfig)
+			{
+				const FSampleGameplayTags& GameplayTags = FSampleGameplayTags::Get();
+
+				// HeroComponent 가지고 있는 InputMappingContext를 순회하며, EnhancedInputLocalPlayerSubsystem에 추가
+				for (const FSampleMappableConfigPair& Pair : DefalutInputConfigs)
+				{
+					if (Pair.bShouldActivateAutomatically)
+					{
+						FModifyContextOptions Options = {};
+						Options.bIgnoreAllPressedKeysUntilRelease = false;
+
+						// 내부적으로 Input Mapping Context 추가
+						// 5.0 버전에서 사용하던 함수이며 현재는 사라짐
+						// 차후 GameFeature 방식으로 재작성 할 예정
+						//Subsystem->AddPlayerMappableConfig(Pair.Config.LoadSynchronous(), Options);
+					}
+				}
+
+				USampleInputComponent* SampleIC = CastChecked<USampleInputComponent>(PlayerInputComponent);
+				{
+					//SampleIC->BindNativeAction(InputConfig, GameplayTags.InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move, false);
+					//SampleIC->BindNativeAction(InputConfig, GameplayTags.InputTag_Look_Mouse, ETriggerEvent::Triggered, this, &ThisClass::Input_LookMouse, false);
+				}
+			}
+		}
+	}
 }
