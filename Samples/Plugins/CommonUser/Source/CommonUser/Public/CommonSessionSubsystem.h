@@ -27,7 +27,7 @@ public:
 	// 전달할 CmdArgs (Experience 이름 전달)
 	UPROPERTY(BlueprintReadWrite, Category = Session)
 	TMap<FString, FString> ExtraArgs;
-}
+};
 
 
 /*

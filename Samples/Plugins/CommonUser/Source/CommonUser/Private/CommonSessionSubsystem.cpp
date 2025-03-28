@@ -50,5 +50,8 @@ void UCommonSessionSubsystem::HostSession(APlayerController* HostingPlayer, UCom
 	}
 
 	// HostingSessionRequest에서 MapID와 ExtraArgs를 통해 URL을 생성, MapLoad 시작
+	// ServerTravel -> 모든 클라이언트를 새로운 레벨로 이동하도록 지시 (서버 호출)
+	// ClientTravel -> 클라이언트가 자신을 새로운 레벨로 이동하도록 지시 (클라 호출)
+	//
 	GetWorld()->ServerTravel(Request->ConstructTravelURL());
 }
