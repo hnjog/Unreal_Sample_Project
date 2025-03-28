@@ -10,10 +10,19 @@
 	Experience - 유저가 경험할 rule과 게임 정보 객체
 */
 
+class UCommonSession_HostSessionRequest;
+
 UCLASS()
 class SAMPLES_API USampleUserFacingExperience : public UPrimaryDataAsset
 {
 	GENERATED_BODY()
+
+public:
+	// Map 로딩 및 Experience 전환을 위해, MapID와 ExperienceID를 활용하여 HostSessionRequest를 생성
+	// const 가 붙을 시, BlueprintPure가 자동으로 true가 되며
+	// 실행단위로 표현되지 않기에 주의
+	UFUNCTION(BlueprintCallable, BlueprintPure = false)
+	UCommonSession_HostSessionRequest* CreateHostingRequest() const;
 
 public:
 	// map에 대한 정보
