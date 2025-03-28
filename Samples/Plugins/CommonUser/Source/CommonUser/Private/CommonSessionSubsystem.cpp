@@ -16,5 +16,26 @@ FString UCommonSession_HostSessionRequest::GetMapName() const
 
 FString UCommonSession_HostSessionRequest::ConstructTravelURL() const
 {
-	return FString();
+	FString CombinedExtraArgs;
+
+	for (const auto& ExtraArg : ExtraArgs)
+	{
+		if(ExtraArg.Key.IsEmpty())
+		{
+			continue;
+		}
+
+		// ?를 seperate로 복수개의 ExtraArg를 전달할 수 있도록 함
+		// - Key값 유무에 따라, =(assignment)를 통해 CmdArg 생성
+		if (ExtraArg.Value.IsEmpty())
+		{
+			CombinedExtraArgs += FString::Printf(TEXT("?%s"), *ExtraArg.Key);
+		}
+		else
+		{
+			CombinedExtraArgs += FString::Printf(TEXT("?%s=%s"), *ExtraArg.Key, *ExtraArg.Value);
+		}
+	}
+
+	return FString::Printf(TEXT("%s%s"),*GetMapName(),*CombinedExtraArgs);
 }
