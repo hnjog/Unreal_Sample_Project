@@ -43,4 +43,12 @@ FString UCommonSession_HostSessionRequest::ConstructTravelURL() const
 
 void UCommonSessionSubsystem::HostSession(APlayerController* HostingPlayer, UCommonSession_HostSessionRequest* Request)
 {
+	ULocalPlayer* LocalPlayer = (HostingPlayer != nullptr) ? HostingPlayer->GetLocalPlayer() : nullptr;
+	if (LocalPlayer == nullptr)
+	{
+		return;
+	}
+
+	// HostingSessionRequest에서 MapID와 ExtraArgs를 통해 URL을 생성, MapLoad 시작
+	GetWorld()->ServerTravel(Request->ConstructTravelURL());
 }
