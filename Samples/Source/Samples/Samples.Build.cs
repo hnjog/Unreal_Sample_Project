@@ -20,6 +20,8 @@ public class Samples : ModuleRules
 			//Input
             "InputCore",
             "EnhancedInput",
+			// CommonUser
+			"CommonUser",
         });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
