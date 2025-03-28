@@ -4,6 +4,32 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "CommonSessionSubsystem.generated.h"
 
+// UCommonSession_HostSessionRequest를 만들어
+// CommonSessionSubsystem 전달하면 내부에서
+// MapID와 CmdArgs로 최종적인 CmdArgs를 만들어줌
+
+UCLASS(BlueprintType)
+class COMMONUSER_API UCommonSession_HostSessionRequest : public UObject
+{
+	GENERATED_BODY()
+public:
+	// MapID -> Text로 변환
+	FString GetMapName() const;
+
+	// ServerTravel에 전달할 최종 URL 생성
+	FString ConstructTravelURL() const;
+
+public:
+	// 준비할 MapID (맵 경로)
+	UPROPERTY(BlueprintReadWrite, Category = Session)
+	FPrimaryAssetId MapID;
+
+	// 전달할 CmdArgs (Experience 이름 전달)
+	UPROPERTY(BlueprintReadWrite, Category = Session)
+	TMap<FString, FString> ExtraArgs;
+}
+
+
 /*
 	Subsystem?
 	(엔진, 에디터, GameInstance, World, LocalPlayer 등 5개 존재)
