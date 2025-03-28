@@ -51,9 +51,20 @@ public:
 
 */
 
+// UCommonSessionSubsystem 은 SampleGame에서 사용되어야 하기에
+// Module Export를 해줘야 하고, 그렇기에 COMMONUSER_API를 사용
+// {ModuleName}_API의 추가는 '다른 모듈'에서 사용할 경우 추가하면 됨
 UCLASS()
 class COMMONUSER_API UCommonSessionSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
-	
+public:
+	UCommonSessionSubsystem() {}
+
+	UFUNCTION(BlueprintCallable, Category = Session)
+	void HostSession(APlayerController* HostingPlayer, UCommonSession_HostSessionRequest* Request);
+
+public:
+	// PendingTravelURL은 맵의 경로
+	FString PendingTravelURL;
 };

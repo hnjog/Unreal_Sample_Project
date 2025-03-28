@@ -1,5 +1,6 @@
-#include "CommonSessionSubsystem.h"
+﻿#include "CommonSessionSubsystem.h"
 #include <Engine/AssetManager.h>
+#include <Engine/LocalPlayer.h>
 
 FString UCommonSession_HostSessionRequest::GetMapName() const
 {
@@ -38,4 +39,8 @@ FString UCommonSession_HostSessionRequest::ConstructTravelURL() const
 	}
 
 	return FString::Printf(TEXT("%s%s"),*GetMapName(),*CombinedExtraArgs);
+}
+
+void UCommonSessionSubsystem::HostSession(APlayerController* HostingPlayer, UCommonSession_HostSessionRequest* Request)
+{
 }
