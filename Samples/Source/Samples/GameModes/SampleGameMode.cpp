@@ -8,6 +8,7 @@
 #include"../GameModes/SampleExperienceDefinition.h"
 #include"Samples/SampleLogChannels.h"
 #include"../Character/SamplePawnExtensionComponent.h"
+#include <Kismet/GameplayStatics.h>
 
 ASampleGameMode::ASampleGameMode()
 {
@@ -141,6 +142,25 @@ void ASampleGameMode::HandleMatchAssignmentIfNotExpectingOne()
 	// - default experience
 
 	UWorld* World = GetWorld();
+
+	// HostSession에서 넘겨준
+	// URL과 함께 ExtraArgs로 넘겼던 정보가 OptionsString에 저장되어 있음
+	if (!ExperienceId.IsValid() && UGameplayStatics::HasOption(OptionsString, TEXT("Experience")))
+	{
+		// Experience의 Value를 가져와서 PrimaryAssetId를 생성해줌
+		// 이 떄 SampleExperienceDefinition의 class 이름을 사용
+		// 
+		// OptionsString?
+		// - 서버와 클라이언트 간의 데이터 전송에 사용되는 문자열 (추가적인 설정이나 파라미터를 전달하는 용도)
+		// 
+		// 기본적으로 HostSession에서 ServerTravel을 호출하고,
+		// 기존 레벨이 언로드된 후, 새로운 레벨을 Load함
+		// 이후 게임모드를 초기화하며 InitGame을 호출하게 됨
+		// URL은 모든 클라이언트에 전달되기에 모든 클라이언트가 동일한 설정을 할 수 있음
+		// - 여담으로 로컬 환경에서는 에디터가 임의의 서버 인스턴스를 생성하고 이를 통해 ServerTravel이 사용됨
+		const FString ExperienceFromOptions = UGameplayStatics::ParseOption(OptionsString, TEXT("Experience"));
+		ExperienceId = FPrimaryAssetId(USampleExperienceDefinition::StaticClass()->GetFName(), FName(*ExperienceFromOptions));
+	}
 
 	// fall back to the default experience
 	// 기본 옵션으로 default하게 B_SampleDefaultExperience로 설정해놓기
