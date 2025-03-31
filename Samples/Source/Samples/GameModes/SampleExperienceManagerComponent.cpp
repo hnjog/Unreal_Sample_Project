@@ -1,6 +1,7 @@
 ﻿#include "SampleExperienceManagerComponent.h"
 #include "../System/SampleAssetManager.h"
 #include "../GameModes/SampleExperienceDefinition.h"
+#include "GameFeaturesSubsystem.h"
 #include "GameFeaturesSubsystemSettings.h"
 
 void USampleExperienceManagerComponent::CallOrRegister_OnExperienceLoaded(FOnSampleExperienceLoaded::FDelegate&& Delegate)
@@ -168,6 +169,11 @@ void USampleExperienceManagerComponent::OnExperienceLoadComplete()
 
 	// FStreamableDelegateDelayHelper에 의해 불림
 	OnExperienceFullLoadCompleted();
+}
+
+void USampleExperienceManagerComponent::OnGameFeaturePluginLoadComplete(const UE::GameFeatures::FResult& Result)
+{
+
 }
 
 void USampleExperienceManagerComponent::OnExperienceFullLoadCompleted()

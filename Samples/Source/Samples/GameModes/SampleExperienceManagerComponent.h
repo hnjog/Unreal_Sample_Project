@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/GameStateComponent.h"
+#include "GameFeaturePluginOperationResult.h"
 #include "SampleExperienceManagerComponent.generated.h"
 
 class USampleExperienceDefinition;
@@ -10,6 +11,7 @@ enum class ESampleExperienceLoadState
 {
 	Unloaded,
 	Loading,
+	LoadingGameFeatures,
 	Loaded,
 	Deactivating,
 };
@@ -50,6 +52,7 @@ public:
 
 	void StartExperienceLoad();
 	void OnExperienceLoadComplete();
+	void OnGameFeaturePluginLoadComplete(const UE::GameFeatures::FResult& Result);
 	void OnExperienceFullLoadCompleted();
 	const USampleExperienceDefinition* GetCurrentExperienceChecked() const;
 
@@ -68,6 +71,9 @@ public:
 	// Experience 로딩이 완료된 이후, BroadCasting Delegate
 	FOnSampleExperienceLoaded OnExperienceLoaded;
 
+	// 활성화된 GameFeature Plugin들
+	int32 NumGameFeaturePluginsLoading = 0;
+	TArray<FString> GameFeaturePluginURLs;
 };
 /*
 	GameStateComponent (Plugin 기능)
