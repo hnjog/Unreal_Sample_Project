@@ -1,4 +1,4 @@
-﻿#include "SampleExperienceManagerComponent.h"
+#include "SampleExperienceManagerComponent.h"
 #include "../System/SampleAssetManager.h"
 #include "../GameModes/SampleExperienceDefinition.h"
 #include "GameFeaturesSubsystem.h"
@@ -161,14 +161,51 @@ void USampleExperienceManagerComponent::StartExperienceLoad()
 }
 PRAGMA_ENABLE_OPTIMIZATION
 
+// Experience의 Load 완료 후, GameFeature Plugin을 로드
 void USampleExperienceManagerComponent::OnExperienceLoadComplete()
 {
 	static int32 OnExperienceLoadComplete_FrameNumber = GFrameNumber;
-	// 원본의 경우,
-	// 여기서 추가적인 로딩을 많이 해준다
+	check(LoadState == ESampleExperienceLoadState::Loading);
+	check(CurrentExperience);
 
-	// FStreamableDelegateDelayHelper에 의해 불림
-	OnExperienceFullLoadCompleted();
+	// 이전에 활성화된 GameFeature Plugin의 URL을 초기화
+	GameFeaturePluginURLs.Reset();
+
+	auto CollectGameFeaturePluginURLs = [This = this](const UPrimaryDataAsset* Context, const TArray<FString>& FeaturePluginList)
+		{
+			// FeaturePluginList를 순회하며, PluginURL을 ExperienceManagerComponent의 GameFeaturePluginURLs에 추가
+			for (const FString& PluginName : FeaturePluginList)
+			{
+				FString PluginURL;
+				// UGameFeaturesSubsystem : 엔진의 서브시스템을 상속받아 만든 것
+				// GetPluginURLByName : Plugin의 이름을 통해 그 Plugin의 URL을 가져오는 함수
+				if (UGameFeaturesSubsystem::Get().GetPluginURLByName(PluginName, PluginURL))
+				{
+					This->GameFeaturePluginURLs.AddUnique(PluginURL);
+				}
+			}
+		};
+
+	// GameFeaturesToEnable에 있는 Plugin만 일단 활성화할 GameFeature Plugin 후보로 등록
+	CollectGameFeaturePluginURLs(CurrentExperience, CurrentExperience->GameFeaturesToEnable);
+
+	// GameFeaturePluginURLs에 등록된 Plugin들을 로딩 및 활성화
+	NumGameFeaturePluginsLoading = GameFeaturePluginURLs.Num();
+	if (NumGameFeaturePluginsLoading)
+	{
+		LoadState = ESampleExperienceLoadState::LoadingGameFeatures;
+		for (const FString& PluginURL : GameFeaturePluginURLs)
+		{
+			// 매 Plugin이 로딩 및 활성화 이후, OnGameFeaturePluginLoadComplete 콜백 함수 등록
+			UGameFeaturesSubsystem::Get().LoadAndActivateGameFeaturePlugin(PluginURL, FGameFeaturePluginLoadComplete::CreateUObject(this, &ThisClass::OnGameFeaturePluginLoadComplete));
+		}
+	}
+	else
+	{
+		// GameFeature Plugin이 없는 경우, 바로 OnExperienceFullLoadCompleted 호출
+		// FStreamableDelegateDelayHelper에 의해 불림
+		OnExperienceFullLoadCompleted();
+	}
 }
 
 void USampleExperienceManagerComponent::OnGameFeaturePluginLoadComplete(const UE::GameFeatures::FResult& Result)
