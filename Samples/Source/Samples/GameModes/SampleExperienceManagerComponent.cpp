@@ -1,4 +1,4 @@
-#include "SampleExperienceManagerComponent.h"
+﻿#include "SampleExperienceManagerComponent.h"
 #include "../System/SampleAssetManager.h"
 #include "../GameModes/SampleExperienceDefinition.h"
 #include "GameFeaturesSubsystem.h"
@@ -210,7 +210,13 @@ void USampleExperienceManagerComponent::OnExperienceLoadComplete()
 
 void USampleExperienceManagerComponent::OnGameFeaturePluginLoadComplete(const UE::GameFeatures::FResult& Result)
 {
-
+	// 매 GameFeature Plugin 로딩될 때마다, 이 함수가 콜백
+	NumGameFeaturePluginsLoading--;
+	if (NumGameFeaturePluginsLoading == 0)
+	{
+		// 모든 로딩이 다 끝난 이후 호출
+		OnExperienceFullLoadCompleted();
+	}
 }
 
 void USampleExperienceManagerComponent::OnExperienceFullLoadCompleted()
