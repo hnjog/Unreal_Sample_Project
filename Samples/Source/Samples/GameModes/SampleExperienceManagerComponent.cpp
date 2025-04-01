@@ -3,6 +3,8 @@
 #include "../GameModes/SampleExperienceDefinition.h"
 #include "GameFeaturesSubsystem.h"
 #include "GameFeaturesSubsystemSettings.h"
+#include"Samples/GameModes/SampleExperienceActionSet.h"
+#include "GameFeatureAction.h"
 
 void USampleExperienceManagerComponent::CallOrRegister_OnExperienceLoaded(FOnSampleExperienceLoaded::FDelegate&& Delegate)
 {
@@ -222,6 +224,54 @@ void USampleExperienceManagerComponent::OnGameFeaturePluginLoadComplete(const UE
 void USampleExperienceManagerComponent::OnExperienceFullLoadCompleted()
 {
 	check(LoadState != ESampleExperienceLoadState::Loaded);
+
+	// GameFeature Plugin 로딩과 활성화 이후, GameFeature Action을 활성화
+	{
+		LoadState = ESampleExperienceLoadState::ExcutingActions;
+
+		// GameFeature Action을 활성화를 위한 Context
+		FGameFeatureActivatingContext Context;
+		{
+			// GameFeatureAction을 관리하는 것은 GameFeatureSystem(EngineSubsystem 기반)
+			// 엔진 서브 시스템은 엔진 자체가 종료될때까지 소멸되지 않음
+			// (PI를 만들더라도 계속 남아있음)
+			// 
+			// 그런데 Action은 엔진 기반의 SubSystem에서 관리하므로,
+			// 어떠한 World에서 Action을 활성화할지를 명시해주어야 함
+			// (안그러면 죄다 Bind 해줘야 하기에)
+			// 
+			// 월드의 핸들을 세팅
+			// ContextHandle를 통하여 월드를 고유하게 식별
+			const FWorldContext* ExistingWorldContext = GEngine->GetWorldContextFromWorld(GetWorld());
+			if (ExistingWorldContext)
+			{
+				Context.SetRequiredWorldContextHandle(ExistingWorldContext->ContextHandle);
+			}
+		}
+
+		auto ActivateListOfActions = [&Context](const TArray<UGameFeatureAction*>& ActionList)
+			{
+				for (UGameFeatureAction* Action : ActionList)
+				{
+					// 명시적으로 GameFeatureAction에 대해 Register -> Loading -> Activating 순으로 호출
+					if (Action)
+					{
+						Action->OnGameFeatureRegistering(); // 등록
+						Action->OnGameFeatureLoading(); // 로드
+						Action->OnGameFeatureActivating(Context); // 활성화 (이때 월드 컨텍스트를 전달)
+					}
+				}
+			};
+
+		// 1. Experience의 Actions
+		ActivateListOfActions(CurrentExperience->Actions);
+
+		// 2. Experience의 ActionSet
+		for (const TObjectPtr<USampleExperienceActionSet>& ActionSet : CurrentExperience->ActionSets)
+		{
+			ActivateListOfActions(ActionSet->Actions);
+		}
+	}
 
 	LoadState = ESampleExperienceLoadState::Loaded;
 	OnExperienceLoaded.Broadcast(CurrentExperience);
