@@ -3,10 +3,10 @@
 #include "CoreMinimal.h"
 #include "Components/PawnComponent.h"
 #include "Components/GameFrameworkInitStateInterface.h"
+#include "Samples/GameFeatures/GameFeatureAction_AddInputContextMapping.h"
 #include "SampleHeroComponent.generated.h"
 
 class USampleCameraMode;
-struct FSampleMappableConfigPair;
 struct FInputActionValue;
 
 /*
@@ -58,5 +58,5 @@ public:
 
 public:
 	UPROPERTY(EditAnywhere)
-	TArray<FSampleMappableConfigPair> DefalutInputConfigs;
+	TArray<FInputMappingContextAndPriority> DefaultInputMappings;
 };

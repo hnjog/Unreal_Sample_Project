@@ -1,20 +1,19 @@
 ﻿#include "SampleHeroComponent.h"
 #include "Components/GameFrameworkComponentManager.h"
-#include "../SampleLogChannels.h"
-#include"../SampleGameplayTags.h"
-#include"SamplePawnExtensionComponent.h"
-#include"../Player/SamplePlayerState.h"
-#include"SamplePawnData.h"
-#include"../Camera/SampleCameraMode.h"
-#include"../Camera/SampleCameraComponent.h"
-#include"../Input/SampleMappableConfigPair.h"
-#include"Samples/Player/SamplePlayerController.h"
-#include"Samples/Input/SampleInputComponent.h"
-#include"PlayerMappableInputConfig.h"
-#include"Samples/Input/SampleMappableConfigPair.h"
-#include"EnhancedInputSubsystems.h"
-#include"InputMappingContext.h"
-#include"InputActionValue.h"
+#include "Samples/SampleLogChannels.h"
+#include "Samples/SampleGameplayTags.h"
+#include "SamplePawnExtensionComponent.h"
+#include "Samples/Player/SamplePlayerState.h"
+#include "SamplePawnData.h"
+#include "Samples/Camera/SampleCameraMode.h"
+#include "Samples/Camera/SampleCameraComponent.h"
+#include "Samples/Player/SamplePlayerController.h"
+#include "Samples/Input/SampleInputComponent.h"
+#include "PlayerMappableInputConfig.h"
+#include "EnhancedInputSubsystems.h"
+#include "InputMappingContext.h"
+#include "InputActionValue.h"
+#include "UserSettings/EnhancedInputUserSettings.h"
 
 const FName USampleHeroComponent::NAME_ActorFeatureName("Hero");
 
@@ -226,18 +225,23 @@ void USampleHeroComponent::InitializePlayerInput(UInputComponent* PlayerInputCom
 			{
 				const FSampleGameplayTags& GameplayTags = FSampleGameplayTags::Get();
 
-				// HeroComponent 가지고 있는 InputMappingContext를 순회하며, EnhancedInputLocalPlayerSubsystem에 추가
-				for (const FSampleMappableConfigPair& Pair : DefalutInputConfigs)
+				//HeroComponent 가지고 있는 InputMappingContext를 순회하며, EnhancedInputLocalPlayerSubsystem에 추가
+				for (const FInputMappingContextAndPriority& Mapping : DefaultInputMappings)
 				{
-					if (Pair.bShouldActivateAutomatically)
+					if (UInputMappingContext* IMC = Mapping.InputMapping.Get())
 					{
-						FModifyContextOptions Options = {};
-						Options.bIgnoreAllPressedKeysUntilRelease = false;
+						if (Mapping.bRegisterWithSettings)
+						{
+							if (UEnhancedInputUserSettings* Settings = Subsystem->GetUserSettings())
+							{
+								Settings->RegisterInputMappingContext(IMC);
+							}
 
-						// 내부적으로 Input Mapping Context 추가
-						// 5.0 버전에서 사용하던 함수이며 현재는 사라짐
-						// 차후 GameFeature 방식으로 재작성 할 예정
-						//Subsystem->AddPlayerMappableConfig(Pair.Config.LoadSynchronous(), Options);
+							FModifyContextOptions Options = {};
+							Options.bIgnoreAllPressedKeysUntilRelease = false;
+							// Actually add the config to the local player							
+							Subsystem->AddMappingContext(IMC, Mapping.Priority, Options);
+						}
 					}
 				}
 
