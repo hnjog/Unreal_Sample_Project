@@ -1,4 +1,4 @@
-﻿#include "SampleHeroComponent.h"
+#include "SampleHeroComponent.h"
 #include "Components/GameFrameworkComponentManager.h"
 #include "Samples/SampleLogChannels.h"
 #include "Samples/SampleGameplayTags.h"
@@ -145,20 +145,20 @@ void USampleHeroComponent::HandleChangeInitState(UGameFrameworkComponentManager*
 			PawnData = PawnExtComp->GetPawnData<USamplePawnData>();
 		}
 
+		if (ASamplePlayerController* SamplePC = GetController<ASamplePlayerController>())
+		{
+			if (Pawn->InputComponent != nullptr)
+			{
+				InitializePlayerInput(Pawn->InputComponent);
+			}
+		}
+
 		if (bIsLocallyControlled && PawnData)
 		{
 			// 현재 SampleCharacter에 Attach 된 CameraComponent를 찾는다
 			if (USampleCameraComponent* CameraComponent = USampleCameraComponent::FindCameraComponent(Pawn))
 			{
 				CameraComponent->DetermineCameraModeDelegate.BindUObject(this, &ThisClass::DetermineCameraMode);
-			}
-		}
-
-		if (ASamplePlayerController* SamplePC = GetController<ASamplePlayerController>())
-		{
-			if (Pawn->InputComponent != nullptr)
-			{
-				InitializePlayerInput(Pawn->InputComponent);
 			}
 		}
 	}
