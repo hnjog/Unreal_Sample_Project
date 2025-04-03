@@ -12,7 +12,7 @@ void USampleCameraMode_ThirdPerson::UpdateView(float DeltaTime)
 	FVector PivotLocation = GetPivotLocation();
 	FRotator PivotRotation = GetPivotRotation();
 
-	PivotRotation.Pitch = FMath::Clamp(PivotRotation.Pitch, ViewPitchMin, ViewPitchMax);
+	PivotRotation.Pitch = FMath::ClampAngle(PivotRotation.Pitch, ViewPitchMin, ViewPitchMax);
 
 	View.Location = PivotLocation;
 	View.Rotation = PivotRotation;
