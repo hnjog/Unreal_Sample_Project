@@ -228,7 +228,8 @@ void USampleHeroComponent::InitializePlayerInput(UInputComponent* PlayerInputCom
 				//HeroComponent 가지고 있는 InputMappingContext를 순회하며, EnhancedInputLocalPlayerSubsystem에 추가
 				for (const FInputMappingContextAndPriority& Mapping : DefaultInputMappings)
 				{
-					if (UInputMappingContext* IMC = Mapping.InputMapping.Get())
+					//if (UInputMappingContext* IMC = Mapping.InputMapping.Get()) // lyra 원본
+					if (UInputMappingContext* IMC = Mapping.InputMapping.LoadSynchronous())
 					{
 						if (Mapping.bRegisterWithSettings)
 						{
