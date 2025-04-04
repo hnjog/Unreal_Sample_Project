@@ -227,7 +227,7 @@ void USampleExperienceManagerComponent::OnExperienceFullLoadCompleted()
 
 	// GameFeature Plugin 로딩과 활성화 이후, GameFeature Action을 활성화
 	{
-		LoadState = ESampleExperienceLoadState::ExcutingActions;
+		LoadState = ESampleExperienceLoadState::ExecutingActions;
 
 		// GameFeature Action을 활성화를 위한 Context
 		FGameFeatureActivatingContext Context;

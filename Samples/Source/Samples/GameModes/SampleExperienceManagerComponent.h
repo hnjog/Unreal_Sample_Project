@@ -12,7 +12,7 @@ enum class ESampleExperienceLoadState
 	Unloaded,
 	Loading,
 	LoadingGameFeatures,
-	ExcutingActions,
+	ExecutingActions,
 	Loaded,
 	Deactivating,
 };
