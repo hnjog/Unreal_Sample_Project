@@ -76,5 +76,15 @@ public:
 	// MappingContext를 추가
 	void AddInputMappingForPlayer(UPlayer* Player, FPerContextData& ActiveData);
 	void RemoveInputMapping(APlayerController* PlayerController, FPerContextData& ActiveData);
-
 };
+
+/*
+	Event? Delegate?
+	Delegate 는 '구독'하는 방식
+	-> 특정한 존재에게 그러한 '상황'을 원하는 개체들이
+	   찾아가는 형식
+	   (전체적인 실행 보장)
+
+	Event는 위와 비슷하지만,
+	EventName을 통하여 필요한 개체들만 실행 시킬 수 있음
+*/
