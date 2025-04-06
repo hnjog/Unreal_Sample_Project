@@ -1,14 +1,14 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "ModularCharacter.h"
 #include "SampleCharacter.generated.h"
 
 class USamplePawnExtensionComponent;
 class USampleCameraComponent;
 
 UCLASS()
-class SAMPLES_API ASampleCharacter : public ACharacter
+class SAMPLES_API ASampleCharacter : public AModularCharacter
 {
 	GENERATED_BODY()
 

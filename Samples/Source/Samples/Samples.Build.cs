@@ -17,6 +17,7 @@ public class Samples : ModuleRules
             // Game Features
             "ModularGameplay",
             "GameFeatures",
+            "ModularGameplayActors",
 			//Input
             "InputCore",
             "EnhancedInput",
