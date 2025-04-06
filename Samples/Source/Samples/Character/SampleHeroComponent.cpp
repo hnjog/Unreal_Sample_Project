@@ -16,6 +16,7 @@
 #include "UserSettings/EnhancedInputUserSettings.h"
 
 const FName USampleHeroComponent::NAME_ActorFeatureName("Hero");
+const FName USampleHeroComponent::NAME_BindInputsNow("BindInputsNow");
 
 USampleHeroComponent::USampleHeroComponent(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -254,6 +255,11 @@ void USampleHeroComponent::InitializePlayerInput(UInputComponent* PlayerInputCom
 			}
 		}
 	}
+
+	// UGameFeatureAction_AddInputContextMapping 의 HandleControllerExtension 콜백함수 전달
+	// -> 첫 매개변수인 'Receiver'에게만 이벤트를 보내라 요청할 수 있음
+	UGameFrameworkComponentManager::SendGameFrameworkComponentExtensionEvent(const_cast<APlayerController*>(PC), NAME_BindInputsNow);
+	UGameFrameworkComponentManager::SendGameFrameworkComponentExtensionEvent(const_cast<APawn*>(Pawn), NAME_BindInputsNow);
 }
 
 void USampleHeroComponent::Input_Move(const FInputActionValue& InputActionValue)

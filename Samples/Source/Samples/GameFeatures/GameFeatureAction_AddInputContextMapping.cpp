@@ -1,6 +1,7 @@
 ﻿#include "GameFeatureAction_AddInputContextMapping.h"
 #include "InputMappingContext.h"
 #include"Samples/System/SampleAssetManager.h"
+#include"Samples/Character/SampleHeroComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "UserSettings/EnhancedInputUserSettings.h"
 #include"GameFeatures/Public/GameFeaturesSubsystem.h"
@@ -137,11 +138,12 @@ void UGameFeatureAction_AddInputContextMapping::HandleControllerExtension(AActor
 	APlayerController* AsController = CastChecked<APlayerController>(Actor);
 	FPerContextData& ActiveData = ContextData.FindOrAdd(ChangeContext);
 
-	if ((EventName == UGameFrameworkComponentManager::NAME_ExtensionRemoved))
+	// Receiver가 사라진 경우 추가
+	if ((EventName == UGameFrameworkComponentManager::NAME_ExtensionRemoved) || (EventName == UGameFrameworkComponentManager::NAME_ReceiverRemoved))
 	{
 		RemoveInputMapping(AsController, ActiveData);
 	}
-	else if ((EventName == UGameFrameworkComponentManager::NAME_ExtensionAdded))
+	else if ((EventName == UGameFrameworkComponentManager::NAME_ExtensionAdded) || (EventName == USampleHeroComponent::NAME_BindInputsNow)) // Hero에서 InitializePlayerInput 에서도 호출
 	{
 		AddInputMappingForPlayer(AsController->GetLocalPlayer(), ActiveData);
 	}

@@ -34,8 +34,6 @@ class SAMPLES_API USampleHeroComponent : public UPawnComponent, public IGameFram
 public:
 	USampleHeroComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	static const FName NAME_ActorFeatureName;
-
 	// PawnComponent interface
 	virtual void OnRegister() final;
 	virtual void BeginPlay() final;
@@ -59,4 +57,10 @@ public:
 public:
 	UPROPERTY(EditAnywhere)
 	TArray<FInputMappingContextAndPriority> DefaultInputMappings;
+
+	// FeatureName
+	static const FName NAME_ActorFeatureName;
+
+	// Extension Event 이름
+	static const FName NAME_BindInputsNow;
 };
