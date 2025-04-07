@@ -100,4 +100,27 @@ public:
 	 Array 역할을 담당하는 부분과 그 Array 요소 가 분리되어 있어야 가능)
 	 (List 와 Entry)
 	 이 시스템을 사용하기 위하여 위와 같은 분리가 이루어짐
+
+	 컨트롤러는 MetaData(TSubclass)를 들고 있음
+	 그렇기에 여러 값을 들고 있어도 가벼움
+
+	 그런데 Pawn은 Mesh 관련 데이터를 들고 있기에
+	 무거움(?)
+	 -> refCount를 높여서?
+	 -> 정확히 말하자면, 프로젝트가 커질 수록 이러한 character이 더 다양해질 것이고,
+	    하나의 파일에 Mesh를 넣게되면, 각자의 Character BP들이 너무 무거워질 수 있음
+		(lyra에선 Tag를 통해 검색하여 Mesh 넣어주는 방식)
+
+	아마도,
+	BP_Human1,BP_Human2,
+	BP_Beast1,BP_Beast2
+	이런 방식보다
+
+	lyra에선
+	BP_Human, BP_Beast
+	를 만들고
+	Mesh는 그때그때 Tag를 이용하여 다르게 적용하려는?
+	것이라 추정
+	(게임 Tag를 이용하여 다른 기능들을 그때그때 붙여줄 수 있으니)
+	(흠.. AI 패턴 같은 것도 지정해줄 수 있는건가?)
 */
