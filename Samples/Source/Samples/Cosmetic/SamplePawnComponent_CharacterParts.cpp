@@ -1,4 +1,4 @@
-﻿#include "SamplePawnComponent_CharacterParts.h"
+#include "SamplePawnComponent_CharacterParts.h"
 #include "GameplayTagAssetInterface.h"
 #include "GameFramework/Character.h"
 
@@ -57,6 +57,20 @@ bool FSampleCharacterPartList::SpawnActorForEntry(FSampleAppliedCharacterPartEnt
 
 }
 
+bool FSampleCharacterPartList::DestroyActorForEntry(FSampleAppliedCharacterPartEntry& Entry)
+{
+	bool bDestroyedAnyActors = false;
+
+	if (Entry.SpawnedComponent)
+	{
+		Entry.SpawnedComponent->DestroyComponent();
+		Entry.SpawnedComponent = nullptr;
+		bDestroyedAnyActors = true;
+	}
+
+	return bDestroyedAnyActors;
+}
+
 FSampleCharacterPartHandle FSampleCharacterPartList::AddEntry(FSampleCharacterPart NewPart)
 {
 	// PawnComponent의 CharacterPartList가 PartHandle을 관리
@@ -72,7 +86,7 @@ FSampleCharacterPartHandle FSampleCharacterPartList::AddEntry(FSampleCharacterPa
 		FSampleAppliedCharacterPartEntry& NewEntry = Entries.AddDefaulted_GetRef();
 		NewEntry.Part = NewPart; // 메타데이터 (레퍼런스로 안 받은 이유)
 		NewEntry.PartHandle = Result.PartHandle;
-		
+
 		// 여기서 실제 Actor 생성
 		// OwnerComponent의 Owner Actor에 Actor 끼리 RootComponent로 Attach
 		if (SpawnActorForEntry(NewEntry))
@@ -85,6 +99,20 @@ FSampleCharacterPartHandle FSampleCharacterPartList::AddEntry(FSampleCharacterPa
 	}
 
 	return Result;
+}
+
+void FSampleCharacterPartList::RemoveEntry(FSampleCharacterPartHandle Handle)
+{
+	for (auto EntryIt = Entries.CreateIterator(); EntryIt; EntryIt++)
+	{
+		FSampleAppliedCharacterPartEntry& Entry = *EntryIt;
+
+		if (Entry.PartHandle == Handle.PartHandle)
+		{
+			DestroyActorForEntry(Entry);
+			break; 
+		}
+	}
 }
 
 FGameplayTagContainer FSampleCharacterPartList::CollectCombinedTags() const
@@ -185,6 +213,11 @@ FSampleCharacterPartHandle USamplePawnComponent_CharacterParts::AddCharacterPart
 {
 	// 일단 관리하고 있는 리스트에 넣어주면서 일 진행
 	return CharacterPartList.AddEntry(NewPart);
+}
+
+void USamplePawnComponent_CharacterParts::RemoveCharacterPart(FSampleCharacterPartHandle Handle)
+{
+	CharacterPartList.RemoveEntry(Handle);
 }
 
 

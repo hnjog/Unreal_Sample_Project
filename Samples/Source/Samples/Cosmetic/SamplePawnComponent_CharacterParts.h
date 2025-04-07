@@ -53,7 +53,11 @@ public:
 	}
 
 	bool SpawnActorForEntry(FSampleAppliedCharacterPartEntry& Entry);
+	bool DestroyActorForEntry(FSampleAppliedCharacterPartEntry& Entry);
+
 	FSampleCharacterPartHandle AddEntry(FSampleCharacterPart NewPart);
+	void RemoveEntry(FSampleCharacterPartHandle Handle);
+	
 	FGameplayTagContainer CollectCombinedTags() const;
 
 public:
@@ -82,6 +86,7 @@ public:
 	void BroadcastChanged();
 
 	FSampleCharacterPartHandle AddCharacterPart(const FSampleCharacterPart& NewPart);
+	void RemoveCharacterPart(FSampleCharacterPartHandle Handle);
 public:
 	// 인스턴스화 된 Character Parts
 	UPROPERTY()
