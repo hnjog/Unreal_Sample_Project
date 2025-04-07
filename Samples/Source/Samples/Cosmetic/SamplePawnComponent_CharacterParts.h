@@ -52,6 +52,10 @@ public:
 	{
 	}
 
+	bool SpawnActorForEntry(FSampleAppliedCharacterPartEntry& Entry);
+	FSampleCharacterPartHandle AddEntry(FSampleCharacterPart NewPart);
+	FGameplayTagContainer CollectCombinedTags() const;
+
 public:
 	//현재 인스턴스화 된 Character Part
 	UPROPERTY()
@@ -72,6 +76,12 @@ class USamplePawnComponent_CharacterParts : public UPawnComponent
 public:
 	USamplePawnComponent_CharacterParts(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+	USkeletalMeshComponent* GetParentMeshComponent() const;
+	USceneComponent* GetSceneComponentToAttachTo() const;
+	FGameplayTagContainer GetCombinedTags(FGameplayTag RequiredPrefix) const;
+	void BroadcastChanged();
+
+	FSampleCharacterPartHandle AddCharacterPart(const FSampleCharacterPart& NewPart);
 public:
 	// 인스턴스화 된 Character Parts
 	UPROPERTY()

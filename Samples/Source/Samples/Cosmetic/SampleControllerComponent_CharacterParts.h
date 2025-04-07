@@ -5,6 +5,8 @@
 #include "SampleCharacterPartTypes.h"
 #include "SampleControllerComponent_CharacterParts.generated.h"
 
+class USamplePawnComponent_CharacterParts;
+
 // Controller Component가 소유하는 Character Parts
 USTRUCT()
 struct FSampleControllerCharacterPartEntry
@@ -25,6 +27,12 @@ class USampleControllerComponent_CharacterParts : public UControllerComponent
 	GENERATED_BODY()
 public:
 	USampleControllerComponent_CharacterParts(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+	USamplePawnComponent_CharacterParts* GetPawnCustomizer() const;
+
+	UFUNCTION(BlueprintCallable, Category = Cosmetics)
+	void AddCharacterPart(const FSampleCharacterPart& NewPart);
+	void AddCharacterPartInternal(const FSampleCharacterPart& NewPart);
 
 public:
 	UPROPERTY(EditAnywhere, Category = Cosmetics)
