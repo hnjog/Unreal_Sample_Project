@@ -38,5 +38,6 @@ public:
 
 	// Actor를 소환하여 붙이는데, 특정 Bone에 붙이기 위한 정보
 	// 따로 정의되어 있지 않으면 Root에 붙임
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName SocketName;
 };
