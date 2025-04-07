@@ -1,9 +1,2 @@
-#include "SampleCharacterPartTypes.h"
+﻿#include "SampleCharacterPartTypes.h"
 
-SampleCharacterPartTypes::SampleCharacterPartTypes()
-{
-}
-
-SampleCharacterPartTypes::~SampleCharacterPartTypes()
-{
-}
