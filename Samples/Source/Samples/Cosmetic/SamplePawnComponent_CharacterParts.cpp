@@ -1,4 +1,4 @@
-#include "SamplePawnComponent_CharacterParts.h"
+﻿#include "SamplePawnComponent_CharacterParts.h"
 #include "GameplayTagAssetInterface.h"
 #include "GameFramework/Character.h"
 
@@ -139,7 +139,8 @@ FGameplayTagContainer FSampleCharacterPartList::CollectCombinedTags() const
 }
 
 USamplePawnComponent_CharacterParts::USamplePawnComponent_CharacterParts(const FObjectInitializer& ObjectInitializer)
-	:Super(ObjectInitializer)
+	:Super(ObjectInitializer),
+	CharacterPartList(this)
 {
 
 }
