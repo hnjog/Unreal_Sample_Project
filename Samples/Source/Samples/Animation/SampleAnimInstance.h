@@ -4,6 +4,16 @@
 #include "Animation/AnimInstance.h"
 #include "SampleAnimInstance.generated.h"
 
+// 다만 Lyra와의 클래스 이름이 다르기에 마이그레이션 시키기 까다로움
+// 1. 이 클래스의 이름을 lyra와 동일하게
+// 2. lyra 에셋을 이 클래스로 일일이 변환
+// -> 둘다 무척 까다로움
+// 
+// 마이그레이션 시 자동으로 교체 시켜줌 (Script : Source를 뜻함)
+// DefaultEngine.ini
+// [CoreRedirects]
+// +ClassRedirects = (OldName = "LyraAnimInstance", NewName = "/Script/Samples.SampleAnimInstance")
+//
 UCLASS()
 class SAMPLES_API USampleAnimInstance : public UAnimInstance
 {
