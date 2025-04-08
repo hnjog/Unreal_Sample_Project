@@ -38,6 +38,11 @@
 //     물약 - '소비' Fragment 붙임 (개수 소비 후 사라짐)
 //     횟수 제한 바주카 - '장착','소비' Fragment를 각각 붙임
 //
+
+
+// Abstract - 추상 클래스로 정의(직접 인스턴스화 불가)
+// DefaultToInstanced - 이 '클래스'를 사용하는 객체 생성시, 이 객체도 인스턴스화 됨 (보통 Editor나 BP에서 생성될때 고려 가능)
+// EditInlineNew - 이 클래스의 인스턴스가 Editor의 디테일 패널에서 수정 가능하도록 함 (쉬운 수정)
 UCLASS(Abstract,DefaultToInstanced,EditInlineNew)
 class USampleInventoryItemFragment : public UObject
 {
@@ -45,9 +50,42 @@ class USampleInventoryItemFragment : public UObject
 public:
 };
 
+// 기본적으로는 '메타데이터'를 들고 있는것이 Definition의 개념
 UCLASS()
 class SAMPLES_API USampleInventoryItemDefinition : public UObject
 {
 	GENERATED_BODY()
-	
+public:
+	USampleInventoryItemDefinition(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+public:
+	// Inventory Item 정의(메타) 이름
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Display)
+	FText DisplayName;
+
+	// Inventory Item의 Component를 Fragment로 인식하면 됨
+	// 아이템의 특성을 여기 붙인다
+	// EditDefaultsOnly - 에디터에서 기본값만 편집
+	// Instanced - 이 프로퍼티가 포함된 클래스가 인스턴스화 되어서 사용될 수 있음을 나타냄
+	// (이 프로퍼티는 다른 객체에 대한 참조를 가지고, 그 객체는 독립적으로 존재 가능)
+	// BlueprintReadOnly - 읽기 전용 (BP에서 수정 x)
+	// Category = Display - Editor의 디테일 패널에서 특정한 카테고리에 속함을 보여준다
+	//  - Category = "" 와 일반적으로 사용하는 차이는 딲히 없음 (가독성 여부)
+	// 
+	// Fragments 를 사용하기 위하여 3개의 키워드가 필요
+	// Instanced - TObjectPtr 을 사용한 TArray 이고, 각각 별도의 객체이므로 사용
+	// USampleInventoryItemFragment 쪽에서
+	// DefaultToInstanced - 이 객체를 사용할 때, Fragment가 인스턴스화 됨 (BP에서 끼워주면 객체화)
+	// EditInlineNew - Editor에서 그러한 것을 확인하고 편집을 쉽게 하기 위함
+	// 
+	// (Fragment 자체는 BP가 있는 Editor 상에서 가리키게 됨)
+	// (사실상 자유로운 속성 조합을 위한 것)
+	// 
+	// 일반적으론 이러한 BP를 만들고 안에 Fragment를 집어넣더라도,
+	// Editor의 Instance 상에서만 적용되고, CDO에는 반영이 안되어서 저장이 되지 않음
+	// (즉, Editor의 Instance엔 적용이 되었지만 런타임의 생성된 객체에선 저장이 안됨)
+	// -> 그렇기에 위의 키워드를 이용하여 실제 Instance가 생성될때도 적용되도록 저장
+	// 
+	UPROPERTY(EditDefaultsOnly,Instanced, BlueprintReadOnly, Category = Display)
+	TArray<TObjectPtr<USampleInventoryItemFragment>> Fragments;
 };
