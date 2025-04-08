@@ -5,6 +5,35 @@
 #include "SampleCosmeticAnimationTypes.generated.h"
 
 USTRUCT(BlueprintType)
+struct FSampleAnimLayerSelectionEntry
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UAnimInstance> Layer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FGameplayTagContainer RequiredTags;
+};
+
+USTRUCT(BlueprintType)
+struct FSampleAnimLayerSelectionSet
+{
+	GENERATED_BODY()
+
+public:
+	// FSampleAnimBodyStyleSelectionSet의 MeshRule 처럼
+	// AnimInstance의 Rule을 가진 LayerRules
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FSampleAnimLayerSelectionEntry> LayerRules;
+
+	// Default Layer
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UAnimInstance> DefaultLayer;
+};
+
+USTRUCT(BlueprintType)
 struct FSampleAnimBodyStyleSelectionEntry
 {
 	GENERATED_BODY()
