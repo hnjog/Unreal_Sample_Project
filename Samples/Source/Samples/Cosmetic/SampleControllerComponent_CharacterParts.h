@@ -28,12 +28,20 @@ class USampleControllerComponent_CharacterParts : public UControllerComponent
 public:
 	USampleControllerComponent_CharacterParts(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+public:
 	USamplePawnComponent_CharacterParts* GetPawnCustomizer() const;
 
 	UFUNCTION(BlueprintCallable, Category = Cosmetics)
 	void AddCharacterPart(const FSampleCharacterPart& NewPart);
 	void AddCharacterPartInternal(const FSampleCharacterPart& NewPart);
 
+	void RemoveAllCharacterParts();
+
+	UFUNCTION()
+	void OnPossessedPawnChanged(APawn* OldPawn, APawn* NewPawn);
 public:
 	UPROPERTY(EditAnywhere, Category = Cosmetics)
 	TArray<FSampleControllerCharacterPartEntry> CharacterParts;
