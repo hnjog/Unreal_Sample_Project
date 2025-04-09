@@ -20,6 +20,10 @@ class SAMPLES_API USampleQuickBarComponent : public UControllerComponent
 public:
 	USampleQuickBarComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintCallable)
+	void AddItemToSlot(int32 SlotIndex, USampleInventoryItemInstance* Item);
 public:
 	// HUD QuickBar Slot 갯수
 		UPROPERTY()
