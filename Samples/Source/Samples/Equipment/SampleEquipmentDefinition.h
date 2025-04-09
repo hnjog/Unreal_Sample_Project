@@ -17,7 +17,7 @@ public:
 
 	// 어느 Bone Socket에 붙일지 결정
 	UPROPERTY(EditAnywhere, Category = Equipment)
-	FName AttackSocket;
+	FName AttachSocket;
 
 	// Socket에서 어느정도 Transformation을 더할 것인지 (Rotation, Position, Scale)
 	UPROPERTY(EditAnywhere, Category = Equipment)
