@@ -14,6 +14,21 @@ class SAMPLES_API USampleEquipmentInstance : public UObject
 public:
 	USampleEquipmentInstance(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+	// BP 정의를 위한 Equip/Unequip 함수
+	// BlueprintImplementableEvent : BP에서 정의할 함수이므로 여기선 구현 안한다
+	UFUNCTION(BlueprintImplementableEvent, Category = Equipment, meta = (DisplayName = "OnEquipped"))
+	void K2_OnEquipped();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = Equipment, meta = (DisplayName = "OnUnequipped"))
+	void K2_OnUnequipped();
+
+	UFUNCTION(BlueprintPure, Category = Equipment)
+	APawn* GetPawn() const;
+
+	// interface
+	virtual void OnEquipped();
+	virtual void OnUnequipped();
+
 public:
 	// 어떤 InventroyItemInstance에 의해 활성화되었는지
 	UPROPERTY()
