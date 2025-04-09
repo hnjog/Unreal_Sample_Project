@@ -6,6 +6,7 @@
 
 class USampleInventoryItemInstance;
 class USampleEquipmentInstance;
+class USampleEquipmentManagerComponent;
 
 // HUD의 QuickBar (MMO의 Shortcut HUD)
 // 아이템 빠르게 사용하는 그것(아니면 FPS의 1번 주무기 이런것)
@@ -22,8 +23,16 @@ public:
 
 	virtual void BeginPlay() override;
 
+public:
+	USampleEquipmentManagerComponent* FindEquipmentManager() const;
+	void UnequipItemInSlot();
+	void EquipItemInSlot();
+
 	UFUNCTION(BlueprintCallable)
 	void AddItemToSlot(int32 SlotIndex, USampleInventoryItemInstance* Item);
+
+	UFUNCTION(BlueprintCallable, Category = "Sample")
+	void SetActiveSlotIndex(int32 NewIndex);
 public:
 	// HUD QuickBar Slot 갯수
 		UPROPERTY()
