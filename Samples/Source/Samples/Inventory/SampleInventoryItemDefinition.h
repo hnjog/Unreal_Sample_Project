@@ -58,6 +58,8 @@ class SAMPLES_API USampleInventoryItemDefinition : public UObject
 public:
 	USampleInventoryItemDefinition(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+	const USampleInventoryItemFragment* FindFragmentByClass(TSubclassOf<USampleInventoryItemFragment> FragmentClass) const;
+
 public:
 	// Inventory Item 정의(메타) 이름
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Display)
