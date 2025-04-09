@@ -5,6 +5,7 @@
 #include "SampleInventoryManagerComponent.generated.h"
 
 class USampleInventoryItemInstance;
+class USampleInventoryItemDefinition;
 
 USTRUCT(BlueprintType)
 struct FSampleInventoryEntry
@@ -28,6 +29,8 @@ public:
 
 	}
 
+	USampleInventoryItemInstance* AddEntry(TSubclassOf<USampleInventoryItemDefinition> ItemDef);
+
 public:
 	UPROPERTY()
 	TArray<FSampleInventoryEntry> Entries;
@@ -49,6 +52,11 @@ class SAMPLES_API USampleInventoryManagerComponent : public UActorComponent
 	GENERATED_BODY()
 public:
 	USampleInventoryManagerComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+	// InventoryItemDefinition을 통해, InventoryList에 추가하여 관리하고
+	// InventoryItemInstance를 반환
+	UFUNCTION(BlueprintCallable, Category = Inventory)
+	USampleInventoryItemInstance* AddItemDefinition(TSubclassOf<USampleInventoryItemDefinition> ItemDef);
 
 public:
 	UPROPERTY()
