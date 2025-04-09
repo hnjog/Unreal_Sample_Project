@@ -51,7 +51,7 @@ public:
 };
 
 // 기본적으로는 '메타데이터'를 들고 있는것이 Definition의 개념
-UCLASS()
+UCLASS(Blueprintable)
 class SAMPLES_API USampleInventoryItemDefinition : public UObject
 {
 	GENERATED_BODY()
