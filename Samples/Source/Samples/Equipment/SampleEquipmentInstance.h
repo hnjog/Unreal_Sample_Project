@@ -4,6 +4,8 @@
 #include "UObject/NoExportTypes.h"
 #include "SampleEquipmentInstance.generated.h"
 
+struct FSampleEquipmentActorToSpawn;
+
 // 일반적인 Definition(정의) <-> Instance (저장형) 과는 다르게
 // 일부 데이터를 관리해준다
 UCLASS(BlueprintType,Blueprintable)
@@ -24,6 +26,9 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = Equipment)
 	APawn* GetPawn() const;
+
+	void SpawnEquipmentActors(const TArray<FSampleEquipmentActorToSpawn>& ActorsToSpawn);
+	void DestroyEquipmentActors();
 
 	// interface
 	virtual void OnEquipped();

@@ -7,6 +7,7 @@
 class USampleEquipmentDefinition;
 class USampleEquipmentInstance;
 
+// 장착이 적용된 요소들
 USTRUCT(BlueprintType)
 struct FSampleAppliedEquipmentEntry
 {
@@ -35,6 +36,9 @@ public:
 
 	}
 
+	USampleEquipmentInstance* AddEntry(TSubclassOf<USampleEquipmentDefinition> EquipmentDefinition);
+	void RemoveEntry(USampleEquipmentInstance* Instance);
+
 public:
 
 	UPROPERTY()
@@ -51,6 +55,9 @@ class SAMPLES_API USampleEquipmentManagerComponent : public UPawnComponent
 	GENERATED_BODY()
 public:
 	USampleEquipmentManagerComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+	USampleEquipmentInstance* EquipItem(TSubclassOf<USampleEquipmentDefinition> EquipmentDefinition);
+	void UnequipItem(USampleEquipmentInstance* ItemInstance);
 
 public:
 	UPROPERTY()
