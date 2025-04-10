@@ -5,3 +5,9 @@ USampleWeaponInstance::USampleWeaponInstance(const FObjectInitializer& ObjectIni
 {
 
 }
+
+TSubclassOf<UAnimInstance> USampleWeaponInstance::PickBestAnimLayer(bool bEquipped, const FGameplayTagContainer& CosmeticTags) const
+{
+	const FSampleAnimLayerSelectionSet& SetToQuery = (bEquipped ? EquippedAnimSet : UnequippedAnimSet);
+	return SetToQuery.SelectBestLayer(CosmeticTags);
+}

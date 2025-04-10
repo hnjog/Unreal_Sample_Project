@@ -21,6 +21,8 @@ USTRUCT(BlueprintType)
 struct FSampleAnimLayerSelectionSet
 {
 	GENERATED_BODY()
+public:
+	TSubclassOf<UAnimInstance> SelectBestLayer(const FGameplayTagContainer& CosmeticTags) const;
 
 public:
 	// FSampleAnimBodyStyleSelectionSet의 MeshRule 처럼
