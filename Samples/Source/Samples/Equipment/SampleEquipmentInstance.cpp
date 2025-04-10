@@ -56,6 +56,19 @@ void USampleEquipmentInstance::DestroyEquipmentActors()
 	}
 }
 
+APawn* USampleEquipmentInstance::GetTypedPawn(TSubclassOf<APawn> PawnType) const
+{
+	APawn* Result = nullptr;
+	if (UClass* ActualPawnType = PawnType)
+	{
+		if (GetOuter()->IsA(ActualPawnType))
+		{
+			Result = Cast<APawn>(GetOuter());
+		}
+	}
+	return Result;
+}
+
 void USampleEquipmentInstance::OnEquipped()
 {
 	// 이러한 효과는 BP에서 작성하도록

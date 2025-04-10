@@ -24,11 +24,20 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = Equipment, meta = (DisplayName = "OnUnequipped"))
 	void K2_OnUnequipped();
 
+public:
 	UFUNCTION(BlueprintPure, Category = Equipment)
 	APawn* GetPawn() const;
 
 	void SpawnEquipmentActors(const TArray<FSampleEquipmentActorToSpawn>& ActorsToSpawn);
 	void DestroyEquipmentActors();
+
+	// DeterminesOutputType은 C++ 정의에는 Apawn* 반환
+	// BP에선 PawnType에 따라 OutputType이 결정되도록 Redirect
+	// DeterminesOutputType : 함수의 출력 타입을 동적으로 설정
+	// (PawnType 을 통해 TSubclassOf<APawn> PawnType 에서 변수로 들어온
+	//  서브클래스 타입에 맞도록 출력 타입이 설정됨)
+	UFUNCTION(BlueprintPure, Category = Equipment, meta = (DeterminesOutputType = PawnType))
+	APawn* GetTypedPawn(TSubclassOf<APawn> PawnType) const;
 
 	// interface
 	virtual void OnEquipped();
