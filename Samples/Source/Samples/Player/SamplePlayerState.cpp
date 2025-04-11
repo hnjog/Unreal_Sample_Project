@@ -5,6 +5,7 @@
 #include "Samples/GameModes/SampleGameMode.h"
 #include "Samples/AbilitySystem/SampleAbilitySystemComponent.h"
 #include "Abilities/GameplayAbilityTypes.h"
+#include "Samples/AbilitySystem/SampleAbilitySet.h"
 
 ASamplePlayerState::ASamplePlayerState(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -76,4 +77,13 @@ void ASamplePlayerState::SetPawnData(const USamplePawnData* InPawnData)
 	check(InPawnData);
 	check(!PawnData); // 2번 설정되지 않게 하기 위해
 	PawnData = InPawnData;
+
+	// PawnData의 AbilitySet을 순회하며 ASC에 Ability를 할당(Give)
+	for (USampleAbilitySet* AbilitySet : PawnData->AbilitySets)
+	{
+		if (AbilitySet)
+		{
+			AbilitySet->GiveToAbilitySystem(AbilitySystemComponent, nullptr);
+		}
+	}
 }
