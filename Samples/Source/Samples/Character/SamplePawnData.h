@@ -6,6 +6,7 @@
 
 class USampleCameraMode;
 class USampleInputConfig;
+class USampleAbilitySet;
 
 UCLASS()
 class SAMPLES_API USamplePawnData : public UPrimaryDataAsset
@@ -25,4 +26,8 @@ public:
 	// Input Config
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sample|InputConfig")
 	TObjectPtr<USampleInputConfig> InputConfig;
+
+	// 해당하는 Pawn의 AbilitySystem에서 허용할 AbilitySets
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sample|Abilities")
+	TArray<TObjectPtr<USampleAbilitySet>> AbilitySets;
 };
