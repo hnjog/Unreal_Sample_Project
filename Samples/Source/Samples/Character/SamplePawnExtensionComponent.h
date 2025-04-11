@@ -32,6 +32,7 @@
 */
 
 class USamplePawnData;
+class USampleAbilitySystemComponent;
 
 UCLASS()
 class SAMPLES_API USamplePawnExtensionComponent : public UPawnComponent, public IGameFrameworkInitStateInterface
@@ -47,6 +48,10 @@ public:
 	const T* GetPawnData() const { return Cast<T>(PawnData); }
 	void SetPawnData(const USamplePawnData* InPawnData);
 	void SetupPlayerInputComponent();
+
+	// AbilitySystemComponent의 AvatorActor 대상 초기화 / 해제 호출
+	void InitalizeAbilitySystem(USampleAbilitySystemComponent* InASC, AActor* InOwnerActor);
+	void UninitalizeAbilitySystem();
 
 public:
 	// UPawnComponent Interfaces
@@ -67,6 +72,10 @@ public:
 	// Pawn을 생성한 Data를 캐싱 (다른 컴포넌트에서 사용 가능)
 	UPROPERTY(EditInstanceOnly, Category = "Sample|Pawn")
 	TObjectPtr<const USamplePawnData> PawnData;
+
+	// AbilitySystemComponent 캐싱
+	UPROPERTY()
+	TObjectPtr<USampleAbilitySystemComponent> AbilitySystemComponent;
 
 	// 선언은 헤더, 구현은 cpp
 	static const FName NAME_ActorFeatureName;

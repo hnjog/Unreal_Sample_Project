@@ -1,8 +1,9 @@
 ﻿#include "SamplePawnExtensionComponent.h"
-#include "../SampleLogChannels.h"
+#include "Samples/SampleLogChannels.h"
 #include "Components/GameFrameworkComponentManager.h"
-#include"../SampleGameplayTags.h"
-#include"../Character/SamplePawnData.h"
+#include "Samples/SampleGameplayTags.h"
+#include "Samples/Character/SamplePawnData.h"
+#include "Samples/AbilitySystem/SampleAbilitySystemComponent.h"
 
 // FeatureName을 Component 단위니, Component는 빼고 PawnExtension으로만 네이밍 한다
 const FName USamplePawnExtensionComponent::NAME_ActorFeatureName("PawnExtension");
@@ -51,6 +52,33 @@ void USamplePawnExtensionComponent::SetupPlayerInputComponent()
 {
 	// Update를 통한 InitState의 상태 변환을 시작
 	CheckDefaultInitialization();
+}
+
+void USamplePawnExtensionComponent::InitalizeAbilitySystem(USampleAbilitySystemComponent* InASC, AActor* InOwnerActor)
+{
+	check(InASC && InOwnerActor);
+
+	if (AbilitySystemComponent == InASC)
+		return;
+
+	if (AbilitySystemComponent)
+		UninitalizeAbilitySystem();
+
+	APawn* Pawn = GetPawnChecked<APawn>();
+	AActor* ExistingAvatar = InASC->GetAvatarActor();
+	check(!ExistingAvatar);
+
+	// ASC 업데이트, InitAbilityActorInfo 를 호출해 Pawn으로 AvatarActor를 업데이트
+	AbilitySystemComponent = InASC;
+	AbilitySystemComponent->InitAbilityActorInfo(InOwnerActor, Pawn);
+}
+
+void USamplePawnExtensionComponent::UninitalizeAbilitySystem()
+{
+	if (!AbilitySystemComponent)
+		return;
+
+	AbilitySystemComponent = nullptr;
 }
 
 void USamplePawnExtensionComponent::OnRegister()

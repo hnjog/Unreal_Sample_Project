@@ -144,6 +144,10 @@ void USampleHeroComponent::HandleChangeInitState(UGameFrameworkComponentManager*
 		if (USamplePawnExtensionComponent* PawnExtComp = USamplePawnExtensionComponent::FindPawnExtensionComponent(Pawn))
 		{
 			PawnData = PawnExtComp->GetPawnData<USamplePawnData>();
+
+			// DataInitialized 단계에 오면 Pawn이 Controller에 Possess되어 준비됨
+			// - InitAbilityActorInfo 호출로 AvactorActor 재설정이 필요
+			PawnExtComp->InitalizeAbilitySystem(SamplePS->GetSampleAbilitySystemComponent(), SamplePS);
 		}
 
 		if (ASamplePlayerController* SamplePC = GetController<ASamplePlayerController>())
