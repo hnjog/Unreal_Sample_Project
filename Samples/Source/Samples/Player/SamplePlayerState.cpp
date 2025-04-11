@@ -1,12 +1,35 @@
 ﻿#include "SamplePlayerState.h"
-#include"../GameModes/SampleExperienceDefinition.h"
-#include"../Character/SamplePawnData.h"
-#include"../GameModes/SampleExperienceManagerComponent.h"
-#include"../GameModes/SampleGameMode.h"
+#include "Samples/GameModes/SampleExperienceDefinition.h"
+#include "Samples/Character/SamplePawnData.h"
+#include "Samples/GameModes/SampleExperienceManagerComponent.h"
+#include "Samples/GameModes/SampleGameMode.h"
+#include "Samples/AbilitySystem/SampleAbilitySystemComponent.h"
+#include "Abilities/GameplayAbilityTypes.h"
+
+ASamplePlayerState::ASamplePlayerState(const FObjectInitializer& ObjectInitializer)
+	:Super(ObjectInitializer)
+{
+	// CDO를 이용한 생성
+	AbilitySystemComponent = ObjectInitializer.CreateDefaultSubobject<USampleAbilitySystemComponent>(this, TEXT("AbilitySystem"));
+}
 
 void ASamplePlayerState::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+
+	check(AbilitySystemComponent);
+	{
+		// 처음 InitAbilityActorInfo 호출 시, OwnerActor 와 AvatarActor 가 같은 Actor를 가리킴
+		// (PlayerState)
+		// - OwnerActor는 PlayerState가 맞으나,
+		//   AvatarActor는 PlayerController가 소유하는 Pawn이 되어야 함
+		FGameplayAbilityActorInfo* ActorInfo = AbilitySystemComponent->AbilityActorInfo.Get();
+		check(ActorInfo->OwnerActor == this);
+		check(ActorInfo->OwnerActor == ActorInfo->AvatarActor);
+	}
+	// 아마 당장은 GetPawn이 null이 들어감
+	// 차후 재세팅 (HeroComponent)
+	AbilitySystemComponent->InitAbilityActorInfo(this, GetPawn());
 
 	const AGameStateBase* GameState = GetWorld()->GetGameState();
 	check(GameState);
