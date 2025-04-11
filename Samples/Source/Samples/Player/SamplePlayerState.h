@@ -26,8 +26,8 @@ public:
 	const T* GetPawnData() const { return Cast<T>(PawnData); }
 	// 폰 데이터 캐싱을 위하여 Experience 로딩 완료때 가져오기 위함
 	void OnExperienceLoaded(const USampleExperienceDefinition* CurrentExperience);
-
 	void SetPawnData(const USamplePawnData* InPawnData);
+	USampleAbilitySystemComponent* GetSampleAbilitySystemComponent() const { return AbilitySystemComponent; }
 
 public:
 	// Cacheing 하는 이유? (ExperienceManagerComponent에도 있지 않나?)
