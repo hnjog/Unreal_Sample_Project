@@ -27,7 +27,7 @@
 	Delegate 처럼 이벤트 기반의
 	필요에 따라 그때그때 효율적으로 처리하는 방식으로 구현
 
-	IGameFrameworkInitStateInterface 는 
+	IGameFrameworkInitStateInterface 는
 	초기화를 편리하게 만들 수 있는 인터페이스
 */
 
@@ -52,6 +52,8 @@ public:
 	// AbilitySystemComponent의 AvatorActor 대상 초기화 / 해제 호출
 	void InitalizeAbilitySystem(USampleAbilitySystemComponent* InASC, AActor* InOwnerActor);
 	void UninitalizeAbilitySystem();
+
+	USampleAbilitySystemComponent* GetSampleAbilitySystemComponent() const { return AbilitySystemComponent; };
 
 public:
 	// UPawnComponent Interfaces
