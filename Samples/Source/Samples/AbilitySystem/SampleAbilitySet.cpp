@@ -8,8 +8,22 @@ void FSampleAbilitySet_GrantedHandles::AddAbilitySpecHandle(const FGameplayAbili
 		AbilitySpecHandles.Add(Handle);
 }
 
+// 해당 구조체가 관리하는 허용된 기능들을 돌며
+// 유효한지 검사 후, 그렇지 않다면 현재 ASC에서 제거
 void FSampleAbilitySet_GrantedHandles::TakeFromAbilitySystem(USampleAbilitySystemComponent* SampleASC)
 {
+	if (!SampleASC->IsOwnerActorAuthoritative())
+		return;
+
+	for (const FGameplayAbilitySpecHandle& Handle : AbilitySpecHandles)
+	{
+		if (Handle.IsValid())
+		{
+			// AcivatableAbilities에서 제거
+			SampleASC->ClearAbility(Handle);
+		}
+	}
+
 }
 
 USampleAbilitySet::USampleAbilitySet(const FObjectInitializer& ObjectInitializer)
