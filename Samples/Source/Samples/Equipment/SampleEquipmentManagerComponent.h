@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/PawnComponent.h"
+#include "Samples/AbilitySystem/SampleAbilitySet.h"
 #include "SampleEquipmentManagerComponent.generated.h"
 
 class USampleEquipmentDefinition;
@@ -21,6 +22,9 @@ public:
 	UPROPERTY()
 	TObjectPtr<USampleEquipmentInstance> Instance = nullptr;
 
+	// 무기에 할당된 허용가능한 GameplayAbility
+	UPROPERTY()
+	FSampleAbilitySet_GrantedHandles GrantedHandles;
 };
 
 // EquimentInstance의 인스턴스는 Entry에서 관리
@@ -38,6 +42,8 @@ public:
 
 	USampleEquipmentInstance* AddEntry(TSubclassOf<USampleEquipmentDefinition> EquipmentDefinition);
 	void RemoveEntry(USampleEquipmentInstance* Instance);
+
+	USampleAbilitySystemComponent* GetAbilitySystemComponent() const;
 
 public:
 

@@ -1,6 +1,7 @@
 ﻿#include "SampleEquipmentManagerComponent.h"
 #include"SampleEquipmentDefinition.h"
 #include"SampleEquipmentInstance.h"
+#include <AbilitySystemGlobals.h>
 
 USampleEquipmentInstance* FSampleEquipmentList::AddEntry(TSubclassOf<USampleEquipmentDefinition> EquipmentDefinition)
 {
@@ -27,6 +28,15 @@ USampleEquipmentInstance* FSampleEquipmentList::AddEntry(TSubclassOf<USampleEqui
 	NewEntry.Instance = NewObject<USampleEquipmentInstance>(OwnerComponent->GetOwner(), InstanceType);
 	Result = NewEntry.Instance;
 
+	USampleAbilitySystemComponent* ASC = GetAbilitySystemComponent();
+	check(ASC);
+	{
+		for (TObjectPtr<USampleAbilitySet> AbilitySet : EquipmentCDO->AbilitySetsToGrant)
+		{
+			AbilitySet->GiveToAbilitySystem(ASC, &NewEntry.GrantedHandles, Result);
+		}
+	}
+
 	// ActorsToSpawn을 통해,EquipmentInstance에 Actor들을 인스턴스화
 	Result->SpawnEquipmentActors(EquipmentCDO->ActorsToSpawn);
 
@@ -45,6 +55,18 @@ void FSampleEquipmentList::RemoveEntry(USampleEquipmentInstance* Instance)
 			EntryIt.RemoveCurrent();
 		}
 	}
+}
+
+USampleAbilitySystemComponent* FSampleEquipmentList::GetAbilitySystemComponent() const
+{
+	check(OwnerComponent);
+	AActor* OwningActor = OwnerComponent->GetOwner();
+
+	// GetAbilitySystemComponentFromActor
+	// - 해당 함수는 IAbilitySystemInterface를 통해 AbilitySystemComponent를 반환
+	// (EquipmentManagerComponent는 ASampleCharacter를 Owner로 가짐
+	//  -> ASampleCharacter 가 IAbilitySystemInterface를 상속받을 필요가 있음)
+	return Cast<USampleAbilitySystemComponent>(UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(OwningActor));
 }
 
 USampleEquipmentManagerComponent::USampleEquipmentManagerComponent(const FObjectInitializer& ObjectInitializer)
