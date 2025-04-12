@@ -1,6 +1,7 @@
 ﻿#include "SampleCharacter.h"
-#include"SamplePawnExtensionComponent.h"
-#include"../Camera/SampleCameraComponent.h"
+#include "SamplePawnExtensionComponent.h"
+#include "Samples/Camera/SampleCameraComponent.h"
+#include "Samples/AbilitySystem/SampleAbilitySystemComponent.h"
 
 ASampleCharacter::ASampleCharacter()
 {
@@ -27,6 +28,12 @@ ASampleCharacter::ASampleCharacter()
 		CameraComponent = CreateDefaultSubobject<USampleCameraComponent>(TEXT("CameraComponent"));
 		CameraComponent->SetRelativeLocation(FVector(-300.0f, 0.0f, 75.0f));
 	}
+}
+
+UAbilitySystemComponent* ASampleCharacter::GetAbilitySystemComponent() const
+{
+	// PawnExtComponent 에 AbilitySystemComponent를 캐싱해두었음
+	return PawnExtComponent->GetSampleAbilitySystemComponent();
 }
 
 void ASampleCharacter::BeginPlay()

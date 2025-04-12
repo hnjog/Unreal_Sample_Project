@@ -2,19 +2,25 @@
 
 #include "CoreMinimal.h"
 #include "ModularCharacter.h"
+#include "AbilitySystemInterface.h"
 #include "SampleCharacter.generated.h"
 
 class USamplePawnExtensionComponent;
 class USampleCameraComponent;
 
 UCLASS()
-class SAMPLES_API ASampleCharacter : public AModularCharacter
+class SAMPLES_API ASampleCharacter : public AModularCharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
 public:
 	ASampleCharacter();
 
+	// IAbilitySystemInterface
+public:
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	// Actor
 protected:
 	virtual void BeginPlay() override;
 
