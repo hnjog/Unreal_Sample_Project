@@ -1,7 +1,8 @@
 ﻿#include "SampleEquipmentManagerComponent.h"
-#include"SampleEquipmentDefinition.h"
-#include"SampleEquipmentInstance.h"
-#include <AbilitySystemGlobals.h>
+#include "SampleEquipmentDefinition.h"
+#include "SampleEquipmentInstance.h"
+#include  <AbilitySystemGlobals.h>
+#include "Samples/AbilitySystem/SampleAbilitySystemComponent.h"
 
 USampleEquipmentInstance* FSampleEquipmentList::AddEntry(TSubclassOf<USampleEquipmentDefinition> EquipmentDefinition)
 {
@@ -50,6 +51,14 @@ void FSampleEquipmentList::RemoveEntry(USampleEquipmentInstance* Instance)
 		FSampleAppliedEquipmentEntry& Entry = *EntryIt;
 		if (Entry.Instance == Instance)
 		{
+			USampleAbilitySystemComponent* ASC = GetAbilitySystemComponent();
+			check(ASC);
+			{
+				//TakeFromAbilitySystem 는 GiveToAbilitySystem 와 반대의 역할
+				// (ActivatableAbilities에서 제거)
+				Entry.GrantedHandles.TakeFromAbilitySystem(ASC);
+			}
+
 			// Actor 제거 작업 및 Array에서 제거
 			Instance->DestroyEquipmentActors();
 			EntryIt.RemoveCurrent();
