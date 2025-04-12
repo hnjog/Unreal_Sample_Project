@@ -1,5 +1,6 @@
 ﻿#include "SampleEquipmentDefinition.h"
 #include "SampleEquipmentInstance.h"
+#include "Samples/AbilitySystem/SampleAbilitySet.h"
 
 USampleEquipmentDefinition::USampleEquipmentDefinition(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)

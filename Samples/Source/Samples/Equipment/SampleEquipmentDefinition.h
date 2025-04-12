@@ -5,6 +5,7 @@
 #include "SampleEquipmentDefinition.generated.h"
 
 class USampleEquipmentInstance;
+class USampleAbilitySet;
 
 USTRUCT()
 struct FSampleEquipmentActorToSpawn
@@ -41,4 +42,8 @@ public:
 	// ex) rpg의 장비들(모자,장갑,신발 등...)
 	UPROPERTY(EditDefaultsOnly, Category = Equipment)
 	TArray<FSampleEquipmentActorToSpawn> ActorsToSpawn;
+
+	// 장착을 통해 부여 가능한 Ability Set
+	UPROPERTY(EditDefaultsOnly, Category = Equipment)
+	TArray<TObjectPtr<USampleAbilitySet>> AbilitySetsToGrant;
 };
