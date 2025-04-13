@@ -12,6 +12,8 @@ ASamplePlayerController::ASamplePlayerController(const FObjectInitializer& Objec
 void ASamplePlayerController::PostProcessInput(const float DeltaTime, const bool bGamePaused)
 {
 	// UPlayerInput :: ProcessInputStack에 의해 호출
+	// (입력 이벤트 발생 시 ProcessInputStack 가 호출되고,
+	// 그 후, 입력 처리 결과를 반영하기 위해 마지막으로 PostProcessInput 가 호출됨)
 	if (USampleAbilitySystemComponent* SampleASC = GetSampleAbilitySystemComponent())
 	{
 		SampleASC->ProcessAbilityInput(DeltaTime, bGamePaused);
