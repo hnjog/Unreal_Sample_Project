@@ -20,7 +20,7 @@ public:
 	void BindNativeAction(const USampleInputConfig* InputConfig, const FGameplayTag& InputTag,ETriggerEvent TriggerEvent,UserClass* Object, FuncType Func, bool bLogIfNotFound);
 	
 	template<class UserClass, typename PressedFuncType, typename ReleasedFuncType>
-	void BindAbilityActions(const USampleInputConfig* InputConfig, const FGameplayTag& InputTag, UserClass* Object, PressedFuncType PressedFunc, ReleasedFuncType ReleasedFunc,TArray<uint32>& BindHandles);
+	void BindAbilityActions(const USampleInputConfig* InputConfig, UserClass* Object, PressedFuncType PressedFunc, ReleasedFuncType ReleasedFunc, TArray<uint32>& BindHandles);
 };
 
 template<class UserClass, typename FuncType>
@@ -43,7 +43,7 @@ inline void USampleInputComponent::BindNativeAction(const USampleInputConfig* In
 }
 
 template<class UserClass, typename PressedFuncType, typename ReleasedFuncType>
-inline void USampleInputComponent::BindAbilityActions(const USampleInputConfig* InputConfig, const FGameplayTag& InputTag, UserClass* Object, PressedFuncType PressedFunc, ReleasedFuncType ReleasedFunc, TArray<uint32>& BindHandles)
+inline void USampleInputComponent::BindAbilityActions(const USampleInputConfig* InputConfig, UserClass* Object, PressedFuncType PressedFunc, ReleasedFuncType ReleasedFunc, TArray<uint32>& BindHandles)
 {
 	check(InputConfig);
 
@@ -54,7 +54,7 @@ inline void USampleInputComponent::BindAbilityActions(const USampleInputConfig* 
 		{
 			if (PressedFunc)
 			{
-				BindHandles.Add(BindAction(Action.InputAction, ETriggerEvent::Pressed, Object, PressedFunc,Action.InputTag).GetHandle());
+				BindHandles.Add(BindAction(Action.InputAction, ETriggerEvent::Triggered, Object, PressedFunc,Action.InputTag).GetHandle());
 			}
 
 			if (ReleasedFunc)
