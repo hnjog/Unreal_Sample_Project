@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
@@ -45,6 +45,7 @@ public:
 
 	void AbilityInputTagPressed(const FGameplayTag& InputTag);
 	void AbilityInputTagReleased(const FGameplayTag& InputTag);
+	void ProcessAbilityInput(float DeltaTime, bool bGamePaused);
 
 public:
 	// Ability Input 처리할 Pending Queue
