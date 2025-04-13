@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
@@ -42,4 +42,13 @@ class SAMPLES_API USampleAbilitySystemComponent : public UAbilitySystemComponent
 	GENERATED_BODY()
 public:
 	USampleAbilitySystemComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+	void AbilityInputTagPressed(const FGameplayTag& InputTag);
+	void AbilityInputTagReleased(const FGameplayTag& InputTag);
+
+public:
+	// Ability Input 처리할 Pending Queue
+	TArray<FGameplayAbilitySpecHandle> InputPressedSpecHandles; // 눌렀을 때
+	TArray<FGameplayAbilitySpecHandle> InputReleasedSpecHandles; // 놓았을 때
+	TArray<FGameplayAbilitySpecHandle> InputHeldSpecHandles; // 누르는 동안
 };

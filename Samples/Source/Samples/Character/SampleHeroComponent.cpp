@@ -14,6 +14,7 @@
 #include "InputMappingContext.h"
 #include "InputActionValue.h"
 #include "UserSettings/EnhancedInputUserSettings.h"
+#include "Samples/AbilitySystem/SampleAbilitySystemComponent.h"
 
 const FName USampleHeroComponent::NAME_ActorFeatureName("Hero");
 const FName USampleHeroComponent::NAME_BindInputsNow("BindInputsNow");
@@ -253,6 +254,12 @@ void USampleHeroComponent::InitializePlayerInput(UInputComponent* PlayerInputCom
 
 				USampleInputComponent* SampleIC = CastChecked<USampleInputComponent>(PlayerInputComponent);
 				{
+					// Ability Action 관련
+					// 바인딩 이후, Input Event에 따라 멤버 함수가 트리거 됨
+					{
+						TArray<uint32> BindHandles;
+						SampleIC->BindAbilityActions(InputConfig, this, &ThisClass::Input_AbilityInputTagPressed, &ThisClass::Input_AbilityInputTagReleased, BindHandles);
+					}
 					SampleIC->BindNativeAction(InputConfig, GameplayTags.InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move, false);
 					SampleIC->BindNativeAction(InputConfig, GameplayTags.InputTag_Look_Mouse, ETriggerEvent::Triggered, this, &ThisClass::Input_LookMouse, false);
 				}
@@ -318,5 +325,33 @@ void USampleHeroComponent::Input_LookMouse(const FInputActionValue& InputActionV
 		// Y에 Pitch 값
 		double AimInversionValue = -Value.Y;
 		Pawn->AddControllerPitchInput(AimInversionValue);
+	}
+}
+
+void USampleHeroComponent::Input_AbilityInputTagPressed(FGameplayTag InputTag)
+{
+	if (const APawn* Pawn = GetPawn<APawn>())
+	{
+		if (const USamplePawnExtensionComponent* PawnExtComp = USamplePawnExtensionComponent::FindPawnExtensionComponent(Pawn))
+		{
+			if (USampleAbilitySystemComponent* SampleASC = PawnExtComp->GetSampleAbilitySystemComponent())
+			{
+				SampleASC->AbilityInputTagPressed(InputTag);
+			}
+		}
+	}
+}
+
+void USampleHeroComponent::Input_AbilityInputTagReleased(FGameplayTag InputTag)
+{
+	if (const APawn* Pawn = GetPawn<APawn>())
+	{
+		if (const USamplePawnExtensionComponent* PawnExtComp = USamplePawnExtensionComponent::FindPawnExtensionComponent(Pawn))
+		{
+			if (USampleAbilitySystemComponent* SampleASC = PawnExtComp->GetSampleAbilitySystemComponent())
+			{
+				SampleASC->AbilityInputTagReleased(InputTag);
+			}
+		}
 	}
 }
