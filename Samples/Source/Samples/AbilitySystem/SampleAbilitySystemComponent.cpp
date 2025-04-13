@@ -48,6 +48,7 @@ void USampleAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& 
 	}
 }
 
+// 사실상 입력 이벤트 발생하거나 거의 매 틱마다 호출
 void USampleAbilitySystemComponent::ProcessAbilityInput(float DeltaTime, bool bGamePaused)
 {
 	TArray<FGameplayAbilitySpecHandle> AbilitiesToActivate;
