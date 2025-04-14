@@ -65,6 +65,8 @@ public:
 	USampleEquipmentInstance* EquipItem(TSubclassOf<USampleEquipmentDefinition> EquipmentDefinition);
 	void UnequipItem(USampleEquipmentInstance* ItemInstance);
 
+	UFUNCTION(BlueprintCallable)
+	TArray<USampleEquipmentInstance*> GetEquipmentInstanceOfType(TSubclassOf<USampleEquipmentInstance> InstanceType) const;
 public:
 	UPROPERTY()
 	FSampleEquipmentList EquipmentList;

@@ -111,3 +111,21 @@ void USampleEquipmentManagerComponent::UnequipItem(USampleEquipmentInstance* Ite
 		EquipmentList.RemoveEntry(ItemInstance);
 	}
 }
+
+TArray<USampleEquipmentInstance*> USampleEquipmentManagerComponent::GetEquipmentInstanceOfType(TSubclassOf<USampleEquipmentInstance> InstanceType) const
+{
+	TArray<USampleEquipmentInstance*> Result;
+
+	// Equipment List 순회
+	for (const FSampleAppliedEquipmentEntry& Entry : EquipmentList.Entries)
+	{
+		if (USampleEquipmentInstance* Instance = Entry.Instance)
+		{
+			// InstanceType에 맞는 Class이면 Result에 추가하여 반환
+			if (Instance->IsA(InstanceType))
+				Result.Add(Instance);
+		}
+	}
+
+	return Result;
+}
