@@ -1,9 +1,33 @@
 ﻿#include "SampleAbilitySystemComponent.h"
 #include "Samples/AbilitySystem/Abilities/SampleGameplayAbility.h"
+#include "Samples/Animation/SampleAnimInstance.h"
+#include "GameFramework/Pawn.h"
 
 USampleAbilitySystemComponent::USampleAbilitySystemComponent(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
+}
+
+// 해당 Anim의 NativeInitializeAnimation가 잘 적용되지 않을 가능성을 고려하여
+// 변경될 때마다, 다시 초기화
+void USampleAbilitySystemComponent::InitAbilityActorInfo(AActor* InOwnerActor, AActor* InAvatarActor)
+{
+	FGameplayAbilityActorInfo* ActorInfo = AbilityActorInfo.Get();
+	check(ActorInfo);
+	check(InOwnerActor);
+
+	Super::InitAbilityActorInfo(InOwnerActor, InAvatarActor);
+
+	const bool bHasNewPawnAvatar = Cast<APawn>(InAvatarActor) && (InAvatarActor != ActorInfo->AvatarActor);
+
+	if (bHasNewPawnAvatar)
+	{
+		if (USampleAnimInstance* SampleAnimInstance = Cast<USampleAnimInstance>(ActorInfo->GetAnimInstance()))
+		{
+			SampleAnimInstance->InitializeWithAbilitySystem(this);
+		}
+	}
+
 }
 
 void USampleAbilitySystemComponent::AbilityInputTagPressed(const FGameplayTag& InputTag)
