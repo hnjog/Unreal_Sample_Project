@@ -118,9 +118,19 @@ FTransform USampleGameplayAbility_RangedWeapon::GetTargetingTransform(APawn* Sou
 
 	// WeaponLoc이 아닌 Pawn의 Loc
 	const FVector WeaponLoc = GetWeaponTargetingSourceLocation();
-	//(WeaponLoc - FocalLoc) | AimDir : Operator| 에 의하여 Dot(외적) 실행
 	// WeaponLoc : pawn의 위치
 	// FocalLoc = 카메라 위치 에서 에임 방향 * 거리 를 통해 구한 위치
+	// (WeaponLoc - FocalLoc) 는 Focal에서 Weapon을 가리키는 벡터
+	// ((WeaponLoc - FocalLoc) | AimDir) : (WeaponLoc - FocalLoc) 와 AimDir을 내적한다
+	// (결과는 scalar 이며, 음수값이 나올 확률이 높긴 함)
+	// (이러한 내적은 normalize된 경우는 두 방향 벡터의 방향을 비교하는데 사용)
+	//  - 음수값이면 서로 반대 방향, 0이면 직각, 양수값이면 서로 비슷한 방향
+	// (normalize가 안되어있기에 지금은 (WeaponLoc - FocalLoc)를 AimDir의 방향으로 투영한다는 의미로 보자)
+	// (그렇기에, weaponLoc에 최대한 가까운 점을 가리키는 내적값이 나옴)
+	// (-> 이걸 AimDir에 곱하므로, AimDir은 그 점을 가리키는 Vector 가 된다)
+	// 
+	// (((WeaponLoc - FocalLoc) | AimDir) * AimDir) 은 결과적으로
+	// FocalLoc에서 WeaponLoc와 가장 가까운 점으로 가게 만드는 Vector로 표현된다
 	FVector FinalCamLoc = FocalLoc + (((WeaponLoc - FocalLoc) | AimDir) * AimDir);
 
 #if 1
@@ -293,6 +303,7 @@ FHitResult USampleGameplayAbility_RangedWeapon::WeaponTrace(const FVector& Start
 	TArray<FHitResult> HitResults;
 
 	// Complex Geometry로 Trace를 진행하며, AvatarActor를 AttachParent를 가지는 오브젝트와의 충돌은 무시
+	// SCENE_QUERY_STAT : FName 반환 및 통계형 구조체를 정의, 메타데이터 관리 등을 진행 (성능 분석 도구 용)
 	FCollisionQueryParams TraceParams(SCENE_QUERY_STAT(WeaponTrace), /*bTraceComplex*/true, /*IgnoreActor=*/GetAvatarActorFromActorInfo());
 	TraceParams.bReturnPhysicalMaterial = true;
 
