@@ -25,6 +25,12 @@ public class Samples : ModuleRules
             "EnhancedInput",
 			// CommonUser
 			"CommonUser",
+			// CommonGame
+			"CommonGame",
+			// CommonUI
+			"CommonUI",
+			// UMG
+			"UMG",
         });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
