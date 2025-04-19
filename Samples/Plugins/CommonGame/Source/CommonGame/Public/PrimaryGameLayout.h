@@ -4,7 +4,7 @@
 #include "CommonUserWidget.h"
 #include "PrimaryGameLayout.generated.h"
 
-UCLASS()
+UCLASS(Abstract)
 class COMMONGAME_API UPrimaryGameLayout : public UCommonUserWidget
 {
 	GENERATED_BODY()
