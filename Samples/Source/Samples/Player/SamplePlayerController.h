@@ -1,14 +1,14 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
-#include "ModularPlayerController.h"
+#include "CommonPlayerController.h"
 #include "SamplePlayerController.generated.h"
 
 class ASamplePlayerState;
 class USampleAbilitySystemComponent;
 
 UCLASS()
-class SAMPLES_API ASamplePlayerController : public AModularPlayerController
+class SAMPLES_API ASamplePlayerController : public ACommonPlayerController
 {
 	GENERATED_BODY()
 public:
