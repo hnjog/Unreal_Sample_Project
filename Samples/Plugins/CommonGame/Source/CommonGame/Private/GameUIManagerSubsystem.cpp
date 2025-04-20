@@ -34,6 +34,9 @@ bool UGameUIManagerSubsystem::ShouldCreateSubsystem(UObject* Outer) const
 {
 	// Dedicate Server의 경우, GameUIManagerSubsystem을 활성화하지 않음
 	// Server에서 UI를 쓸일이 없으니
+
+	// 기본적으로 ShouldCreateSubsystem의 Outer는 해당 서브 시스템의 주체를 따라간다
+	// (ex : GameInstanceSubSystem 이면, GameInstance가 들어옴)
 	if (!CastChecked<UGameInstance>(Outer)->IsDedicatedServerInstance())
 	{
 		// 어떠한 Subsystem도 UGameUIManagerSubsystem을 상속받지 않았다면,
