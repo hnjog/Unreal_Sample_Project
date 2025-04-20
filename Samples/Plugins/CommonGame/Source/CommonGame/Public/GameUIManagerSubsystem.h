@@ -11,6 +11,8 @@ UCLASS(Abstract, Config = Game)
 class COMMONGAME_API UGameUIManagerSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
+public:
+	UGameUIManagerSubsystem();
 
 public:
 	// Member Method

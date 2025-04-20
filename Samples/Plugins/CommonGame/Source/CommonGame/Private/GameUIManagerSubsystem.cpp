@@ -2,6 +2,10 @@
 #include "GameUIPolicy.h"
 #include "CommonLocalPlayer.h"
 
+UGameUIManagerSubsystem::UGameUIManagerSubsystem()
+{
+}
+
 void UGameUIManagerSubsystem::SwitchToPolicy(UGameUIPolicy* InPolicy)
 {
 	if (CurrentPolicy != InPolicy)
