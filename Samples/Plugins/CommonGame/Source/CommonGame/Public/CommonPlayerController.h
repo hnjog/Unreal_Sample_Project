@@ -8,5 +8,6 @@ UCLASS()
 class COMMONGAME_API ACommonPlayerController : public AModularPlayerController
 {
 	GENERATED_BODY()
-	
+public:
+	virtual void ReceivedPlayer() override;
 };
