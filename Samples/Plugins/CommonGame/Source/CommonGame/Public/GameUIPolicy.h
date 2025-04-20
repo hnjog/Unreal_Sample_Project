@@ -45,6 +45,23 @@ UCLASS(Abstract,Blueprintable)
 class COMMONGAME_API UGameUIPolicy : public UObject
 {
 	GENERATED_BODY()
+
+public:
+	UPrimaryGameLayout* GetRootLayout(const UCommonLocalPlayer* LocalPlayer) const;
+	TSubclassOf<UPrimaryGameLayout> GetLayoutWidgetClass(UCommonLocalPlayer* LocalPlayer);
+
+	void CreateLayoutWidget(UCommonLocalPlayer* LocalPlayer);
+	void AddLayoutFromViewport(UCommonLocalPlayer* LocalPlayer, UPrimaryGameLayout* Layout);
+	void RemoveLayoutFromViewport(UCommonLocalPlayer* LocalPlayer, UPrimaryGameLayout* Layout);
+
+	// lyra에선 private 이긴 한데
+	// friend class 걸어놓음
+	// 그리고 이게 virtual이 아니긴 하다
+	virtual void NotifyPlayerAdded(UCommonLocalPlayer* LocalPlayer);
+	virtual void NotifyPlayerRemoved(UCommonLocalPlayer* LocalPlayer);
+	virtual void NotifyPlayerDestroyed(UCommonLocalPlayer* LocalPlayer);
+
+
 public:
 	// LocalPlayer에 바인딩된 UI의 Layout
 	// 어떤 Layout 클래스를 사용할지 결정

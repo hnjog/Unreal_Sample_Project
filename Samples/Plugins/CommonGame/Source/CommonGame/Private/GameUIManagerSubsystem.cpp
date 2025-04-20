@@ -1,11 +1,36 @@
 ﻿#include "GameUIManagerSubsystem.h"
 #include "GameUIPolicy.h"
+#include "CommonLocalPlayer.h"
 
 void UGameUIManagerSubsystem::SwitchToPolicy(UGameUIPolicy* InPolicy)
 {
 	if (CurrentPolicy != InPolicy)
 	{
 		CurrentPolicy = InPolicy;
+	}
+}
+
+void UGameUIManagerSubsystem::NotifyPlayerAdded(UCommonLocalPlayer* LocalPlayer)
+{
+	if (ensure(LocalPlayer) && CurrentPolicy)
+	{
+		CurrentPolicy->NotifyPlayerAdded(LocalPlayer);
+	}
+}
+
+void UGameUIManagerSubsystem::NotifyPlayerRemoved(UCommonLocalPlayer* LocalPlayer)
+{
+	if (ensure(LocalPlayer) && CurrentPolicy)
+	{
+		CurrentPolicy->NotifyPlayerRemoved(LocalPlayer);
+	}
+}
+
+void UGameUIManagerSubsystem::NotifyPlayerDestroyed(UCommonLocalPlayer* LocalPlayer)
+{
+	if (ensure(LocalPlayer) && CurrentPolicy)
+	{
+		CurrentPolicy->NotifyPlayerDestroyed(LocalPlayer);
 	}
 }
 
