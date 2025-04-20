@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "Engine/LocalPlayer.h"
@@ -8,5 +8,8 @@ UCLASS()
 class COMMONGAME_API UCommonLocalPlayer : public ULocalPlayer
 {
 	GENERATED_BODY()
-	
+public:
+	// player controller가 local player에 할당(assign) 되었을 경우 실행할 Delegate
+	DECLARE_MULTICAST_DELEGATE_TwoParams(FPlayerControllerSetDelegate,UCommonLocalPlayer* LocalPlayer,APlayerController* PlayerController)
+	FPlayerControllerSetDelegate OnPlayerControllerSet;
 };
