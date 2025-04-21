@@ -31,6 +31,8 @@ public class Samples : ModuleRules
 			"CommonUI",
 			// UMG
 			"UMG",
+			// UIExtension
+			"UIExtension",
         });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
