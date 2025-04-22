@@ -234,6 +234,10 @@ void USampleHeroComponent::InitializePlayerInput(UInputComponent* PlayerInputCom
 				//HeroComponent 가지고 있는 InputMappingContext를 순회하며, EnhancedInputLocalPlayerSubsystem에 추가
 				for (const FInputMappingContextAndPriority& Mapping : DefaultInputMappings)
 				{
+					// InputMapping 이 SoftObjectPtr 이기에, 단순히 경로만 가리킴
+					// lyra에서는 UGameFeatureAction_AddInputContextMapping 쪽에서
+					// Local player가 들어올 때 해당 데이터를 GetAsset으로 미리 호출해주었기에
+					// Get으로 사용해도 된다
 					//if (UInputMappingContext* IMC = Mapping.InputMapping.Get()) // lyra 원본
 					if (UInputMappingContext* IMC = Mapping.InputMapping.LoadSynchronous())
 					{
