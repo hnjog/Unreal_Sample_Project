@@ -9,6 +9,7 @@
 #include"Samples/SampleLogChannels.h"
 #include"../Character/SamplePawnExtensionComponent.h"
 #include <Kismet/GameplayStatics.h>
+#include "Samples/UI/SampleHUD.h"
 
 ASampleGameMode::ASampleGameMode()
 {
@@ -17,6 +18,7 @@ ASampleGameMode::ASampleGameMode()
 	PlayerControllerClass = ASamplePlayerController::StaticClass();
 	PlayerStateClass = ASamplePlayerState::StaticClass();
 	DefaultPawnClass = ASampleCharacter::StaticClass();
+	HUDClass = ASampleHUD::StaticClass();
 }
 
 void ASampleGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
