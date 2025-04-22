@@ -40,9 +40,12 @@ struct UIEXTENSION_API FUIExtensionHandle
 public:
 	FUIExtensionHandle() {}
 	FUIExtensionHandle(UUIExtensionSubsystem* InExtensionSource,const TSharedPtr<FUIExtension>& InDataPtr)
-		:ExtensionSourece(InExtensionSource),
+		:ExtensionSource(InExtensionSource),
 		DataPtr(InDataPtr)
 	{ }
+
+	void Unregister();
+	bool IsValid() const { return DataPtr.IsValid(); }
 
 	// 아래의 구조체 동작 특성 정의 중 WithIdenticalViaEquality 에 대한 내용
 	bool operator==(const FUIExtensionHandle& Other) const { return DataPtr == Other.DataPtr; }
@@ -52,7 +55,7 @@ public:
 	friend class UUIExtensionSubsystem;
 	// World마다 다른 UUIExtensionSubsystem(WorldSubsystem 기반)을 들고 있음
 	// Subsystem 과 Extension을 매핑하는 용도
-	TWeakObjectPtr<UUIExtensionSubsystem> ExtensionSourece;
+	TWeakObjectPtr<UUIExtensionSubsystem> ExtensionSource;
 	TSharedPtr<FUIExtension> DataPtr;
 };
 
@@ -76,5 +79,12 @@ class UIEXTENSION_API UUIExtensionSubsystem : public UWorldSubsystem
 {
 	GENERATED_BODY()
 public:
-	
+	void UnregisterExtension(const FUIExtensionHandle& ExtensionHandle);
+	FUIExtensionHandle RegisterExtensionAsWidgetForContext(const FGameplayTag& ExtensionPointTag, UObject* ContextObject, TSubclassOf<UUserWidget> WidgetClass, int32 Priority);
+	FUIExtensionHandle RegisterExtensionAsData(const FGameplayTag& ExtensionPointTag, UObject* ContextObject, UObject* Data, int32 Priority);
+
+public:
+	// GameplayTag(Slot) <-> FUIExtension(WidgetClass) 매핑
+	typedef TArray<TSharedPtr<FUIExtension>> FExtensionList;
+	TMap<FGameplayTag, FExtensionList> ExtensionMap;
 };
