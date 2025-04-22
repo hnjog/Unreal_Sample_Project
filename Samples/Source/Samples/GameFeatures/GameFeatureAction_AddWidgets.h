@@ -59,6 +59,20 @@ public:
 	};
 
 public:
+	// UGameFeatureAction Interface
+	virtual void OnGameFeatureDeactivating(FGameFeatureDeactivatingContext& Context) override;
+
+	// UGameFeatureAction_WorldActionBase Interface
+	virtual void AddToWorld(const FWorldContext& WorldContext, const FGameFeatureStateChangeContext& ChangeContext) override;
+
+	// Member Method
+	void HandleActorExtension(AActor* Actor, FName EventName, FGameFeatureStateChangeContext ChangeContext);
+	void AddWidgets(AActor* Actor, FPerContextData& ActiveData);
+	void RemoveWidgets(AActor* Actor, FPerContextData& ActiveData);
+public:
+	// GFA Add/ Remove 상태 관리
+	TMap<FGameFeatureStateChangeContext, FPerContextData> ContextData;
+
 	// 형태를 표현
 	// 특정한 GameplayTag에 widget을 장착하기 위함
 	// (레이아웃이 TArray인 이유는 
