@@ -18,7 +18,7 @@ struct FSampleHUDLayoutRequest
 public:
 	// UI의 레이아웃으로 CommonActivatableWidget을 사용
 	// TSoftClassPtr-> Widget들은 무겁기에 클래스 메타 데이터만 들고 있는다
-	UPROPERTY(EditAnywhere, Category = UI)
+	UPROPERTY(EditAnywhere, Category = UI, meta = (AssetBundles = "Client"))
 	TSoftClassPtr<UCommonActivatableWidget> LayoutClass;
 
 	// PrimaryGameLayout의 LayerID
@@ -33,7 +33,7 @@ struct FSampleHUDElementEntry
 public:
 
 	// SampleHUDLayout 위에 올릴 대상이 되는 Widget Class
-	UPROPERTY(EditAnywhere, Category = UI)
+	UPROPERTY(EditAnywhere, Category = UI, meta = (AssetBundles = "Client"))
 	TSoftClassPtr<UUserWidget> WidgetClass;
 
 	// SampleHUDLayoutRequest에 올린 LayoutClass에 정의된 Slot(GameplayTag)
