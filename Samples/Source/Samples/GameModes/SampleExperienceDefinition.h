@@ -33,6 +33,10 @@ class SAMPLES_API USampleExperienceDefinition : public UPrimaryDataAsset
 public:
 	USampleExperienceDefinition(const FObjectInitializer& ObjectInitalizer = FObjectInitializer::Get());
 
+#if WITH_EDITORONLY_DATA
+	virtual void UpdateAssetBundleData() override;
+#endif
+public:
 	UPROPERTY(EditDefaultsOnly, Category = Gameplay)
 	TObjectPtr<USamplePawnData> DefaultPawnData;
 

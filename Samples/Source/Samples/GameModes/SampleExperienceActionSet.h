@@ -17,7 +17,10 @@ class SAMPLES_API USampleExperienceActionSet : public UPrimaryDataAsset
 	GENERATED_BODY()
 public:
 	USampleExperienceActionSet();
-	
+#if WITH_EDITORONLY_DATA
+	// 이 함수는 에셋 변경 or 리빌드 등이 필요할때, 에디터가 내부에서 호출
+	virtual void UpdateAssetBundleData() override;
+#endif
 public:
 	UPROPERTY(EditAnywhere, Category = "Actions to Perform")
 	TArray<TObjectPtr<UGameFeatureAction>> Actions;
