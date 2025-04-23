@@ -89,6 +89,15 @@ void USampleExperienceManagerComponent::StartExperienceLoad()
 	TSet<FPrimaryAssetId> BundleAssetList;
 	BundleAssetList.Add(CurrentExperience->GetPrimaryAssetId());
 
+	// ExperienceActionSet을 순회하며 BuldeAssetList에 추가
+	for (const TObjectPtr<USampleExperienceActionSet>& ActionSet : CurrentExperience->ActionSets)
+	{
+		if (ActionSet)
+		{
+			BundleAssetList.Add(ActionSet->GetPrimaryAssetId());
+		}
+	}
+
 	// load Assets associated with the experience
 	// GameFeature 사용하여, Experience에 바인딩된 GameFeature Plugin을 로딩할 Bundle 이름을 추가
 	// - Bundle : 우리가 로딩할 에셋의 카테고리 이름이라 생각하면 됨
