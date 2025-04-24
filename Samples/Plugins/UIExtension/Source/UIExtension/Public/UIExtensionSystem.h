@@ -5,6 +5,22 @@
 #include "Subsystems/WorldSubsystem.h"
 #include "UIExtensionSystem.generated.h"
 
+// ExtensionPoint GameplayTag 비교 방식
+UENUM(BlueprintType)
+enum class EUIExtensionPointMatch :uint8
+{
+	ExactMatch, // A.B 는 A.B.C를 허용치 않음
+	PartialMatch, // A.B 는 A.B.C를 허용
+};
+
+UENUM(BlueprintType)
+enum class EUIExtensionAction : uint8
+{
+	Added,
+	Removed
+};
+
+
 // TSharedFromThis : 객체가 자기 자신의 SharedPtr을 얻고 싶을때, 상속받는 헬퍼 클래스
 // (std::enable_shared_from_this와 비슷)
 // -> 해당 객체가 SharedPtr로 관리되는 것을 암시
@@ -39,10 +55,11 @@ struct UIEXTENSION_API FUIExtensionHandle
 	GENERATED_BODY()
 public:
 	FUIExtensionHandle() {}
-	FUIExtensionHandle(UUIExtensionSubsystem* InExtensionSource,const TSharedPtr<FUIExtension>& InDataPtr)
+	FUIExtensionHandle(UUIExtensionSubsystem* InExtensionSource, const TSharedPtr<FUIExtension>& InDataPtr)
 		:ExtensionSource(InExtensionSource),
 		DataPtr(InDataPtr)
-	{ }
+	{
+	}
 
 	void Unregister();
 	bool IsValid() const { return DataPtr.IsValid(); }
@@ -51,12 +68,86 @@ public:
 	bool operator==(const FUIExtensionHandle& Other) const { return DataPtr == Other.DataPtr; }
 	bool operator!=(const FUIExtensionHandle& Other) const { return !operator==(Other); }
 
+	// Unreal Map이 내부적으로 Hash를 통해 관리
+	friend uint32 GetTypeHash(const FUIExtensionHandle& Handle)
+	{
+		return PointerHash(Handle.DataPtr.Get());
+	}
+
 public:
 	friend class UUIExtensionSubsystem;
 	// World마다 다른 UUIExtensionSubsystem(WorldSubsystem 기반)을 들고 있음
 	// Subsystem 과 Extension을 매핑하는 용도
 	TWeakObjectPtr<UUIExtensionSubsystem> ExtensionSource;
 	TSharedPtr<FUIExtension> DataPtr;
+};
+
+USTRUCT(BlueprintType)
+struct FUIExtensionRequest
+{
+	GENERATED_BODY()
+
+public:
+	// UIExtensionPoint와 연동될 Extension
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FUIExtensionHandle ExtensionHandle;
+
+	// Extension의 Slot GameplayTag
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FGameplayTag ExtensionPointTag;
+
+	// WidgetClass로 FUIExtension과 비슷
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UObject> Data = nullptr;
+
+	// FUIExtension의 ContextObject를 전달받음
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UObject> ContextObject = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int32 Priority = INDEX_NONE;
+};
+
+DECLARE_DELEGATE_TwoParams(FExtendExtensionPointDelegate, EUIExtensionAction Action, const FUIExtensionRequest& Request);
+
+struct FUIExtensionPoint : TSharedFromThis<FUIExtensionPoint>
+{
+public:
+	// UIExtension의 Slot GameplayTag
+	FGameplayTag ExtensionPointTag;
+
+	// UIExtension을 생성 / 제거한 Instigator(주체)
+	TWeakObjectPtr<UObject> ContextObject;
+
+	// UUIExtensionPointWidget 에 허용된 Widget class : UIExtensionPointWidget 의 DataClass
+	TArray<UClass*> AllowedDataClasses;
+
+	// Widget을 ExtensionPointWidget에 연결하기 위한 CallBack 함수
+	FExtendExtensionPointDelegate Callback;
+	EUIExtensionPointMatch ExtensionPointTagMatchType = EUIExtensionPointMatch::ExactMatch;
+};
+
+USTRUCT(BlueprintType)
+struct UIEXTENSION_API FUIExtensionPointHandle
+{
+	GENERATED_BODY()
+public:
+	FUIExtensionPointHandle() {}
+	FUIExtensionPointHandle(UUIExtensionSubsystem* InExtensionSource,const TSharedPtr<FUIExtensionPoint>& InDataPtr)
+		:ExtensionSource(InExtensionSource),
+		DataPtr(InDataPtr)
+	{}
+
+	void Unregister();
+
+	bool IsValid() const { return DataPtr.IsValid(); }
+
+	bool operator==(const FUIExtensionPointHandle& Other) const { return DataPtr == Other.DataPtr; }
+	bool operator!=(const FUIExtensionPointHandle& Other) const { return !operator==(Other); }
+
+public:
+	TWeakObjectPtr<UUIExtensionSubsystem> ExtensionSource;
+	TSharedPtr<FUIExtensionPoint> DataPtr;
 };
 
 // 구조체 동작 특성 정의

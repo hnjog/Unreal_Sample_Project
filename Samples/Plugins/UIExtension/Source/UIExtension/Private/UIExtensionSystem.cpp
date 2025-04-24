@@ -1,6 +1,16 @@
 ﻿#include "UIExtensionSystem.h"
 #include "Blueprint/UserWidget.h"
 
+void FUIExtensionPointHandle::Unregister()
+{
+}
+
+/*
+	FUIExtensionPointHandle
+	
+	FUIExtensionHandle
+*/
+
 void FUIExtensionHandle::Unregister()
 {
 	if (UUIExtensionSubsystem* ExtensionSourcePtr = ExtensionSource.Get())
@@ -8,6 +18,12 @@ void FUIExtensionHandle::Unregister()
 		ExtensionSourcePtr->UnregisterExtension(*this);
 	}
 }
+
+/*
+	FUIExtensionHandle
+
+	UUIExtensionSubsystem
+*/
 
 void UUIExtensionSubsystem::UnregisterExtension(const FUIExtensionHandle& ExtensionHandle)
 {
