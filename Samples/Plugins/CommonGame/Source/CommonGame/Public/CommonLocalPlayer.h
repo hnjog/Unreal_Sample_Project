@@ -12,4 +12,10 @@ public:
 	// player controller가 local player에 할당(assign) 되었을 경우 실행할 Delegate
 	DECLARE_MULTICAST_DELEGATE_TwoParams(FPlayerControllerSetDelegate,UCommonLocalPlayer* LocalPlayer,APlayerController* PlayerController)
 	FPlayerControllerSetDelegate OnPlayerControllerSet;
+
+	// player state가 local player에 할당(assign) 되었을 경우 실행할 Delegate
+	DECLARE_MULTICAST_DELEGATE_TwoParams(FPlayerStateSetDelegate, UCommonLocalPlayer* LocalPlayer, APlayerState* PlayerState);
+	FPlayerStateSetDelegate OnPlayerStateSet;
+
+	FDelegateHandle CallAndRegister_OnPlayerStateSet(FPlayerStateSetDelegate::FDelegate Delegate);
 };
