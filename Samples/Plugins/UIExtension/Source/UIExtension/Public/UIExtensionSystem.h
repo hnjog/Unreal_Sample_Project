@@ -71,6 +71,8 @@ public:
 	// Unreal Map이 내부적으로 Hash를 통해 관리
 	friend uint32 GetTypeHash(const FUIExtensionHandle& Handle)
 	{
+		// 일반적으로 포인터를 이용하는 경우
+		// PointerHash를 많아 사용
 		return PointerHash(Handle.DataPtr.Get());
 	}
 
@@ -101,6 +103,7 @@ public:
 	TObjectPtr<UObject> Data = nullptr;
 
 	// FUIExtension의 ContextObject를 전달받음
+	// 장착할 대상의 일치 여부 확인
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UObject> ContextObject = nullptr;
 
@@ -112,6 +115,10 @@ DECLARE_DELEGATE_TwoParams(FExtendExtensionPointDelegate, EUIExtensionAction Act
 
 struct FUIExtensionPoint : TSharedFromThis<FUIExtensionPoint>
 {
+public:
+	// Extension <-> ExtensionPoint와 매칭되는지 확인
+	bool DoesExtensionPassContract(const FUIExtension* Extension) const;
+
 public:
 	// UIExtension의 Slot GameplayTag
 	FGameplayTag ExtensionPointTag;
@@ -174,8 +181,27 @@ public:
 	FUIExtensionHandle RegisterExtensionAsWidgetForContext(const FGameplayTag& ExtensionPointTag, UObject* ContextObject, TSubclassOf<UUserWidget> WidgetClass, int32 Priority);
 	FUIExtensionHandle RegisterExtensionAsData(const FGameplayTag& ExtensionPointTag, UObject* ContextObject, UObject* Data, int32 Priority);
 
+	void UnregisterExtensionPoint(const FUIExtensionPointHandle& ExtensionPointHandle);
+	FUIExtensionPointHandle RegisterExtensionPoint(const FGameplayTag& ExtensionPointTag, EUIExtensionPointMatch ExtensionPointTagMatchType, const TArray<UClass*>& AllowedDataClasses, FExtendExtensionPointDelegate ExtensionCallback);
+	FUIExtensionPointHandle RegisterExtensionPointForContext(const FGameplayTag& ExtensionPointTag, UObject* ContextObject, EUIExtensionPointMatch ExtensionPointTagMatchType, const TArray<UClass*>& AllowedDataClasses, FExtendExtensionPointDelegate ExtensionCallback);
+
+	FUIExtensionRequest CreateExtensionRequest(const TSharedPtr<FUIExtension>& Extension);
+
+	// ExtensionPoint -(Broadcast)-> Extensions
+	// ExtensionPoint 가 추가 / 제거 되었을 경우, Extension에 알림
+	void NotifyExtensionPointOfExtensions(TSharedPtr<FUIExtensionPoint>& ExtensionPoint);
+
+	// Extension -(Broadcast)-> ExtensionsPoints
+	// Extension이 추가 / 제거 되었을 경우, Extension Points에 알림
+	void NotifyExtensionPointsOfExtension(EUIExtensionAction Action, TSharedPtr<FUIExtension>& Extension);
+
+
 public:
 	// GameplayTag(Slot) <-> FUIExtension(WidgetClass) 매핑
 	typedef TArray<TSharedPtr<FUIExtension>> FExtensionList;
 	TMap<FGameplayTag, FExtensionList> ExtensionMap;
+
+	// GameplayTag(Slot) <-> FUIExtensionPoint(WidgetClass With Context) 매핑
+	typedef TArray<TSharedPtr<FUIExtensionPoint>> FExtensionPointList;
+	TMap<FGameplayTag, FExtensionPointList> ExtensionPointMap;
 };
