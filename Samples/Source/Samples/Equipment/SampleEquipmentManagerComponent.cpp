@@ -112,6 +112,22 @@ void USampleEquipmentManagerComponent::UnequipItem(USampleEquipmentInstance* Ite
 	}
 }
 
+USampleEquipmentInstance* USampleEquipmentManagerComponent::GetFirstInstanceOfType(TSubclassOf<USampleEquipmentInstance> InstanceType)
+{
+	for (FSampleAppliedEquipmentEntry& Entry : EquipmentList.Entries)
+	{
+		if (USampleEquipmentInstance* Instance = Entry.Instance)
+		{
+			if (Instance->IsA(InstanceType))
+			{
+				return Instance;
+			}
+		}
+	}
+
+	return nullptr;
+}
+
 TArray<USampleEquipmentInstance*> USampleEquipmentManagerComponent::GetEquipmentInstanceOfType(TSubclassOf<USampleEquipmentInstance> InstanceType) const
 {
 	TArray<USampleEquipmentInstance*> Result;
