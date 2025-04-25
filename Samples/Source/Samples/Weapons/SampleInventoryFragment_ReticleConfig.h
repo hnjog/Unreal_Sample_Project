@@ -13,5 +13,6 @@ class USampleInventoryFragment_ReticleConfig : public USampleInventoryItemFragme
 	GENERATED_BODY()
 public:
 	// 무기에 결합된 ReticleWidget 정보를 가지고 있는 Fragment
-	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Reticle)
+	TArray<TSubclassOf<USampleReticleWidgetBase>> ReticleWidgets;
 };
