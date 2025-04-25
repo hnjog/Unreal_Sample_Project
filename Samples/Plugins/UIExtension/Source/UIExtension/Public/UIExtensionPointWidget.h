@@ -21,6 +21,8 @@ public:
 	void RegisterExtensionPointForPlayerState(UCommonLocalPlayer* LocalPlayer, APlayerState* PlayerState);
 	void OnAddOrRemoveExtension(EUIExtensionAction Action, const FUIExtensionRequest& Request);
 
+	// UWidget Interface
+	virtual TSharedRef<SWidget> RebuildWidget() override;
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI Extension")
 	FGameplayTag ExtensionPointTag;
