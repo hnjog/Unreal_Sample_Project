@@ -13,7 +13,7 @@ class USampleInventoryItemFragment;
 // Definition 을 인벤토리에 저장하게 될때,
 // Instance라는 단위로 저장하게 된다
 //
-UCLASS()
+UCLASS(BlueprintType)
 class SAMPLES_API USampleInventoryItemInstance : public UObject
 {
 	GENERATED_BODY()
@@ -22,6 +22,7 @@ public:
 
 	// 아래의 템플릿 클래스와 함께
 	// 특정 '클래스'를 받아 그 클래스 객체를 반환하는 방식
+	UFUNCTION(BlueprintCallable, BlueprintPure = false, meta = (DeterminesOutputType = FragmentClass))
 	const USampleInventoryItemFragment* FindFragmentByClass(TSubclassOf<USampleInventoryItemFragment> FragmentClass) const;
 
 	template<typename ResultClass>
