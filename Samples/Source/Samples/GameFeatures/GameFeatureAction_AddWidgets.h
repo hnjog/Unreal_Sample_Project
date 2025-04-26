@@ -62,6 +62,10 @@ public:
 	// UGameFeatureAction Interface
 	virtual void OnGameFeatureDeactivating(FGameFeatureDeactivatingContext& Context) override;
 
+#if WITH_EDITORONLY_DATA
+	virtual void AddAdditionalAssetBundleData(FAssetBundleData& AssetBundleData) override;
+#endif
+
 	// UGameFeatureAction_WorldActionBase Interface
 	virtual void AddToWorld(const FWorldContext& WorldContext, const FGameFeatureStateChangeContext& ChangeContext) override;
 

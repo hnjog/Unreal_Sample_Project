@@ -3,11 +3,20 @@
 #include "Samples/UI/SampleHUD.h"
 #include "UIExtension.h"
 #include "CommonUIExtensions.h"
+#include "GameFeaturesSubsystemSettings.h"
 
 void UGameFeatureAction_AddWidgets::OnGameFeatureDeactivating(FGameFeatureDeactivatingContext& Context)
 {
 	Super::OnGameFeatureDeactivating(Context);
 
+}
+
+void UGameFeatureAction_AddWidgets::AddAdditionalAssetBundleData(FAssetBundleData& AssetBundleData)
+{
+	for (const FSampleHUDElementEntry& Entry : Widgets)
+	{
+		AssetBundleData.AddBundleAsset(UGameFeaturesSubsystemSettings::LoadStateClient, Entry.WidgetClass.ToSoftObjectPath().GetAssetPath());
+	}
 }
 
 void UGameFeatureAction_AddWidgets::AddToWorld(const FWorldContext& WorldContext, const FGameFeatureStateChangeContext& ChangeContext)
