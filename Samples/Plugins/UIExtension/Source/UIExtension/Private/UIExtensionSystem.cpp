@@ -167,7 +167,7 @@ FUIExtensionPointHandle UUIExtensionSubsystem::RegisterExtensionPointForContext(
 	// ExtensionPointMap에 새로운 Entry 등록
 	// (별도의 중복 체크 x -> Register와 Unregister 에서 쌍을 맞춰야 함)
 	FExtensionPointList& List = ExtensionPointMap.FindOrAdd(ExtensionPointTag);
-	TSharedPtr<FUIExtensionPoint> Entry = List.Add_GetRef(MakeShared<FUIExtensionPoint>());
+	TSharedPtr<FUIExtensionPoint>& Entry = List.Add_GetRef(MakeShared<FUIExtensionPoint>());
 	Entry->ExtensionPointTag = ExtensionPointTag;
 	Entry->ContextObject = ContextObject;
 	Entry->ExtensionPointTagMatchType = ExtensionPointTagMatchType;
