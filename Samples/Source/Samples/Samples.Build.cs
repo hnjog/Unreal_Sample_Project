@@ -33,6 +33,9 @@ public class Samples : ModuleRules
 			"UMG",
 			// UIExtension
 			"UIExtension",
+			// Slate
+			"Slate",
+			"SlateCore",
         });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
