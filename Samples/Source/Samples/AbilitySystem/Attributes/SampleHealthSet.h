@@ -20,8 +20,9 @@ class SAMPLES_API USampleHealthSet : public USampleAttributeSet
 {
 	GENERATED_BODY()
 public:
+	USampleHealthSet();
+
 	// Attribute_Accessors를 통해 설정
-	
 	ATTRIBUTE_ACCESSORS(USampleHealthSet, Health);
 	ATTRIBUTE_ACCESSORS(USampleHealthSet, MaxHealth);
 	ATTRIBUTE_ACCESSORS(USampleHealthSet, Healing);
