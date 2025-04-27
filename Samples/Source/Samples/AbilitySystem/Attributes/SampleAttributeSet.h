@@ -13,6 +13,11 @@
 // float GetHealth() const {...}
 // void SetHealth(float NewVal) {...}
 // void InitHealth(float NewVal) {...}
+//
+// 세부적으로는 Get##PropertyName 같은 방식으로 정의됨
+// (## : 양 옆의 요소를 합침)
+// (직접 만들어도 상관없음 -> 자체적으로 매크로를 지원하고 있다는 건 알아두자)
+//
 
 #define ATTRIBUTE_ACCESSORS(ClassName,PropertyName) \
  GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName,PropertyName) \
