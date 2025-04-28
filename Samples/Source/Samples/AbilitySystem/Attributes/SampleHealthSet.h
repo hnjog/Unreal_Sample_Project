@@ -27,6 +27,13 @@ public:
 	ATTRIBUTE_ACCESSORS(USampleHealthSet, MaxHealth);
 	ATTRIBUTE_ACCESSORS(USampleHealthSet, Healing);
 
+	// Attribute 값을 ClampAttribute를 활용하여, 값의 범위를 유지
+	void ClampAttribute(const FGameplayAttribute& Attribute, float& NewValue) const;
+
+	// 특정 Attribute 값이 바뀌기 전에 거치는 함수들을
+	// override 함으로서 일정한 범위 내를 유지하도록 한다(위의 ClampAttribute 호출)
+	virtual void PreAttributeBaseChange(const FGameplayAttribute& Attribute, float& NewValue) const override;
+	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 public:
 	// 현재 체력
 	UPROPERTY(BlueprintReadOnly, Category = "Sample|Health")
