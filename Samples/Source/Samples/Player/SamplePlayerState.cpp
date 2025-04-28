@@ -6,12 +6,28 @@
 #include "Samples/AbilitySystem/SampleAbilitySystemComponent.h"
 #include "Abilities/GameplayAbilityTypes.h"
 #include "Samples/AbilitySystem/SampleAbilitySet.h"
+#include "Samples/AbilitySystem/Attributes/SampleHealthSet.h"
+#include "Samples/AbilitySystem/Attributes/SampleCombatSet.h"
 
 ASamplePlayerState::ASamplePlayerState(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
 	// CDO를 이용한 생성
 	AbilitySystemComponent = ObjectInitializer.CreateDefaultSubobject<USampleAbilitySystemComponent>(this, TEXT("AbilitySystem"));
+
+	// 캐싱을 별도로 하지 않는다?
+	// 
+	// AbilitySystemComponent 이 Init 되는 과정에서
+	// AbilitySystemComponent 의 Outer (지금은 this를 넣어줌, 즉 PlayerState)
+	// 의 Attribute를 알아서 가져온다
+	// (그렇기에 생성만 해두고, 별도로 캐싱하지 않는 것)
+	// (매개변수로 지정하지 않으면 outer로 this인 playerState가 지정)
+	// 
+	// 이러한 Data를 PlayerState에서 관리
+	// (Client, Server 양쪽 모두에서 존재하며
+	//  Pawn처럼 죽는 경우에도 사라지지 않게 하기 위하여)
+	CreateDefaultSubobject<USampleHealthSet>(TEXT("HealthSet"));
+	CreateDefaultSubobject<USampleCombatSet>(TEXT("CombatSet"));
 }
 
 void ASamplePlayerState::PostInitializeComponents()
