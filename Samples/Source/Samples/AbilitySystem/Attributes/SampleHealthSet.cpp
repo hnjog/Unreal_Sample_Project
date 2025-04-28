@@ -1,4 +1,5 @@
 ﻿#include "SampleHealthSet.h"
+#include "GameplayEffectExtension.h"
 
 USampleHealthSet::USampleHealthSet()
 	:Super(),
@@ -31,4 +32,28 @@ void USampleHealthSet::PreAttributeChange(const FGameplayAttribute& Attribute, f
 {
 	Super::PreAttributeChange(Attribute, NewValue);
 	ClampAttribute(Attribute, NewValue);
+}
+
+bool USampleHealthSet::PreGameplayEffectExecute(FGameplayEffectModCallbackData& Data)
+{
+	return Super::PreGameplayEffectExecute(Data);
+}
+
+void USampleHealthSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
+{
+	Super::PostGameplayEffectExecute(Data);
+
+	float MinimumHealth = 0.f;
+	
+	// Healing이 업데이트되는 경우, Healing을 Health에 적용하고, Healing은 초기화
+	if (Data.EvaluatedData.Attribute == GetHealingAttribute())
+	{
+		SetHealth(FMath::Clamp(GetHealth() + GetHealing(), MinimumHealth, GetMaxHealth()));
+		SetHealing(0.0f);
+	}
+	// Health 업데이트 시, 0~max 사이로
+	else if (Data.EvaluatedData.Attribute == GetHealthAttribute())
+	{
+		SetHealth(FMath::Clamp(GetHealth(), MinimumHealth, GetMaxHealth()));
+	}
 }

@@ -34,6 +34,11 @@ public:
 	// override 함으로서 일정한 범위 내를 유지하도록 한다(위의 ClampAttribute 호출)
 	virtual void PreAttributeBaseChange(const FGameplayAttribute& Attribute, float& NewValue) const override;
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
+
+	// GameplayEffect가 HealthSet의 Attribute를 수정하기 전에 불리는 Callback 함수
+	// - Healing이 Update되면 이걸 기반으로 Health에 Healing을 적용하여 update 가능
+	virtual bool PreGameplayEffectExecute(FGameplayEffectModCallbackData& Data) override;
+	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 public:
 	// 현재 체력
 	UPROPERTY(BlueprintReadOnly, Category = "Sample|Health")
