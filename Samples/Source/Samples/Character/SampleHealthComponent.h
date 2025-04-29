@@ -37,6 +37,13 @@ class SAMPLES_API USampleHealthComponent : public UGameFrameworkComponent
 public:
 	USampleHealthComponent(const FObjectInitializer& ObjectInitializer);
 	
+	// ASC와 HealthSet 초기화
+	void InitializeWithAbilitySystem(USampleAbilitySystemComponent* InASC);
+	void UninitializeWithAbilitySystem();
+
+	// ASC를 통해, HealthAttribute 변경이 있을때의 Callback 함수
+	void HandleHealthChanged(const FOnAttributeChangeData& ChangeData);
+
 public:
 	// HealthSet을 접근하기 위한 AbilitySystemComponent
 	UPROPERTY()
