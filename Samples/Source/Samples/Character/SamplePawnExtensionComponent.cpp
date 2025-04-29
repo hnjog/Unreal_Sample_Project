@@ -71,6 +71,9 @@ void USamplePawnExtensionComponent::InitalizeAbilitySystem(USampleAbilitySystemC
 	// ASC 업데이트, InitAbilityActorInfo 를 호출해 Pawn으로 AvatarActor를 업데이트
 	AbilitySystemComponent = InASC;
 	AbilitySystemComponent->InitAbilityActorInfo(InOwnerActor, Pawn);
+
+	// 바인딩된 Delegate 호출
+	OnAbilitySystemInitialized.Broadcast();
 }
 
 void USamplePawnExtensionComponent::UninitalizeAbilitySystem()
@@ -78,7 +81,35 @@ void USamplePawnExtensionComponent::UninitalizeAbilitySystem()
 	if (!AbilitySystemComponent)
 		return;
 
+	if (AbilitySystemComponent->GetAvatarActor() == GetOwner())
+	{
+		OnAbilitySystemUninitialized.Broadcast();
+	}
+
 	AbilitySystemComponent = nullptr;
+}
+
+void USamplePawnExtensionComponent::OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate Delegate)
+{
+	// OnAbilitySystemInitialized 가 UObject에 바인딩되어있지 않으면 추가(Uniqueness)
+	if (!OnAbilitySystemInitialized.IsBoundToObject(Delegate.GetUObject()))
+	{
+		OnAbilitySystemInitialized.Add(Delegate);
+	}
+
+	// 이미 ASC 설정되었다면 바로 호출
+	if (AbilitySystemComponent)
+	{
+		Delegate.Execute();
+	}
+}
+
+void USamplePawnExtensionComponent::OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate Delegate)
+{
+	if (!OnAbilitySystemUninitialized.IsBoundToObject(Delegate.GetUObject()))
+	{
+		OnAbilitySystemUninitialized.Add(Delegate);
+	}
 }
 
 void USamplePawnExtensionComponent::OnRegister()

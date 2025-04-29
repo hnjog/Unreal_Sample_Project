@@ -17,6 +17,9 @@ class SAMPLES_API ASampleCharacter : public AModularCharacter, public IAbilitySy
 public:
 	ASampleCharacter();
 
+	void OnAbilitySystemInitialized();
+	void OnAbilitySystemUninitialized();
+
 	// IAbilitySystemInterface
 public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;

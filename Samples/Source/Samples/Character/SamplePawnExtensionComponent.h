@@ -53,6 +53,10 @@ public:
 	void InitalizeAbilitySystem(USampleAbilitySystemComponent* InASC, AActor* InOwnerActor);
 	void UninitalizeAbilitySystem();
 
+	// OnAbilitySystem [Initialize / Uninitialize] Delegate에 추가
+	void OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate Delegate);
+	void OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate Delegate);
+
 	USampleAbilitySystemComponent* GetSampleAbilitySystemComponent() const { return AbilitySystemComponent; };
 
 public:
@@ -81,6 +85,10 @@ public:
 
 	// 선언은 헤더, 구현은 cpp
 	static const FName NAME_ActorFeatureName;
+
+	// ASC Init과 Uninit의 Delegate
+	FSimpleMulticastDelegate OnAbilitySystemInitialized;
+	FSimpleMulticastDelegate OnAbilitySystemUninitialized;
 };
 
 /*

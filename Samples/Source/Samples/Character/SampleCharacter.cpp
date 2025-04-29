@@ -19,6 +19,10 @@ ASampleCharacter::ASampleCharacter()
 	// (다만 이후 생성되는 컴포넌트들은 BP에서만 생성해야 하는 점을 상기)
 	// (더 파고드려면 Post Initialize 등을 참고하자)
 	PawnExtComponent = CreateDefaultSubobject<USamplePawnExtensionComponent>(TEXT("PawnExtensionComponent"));
+	{
+		PawnExtComponent->OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate::CreateUObject(this,&ThisClass::OnAbilitySystemInitialized));
+		PawnExtComponent->OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate::CreateUObject(this,&ThisClass::OnAbilitySystemUninitialized));
+	}
 
 	// CameraComponent 생성
 	// 이건 카메라에 다는 것이라 괜찮은 건가?
@@ -34,6 +38,19 @@ ASampleCharacter::ASampleCharacter()
 	{
 		HealthComponent = CreateDefaultSubobject<USampleHealthComponent>(TEXT("HealthComponent"));
 	}
+}
+
+void ASampleCharacter::OnAbilitySystemInitialized()
+{
+	USampleAbilitySystemComponent* SampleASC = Cast<USampleAbilitySystemComponent>(GetAbilitySystemComponent());
+	check(SampleASC);
+
+	HealthComponent->InitializeWithAbilitySystem(SampleASC);
+}
+
+void ASampleCharacter::OnAbilitySystemUninitialized()
+{
+	HealthComponent->UninitializeWithAbilitySystem();
 }
 
 UAbilitySystemComponent* ASampleCharacter::GetAbilitySystemComponent() const
