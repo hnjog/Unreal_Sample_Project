@@ -7,6 +7,7 @@
 
 class USamplePawnExtensionComponent;
 class USampleCameraComponent;
+class USampleHealthComponent;
 
 UCLASS()
 class SAMPLES_API ASampleCharacter : public AModularCharacter, public IAbilitySystemInterface
@@ -66,4 +67,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sample|Character")
 	TObjectPtr<USampleCameraComponent> CameraComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sample|Character")
+	TObjectPtr<USampleHealthComponent> HealthComponent;
 };

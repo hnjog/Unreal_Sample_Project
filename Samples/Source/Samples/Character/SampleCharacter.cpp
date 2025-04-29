@@ -2,6 +2,7 @@
 #include "SamplePawnExtensionComponent.h"
 #include "Samples/Camera/SampleCameraComponent.h"
 #include "Samples/AbilitySystem/SampleAbilitySystemComponent.h"
+#include "SampleHealthComponent.h"
 
 ASampleCharacter::ASampleCharacter()
 {
@@ -27,6 +28,11 @@ ASampleCharacter::ASampleCharacter()
 	{
 		CameraComponent = CreateDefaultSubobject<USampleCameraComponent>(TEXT("CameraComponent"));
 		CameraComponent->SetRelativeLocation(FVector(-300.0f, 0.0f, 75.0f));
+	}
+
+	// HealthComponent 생성
+	{
+		HealthComponent = CreateDefaultSubobject<USampleHealthComponent>(TEXT("HealthComponent"));
 	}
 }
 
