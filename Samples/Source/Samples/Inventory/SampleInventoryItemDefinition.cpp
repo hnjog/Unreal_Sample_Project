@@ -1,4 +1,5 @@
 ﻿#include "SampleInventoryItemDefinition.h"
+#include "SampleInventoryItemInstance.h"
 
 USampleInventoryItemDefinition::USampleInventoryItemDefinition(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)

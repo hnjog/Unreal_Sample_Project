@@ -39,6 +39,7 @@
 //     횟수 제한 바주카 - '장착','소비' Fragment를 각각 붙임
 //
 
+class USampleInventoryItemInstance;
 
 // Abstract - 추상 클래스로 정의(직접 인스턴스화 불가)
 // DefaultToInstanced - 이 '클래스'를 사용하는 객체 생성시, 이 객체도 인스턴스화 됨 (보통 Editor나 BP에서 생성될때 고려 가능)
@@ -48,6 +49,9 @@ class USampleInventoryItemFragment : public UObject
 {
 	GENERATED_BODY()
 public:
+	// 모든 USampleInventoryItemFragment가 생성될 때 실행
+	// 필요에 따라 Fragment에 대한 정의를 보조한다
+	virtual void OnInstanceCreated(USampleInventoryItemInstance* Instance) const {}
 };
 
 // 기본적으로는 '메타데이터'를 들고 있는것이 Definition의 개념

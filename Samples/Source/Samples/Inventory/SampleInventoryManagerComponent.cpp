@@ -17,6 +17,16 @@ USampleInventoryItemInstance* FSampleInventoryList::AddEntry(TSubclassOf<USample
 	NewEntry.Instance = NewObject<USampleInventoryItemInstance>(OwningActor);
 	NewEntry.Instance->ItemDef = ItemDef;
 
+	// Definition은 정의, Instance는 생성 이후의 각종 세팅을 담당
+	// 그렇기에 Definition의 하위 속성들에게 자신이 생성되었음을 알린다
+	// (지금은 아이템이니, 장착, 스탯 등에게 실제 생성된 현재 Instance를 전달)
+	for (const USampleInventoryItemFragment* Fragment : GetDefault<USampleInventoryItemDefinition>(ItemDef)->Fragments)
+	{
+		if (Fragment)
+		{
+			Fragment->OnInstanceCreated(NewEntry.Instance);
+		}
+	}
 	Result = NewEntry.Instance;
 
 	return Result;
