@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "Samples/System/SampleGameplayTagStack.h"
 #include "SampleInventoryItemInstance.generated.h"
 
 class USampleInventoryItemDefinition;
@@ -31,7 +32,20 @@ public:
 		return (ResultClass*)FindFragmentByClass(ResultClass::StaticClass());
 	}
 
+	void AddStatTagStack(FGameplayTag Tag, int32 StackCount);
+	void RemoveStatTagStack(FGameplayTag Tag, int32 StackCount);
+
+	bool HasStatTag(FGameplayTag Tag) const;
+
+	UFUNCTION(BlueprintCallable, Category = Inventory)
+	int32 GetStatTagStackCount(FGameplayTag Tag) const;
+
 public:
+	// 아이템마다 Definition이 다르더라도 Stat이 다를 수 있기에
+	// Instance에서 관리
+	UPROPERTY()
+	FSampleGameplayTagStackContainer StatTags;
+
 	// Inventory Item의 인스턴스에는 무엇으로 정의되었는지
 	// 그 메타 클래스인 USampleInventoryItemDefinition 를 들고 있음
 	UPROPERTY()
