@@ -16,6 +16,37 @@ USampleHealthComponent::USampleHealthComponent(const FObjectInitializer& ObjectI
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
+USampleHealthComponent* USampleHealthComponent::FindHealthComponent(const AActor* Actor)
+{
+	if(!Actor)
+		return nullptr;
+
+	USampleHealthComponent* HealthComponent = Actor->FindComponentByClass<USampleHealthComponent>();
+	return HealthComponent;
+}
+
+float USampleHealthComponent::GetHealth() const
+{
+	return (HealthSet ? HealthSet->GetHealth() : 0.0f);
+}
+
+float USampleHealthComponent::GetMaxHealth() const
+{
+	return (HealthSet ? HealthSet->GetMaxHealth() : 0.0f);
+}
+
+float USampleHealthComponent::GetHealthNormalized() const
+{
+	if (HealthSet)
+	{
+		const float Health = HealthSet->GetHealth();
+		const float MaxHealth = HealthSet->GetMaxHealth();
+		return ((MaxHealth > 0.0f) ? (Health / MaxHealth) : 0.0f);
+	}
+
+	return 0.0f;
+}
+
 void USampleHealthComponent::InitializeWithAbilitySystem(USampleAbilitySystemComponent* InASC)
 {
 	AActor* Owner = GetOwner();

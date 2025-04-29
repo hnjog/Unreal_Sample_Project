@@ -36,6 +36,21 @@ class SAMPLES_API USampleHealthComponent : public UGameFrameworkComponent
 	GENERATED_BODY()
 public:
 	USampleHealthComponent(const FObjectInitializer& ObjectInitializer);
+
+	// Actor 의 HealthComponent 반환
+	UFUNCTION(BlueprintPure, Category = "Sample|Health")
+	static USampleHealthComponent* FindHealthComponent(const AActor* Actor);
+
+	// HealthSet의 Attribute에 접근하기 위한 BP Accessor 함수들
+	UFUNCTION(BlueprintPure, Category = "Sample|Health")
+	float GetHealth() const;
+
+	UFUNCTION(BlueprintPure, Category = "Sample|Health")
+	float GetMaxHealth() const;
+
+	// 0~1.0f
+	UFUNCTION(BlueprintPure, Category = "Sample|Health")
+	float GetHealthNormalized() const;
 	
 	// ASC와 HealthSet 초기화
 	void InitializeWithAbilitySystem(USampleAbilitySystemComponent* InASC);
