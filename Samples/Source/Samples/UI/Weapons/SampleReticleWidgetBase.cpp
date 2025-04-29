@@ -17,4 +17,6 @@ void USampleReticleWidgetBase::InitializeFromWeapon(USampleWeaponInstance* InWea
 	{
 		InventoryInstance = Cast<USampleInventoryItemInstance>(WeaponInstance->GetInstigator());
 	}
+
+	OnWeaponInitialized();
 }

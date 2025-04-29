@@ -18,6 +18,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void InitializeFromWeapon(USampleWeaponInstance* InWeapon);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnWeaponInitialized();
 public:
 	// WeaponInstance / InventoryIntance 를 상태 추적용 캐싱
 	UPROPERTY(BlueprintReadOnly)
