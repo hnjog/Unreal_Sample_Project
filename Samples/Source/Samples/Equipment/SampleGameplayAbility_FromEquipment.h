@@ -5,6 +5,7 @@
 #include "SampleGameplayAbility_FromEquipment.generated.h"
 
 class USampleEquipmentInstance;
+class USampleInventoryItemInstance;
 
 UCLASS()
 class SAMPLES_API USampleGameplayAbility_FromEquipment : public USampleGameplayAbility
@@ -13,5 +14,6 @@ class SAMPLES_API USampleGameplayAbility_FromEquipment : public USampleGameplayA
 public:
 	USampleGameplayAbility_FromEquipment(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	USampleEquipmentInstance* GetAssociatedEquipment();
+	USampleEquipmentInstance* GetAssociatedEquipment() const;
+	USampleInventoryItemInstance* GetAssociatedItem() const;
 };
