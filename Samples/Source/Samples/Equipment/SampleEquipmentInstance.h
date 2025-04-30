@@ -31,6 +31,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = Equipment)
 	APawn* GetPawn() const;
 
+	UFUNCTION(BlueprintPure, Category = Equipment)
+	UObject* GetInstigator() const { return Instigator; }
+
 	void SpawnEquipmentActors(const TArray<FSampleEquipmentActorToSpawn>& ActorsToSpawn);
 	void DestroyEquipmentActors();
 
